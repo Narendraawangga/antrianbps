@@ -34,6 +34,7 @@ export default defineConfig({
                 // =========================================
                 'resources/css/admin/dashboard.css',
                 'resources/js/admin/dashboard.js',
+                'resources/css/admin/jadwal.css',
 
 
                 // =========================================

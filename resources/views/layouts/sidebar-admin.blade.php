@@ -58,8 +58,8 @@
 
         <!-- JADWAL PETUGAS -->
         <a
-            href="#"
-            class="admin-menu-item">
+            href="{{ route('admin.jadwal') }}"
+            class="admin-menu-item {{ request()->routeIs('admin.jadwal*') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 📅
@@ -187,4 +187,3 @@
     </div>
 
 </aside>
-
