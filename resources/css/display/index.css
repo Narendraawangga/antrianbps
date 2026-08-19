@@ -1,0 +1,808 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family:
+        "Instrument Sans",
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: #0f172a;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(37, 99, 235, 0.12),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            rgba(14, 165, 233, 0.10),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #f8fafc 0%,
+            #eef4ff 50%,
+            #f8fafc 100%
+        );
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.display-page {
+    position: relative;
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* dekorasi background */
+
+.display-page::before {
+    content: "";
+
+    position: fixed;
+
+    width: 420px;
+    height: 420px;
+
+    top: -170px;
+    right: -140px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37, 99, 235, 0.14),
+            rgba(14, 165, 233, 0.04)
+        );
+
+    filter: blur(5px);
+
+    pointer-events: none;
+    z-index: 0;
+}
+
+.display-page::after {
+    content: "";
+
+    position: fixed;
+
+    width: 350px;
+    height: 350px;
+
+    left: -150px;
+    bottom: -160px;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(59, 130, 246, 0.10),
+            rgba(99, 102, 241, 0.04)
+        );
+
+    pointer-events: none;
+    z-index: 0;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.display-header {
+    position: relative;
+    z-index: 10;
+
+    min-height: 105px;
+
+    padding: 22px 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background:
+        rgba(255, 255, 255, 0.88);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border-bottom:
+        1px solid rgba(148, 163, 184, 0.18);
+
+    box-shadow:
+        0 10px 35px rgba(15, 23, 42, 0.04);
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.display-title {
+    position: relative;
+
+    padding-left: 20px;
+}
+
+.display-title::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 3px;
+
+    width: 5px;
+    height: 52px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #2563eb,
+            #0ea5e9
+        );
+
+    box-shadow:
+        0 4px 15px rgba(37, 99, 235, 0.25);
+}
+
+.display-title h1 {
+    font-size: 27px;
+    font-weight: 800;
+
+    letter-spacing: -0.6px;
+
+    color: #172554;
+}
+
+.display-title p {
+    margin-top: 7px;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    color: #64748b;
+
+    letter-spacing: 0.2px;
+}
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+.display-clock {
+    min-width: 190px;
+
+    padding: 13px 18px;
+
+    text-align: right;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(239, 246, 255, 0.9),
+            rgba(255, 255, 255, 0.92)
+        );
+
+    border:
+        1px solid rgba(59, 130, 246, 0.10);
+}
+
+.display-time {
+    font-size: 29px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    color: #1d4ed8;
+}
+
+.display-date {
+    margin-top: 4px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.display-content {
+    position: relative;
+    z-index: 5;
+
+    flex: 1;
+
+    width: 100%;
+
+    padding: 40px 48px 55px;
+}
+
+
+/* =========================================================
+   HEADING
+========================================================= */
+
+.queue-heading {
+    max-width: 760px;
+
+    margin:
+        0 auto
+        34px;
+
+    text-align: center;
+}
+
+.queue-heading h2 {
+    font-size: 30px;
+    font-weight: 800;
+
+    letter-spacing: -0.7px;
+
+    color: #172554;
+}
+
+.queue-heading p {
+    margin-top: 9px;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   QUEUE GRID
+========================================================= */
+
+.queue-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(300px, 1fr)
+        );
+
+    gap: 24px;
+
+    width: 100%;
+    max-width: 1380px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   QUEUE CARD
+========================================================= */
+
+.queue-card {
+    position: relative;
+
+    min-height: 250px;
+
+    padding: 34px 28px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.96),
+            rgba(248, 250, 252, 0.93)
+        );
+
+    border:
+        1px solid rgba(148, 163, 184, 0.18);
+
+    box-shadow:
+        0 20px 45px rgba(15, 23, 42, 0.07),
+        0 3px 12px rgba(15, 23, 42, 0.04);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.queue-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #1d4ed8,
+            #2563eb,
+            #0ea5e9
+        );
+}
+
+.queue-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 170px;
+    height: 170px;
+
+    right: -80px;
+    bottom: -90px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(37, 99, 235, 0.08),
+            transparent 70%
+        );
+}
+
+.queue-card:hover {
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 24px 55px rgba(15, 23, 42, 0.10),
+        0 5px 15px rgba(15, 23, 42, 0.05);
+}
+
+
+/* =========================================================
+   QUEUE NUMBER
+========================================================= */
+
+.queue-number {
+    position: relative;
+    z-index: 2;
+
+    font-size: 62px;
+    font-weight: 900;
+
+    line-height: 1;
+
+    letter-spacing: 2px;
+
+    color: #1d4ed8;
+
+    text-shadow:
+        0 5px 18px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =========================================================
+   SERVICE
+========================================================= */
+
+.queue-service {
+    position: relative;
+    z-index: 2;
+
+    margin-top: 17px;
+
+    max-width: 330px;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1.45;
+
+    color: #334155;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.queue-status {
+    position: relative;
+    z-index: 2;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 22px;
+
+    padding: 9px 18px;
+
+    border-radius: 50px;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 0.4px;
+
+    text-transform: uppercase;
+}
+
+
+/* DIPANGGIL */
+
+.status-called {
+    color: #1d4ed8;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dbeafe,
+            #eff6ff
+        );
+
+    border:
+        1px solid #bfdbfe;
+}
+
+
+/* SEDANG DILAYANI */
+
+.status-serving {
+    color: #15803d;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dcfce7,
+            #f0fdf4
+        );
+
+    border:
+        1px solid #bbf7d0;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.queue-empty {
+    position: relative;
+
+    max-width: 620px;
+
+    margin: 70px auto;
+
+    padding: 60px 35px;
+
+    text-align: center;
+
+    border-radius: 26px;
+
+    background:
+        rgba(255, 255, 255, 0.88);
+
+    backdrop-filter: blur(15px);
+
+    border:
+        1px solid rgba(148, 163, 184, 0.18);
+
+    box-shadow:
+        0 20px 50px rgba(15, 23, 42, 0.07);
+}
+
+.queue-empty-icon {
+    width: 82px;
+    height: 82px;
+
+    margin:
+        0 auto
+        20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 22px;
+
+    font-size: 38px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eff6ff,
+            #dbeafe
+        );
+
+    box-shadow:
+        0 10px 25px rgba(37, 99, 235, 0.10);
+}
+
+.queue-empty h2 {
+    font-size: 24px;
+    font-weight: 800;
+
+    color: #172554;
+}
+
+.queue-empty p {
+    max-width: 420px;
+
+    margin:
+        10px auto
+        0;
+
+    font-size: 14px;
+    line-height: 1.7;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes queueEnter {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(15px)
+            scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+.queue-card {
+    animation:
+        queueEnter
+        0.45s ease;
+}
+
+
+/* =========================================================
+   LARGE DISPLAY / TV
+========================================================= */
+
+@media (min-width: 1500px) {
+
+    .display-header {
+        padding:
+            26px
+            65px;
+    }
+
+    .display-title h1 {
+        font-size: 34px;
+    }
+
+    .display-title p {
+        font-size: 15px;
+    }
+
+    .display-time {
+        font-size: 36px;
+    }
+
+    .display-date {
+        font-size: 14px;
+    }
+
+    .display-content {
+        padding:
+            52px
+            65px;
+    }
+
+    .queue-heading h2 {
+        font-size: 36px;
+    }
+
+    .queue-heading p {
+        font-size: 16px;
+    }
+
+    .queue-card {
+        min-height: 300px;
+    }
+
+    .queue-number {
+        font-size: 78px;
+    }
+
+    .queue-service {
+        font-size: 20px;
+    }
+
+    .queue-status {
+        font-size: 14px;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .display-header {
+        padding:
+            18px
+            25px;
+    }
+
+    .display-title h1 {
+        font-size: 22px;
+    }
+
+    .display-time {
+        font-size: 24px;
+    }
+
+    .display-content {
+        padding:
+            30px
+            25px;
+    }
+
+    .queue-heading h2 {
+        font-size: 26px;
+    }
+
+    .queue-number {
+        font-size: 52px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .display-header {
+        gap: 15px;
+
+        padding:
+            16px
+            18px;
+    }
+
+    .display-title {
+        padding-left: 14px;
+    }
+
+    .display-title::before {
+        height: 45px;
+    }
+
+    .display-title h1 {
+        font-size: 17px;
+    }
+
+    .display-title p {
+        font-size: 10px;
+    }
+
+    .display-clock {
+        min-width: auto;
+
+        padding:
+            9px
+            10px;
+    }
+
+    .display-time {
+        font-size: 19px;
+    }
+
+    .display-date {
+        display: none;
+    }
+
+    .display-content {
+        padding:
+            25px
+            15px;
+    }
+
+    .queue-heading {
+        margin-bottom: 22px;
+    }
+
+    .queue-heading h2 {
+        font-size: 22px;
+    }
+
+    .queue-heading p {
+        font-size: 12px;
+    }
+
+    .queue-grid {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+    .queue-card {
+        min-height: 210px;
+
+        padding:
+            25px
+            20px;
+    }
+
+    .queue-number {
+        font-size: 48px;
+    }
+
+    .queue-service {
+        font-size: 15px;
+    }
+
+    .queue-empty {
+        margin:
+            35px
+            auto;
+
+        padding:
+            40px
+            20px;
+    }
+}

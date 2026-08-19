@@ -1,0 +1,275 @@
+/* =====================================
+   NAVBAR PETUGAS
+===================================== */
+
+.petugas-navbar {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 72px;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #e5e7eb;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 22px;
+
+    z-index: 1000;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =====================================
+   BAGIAN KIRI
+===================================== */
+
+.petugas-navbar .navbar-left {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+}
+
+
+/* =====================================
+   LOGO
+===================================== */
+
+.petugas-navbar .navbar-logo {
+    width: 52px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.petugas-navbar .logo-bps {
+    width: 48px;
+    height: 48px;
+
+    object-fit: contain;
+}
+
+
+/* =====================================
+   IDENTITAS SISTEM
+===================================== */
+
+.petugas-navbar .navbar-title {
+    line-height: 1.2;
+}
+
+
+.petugas-navbar .institution-name {
+    color: #2349ad;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+}
+
+
+.petugas-navbar .system-name {
+    margin-top: 4px;
+
+    color: #888;
+
+    font-size: 11px;
+}
+
+
+/* =====================================
+   BAGIAN KANAN
+===================================== */
+
+.petugas-navbar .navbar-right {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+}
+
+
+/* =====================================
+   PROFILE
+===================================== */
+
+.petugas-navbar .petugas-profile {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 5px 7px;
+
+    border-radius: 8px;
+
+    transition: 0.2s;
+}
+
+
+.petugas-navbar .petugas-profile:hover {
+    background: #f5f7fb;
+}
+
+
+/* =====================================
+   AVATAR
+===================================== */
+
+.petugas-navbar .profile-avatar {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    background: #2349ad;
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* =====================================
+   PROFILE INFO
+===================================== */
+
+.petugas-navbar .profile-info {
+    min-width: 90px;
+}
+
+
+.petugas-navbar .profile-name {
+    color: #333;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+.petugas-navbar .profile-role {
+    margin-top: 3px;
+
+    color: #999;
+
+    font-size: 10px;
+}
+
+
+/* =====================================
+   LOGOUT
+===================================== */
+
+.petugas-navbar .logout-form {
+    margin: 0;
+}
+
+
+.petugas-navbar .logout-button {
+    border: none;
+
+    background: #dc2626;
+
+    color: white;
+
+    padding: 9px 15px;
+
+    border-radius: 7px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.petugas-navbar .logout-button:hover {
+    background: #b91c1c;
+}
+
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width: 700px) {
+
+    .petugas-navbar {
+        padding: 0 12px;
+    }
+
+
+    .petugas-navbar .navbar-logo {
+        width: 42px;
+    }
+
+
+    .petugas-navbar .institution-name {
+        font-size: 11px;
+    }
+
+
+    .petugas-navbar .system-name {
+        font-size: 9px;
+    }
+
+
+    .petugas-navbar .navbar-right {
+        gap: 6px;
+    }
+
+
+    .petugas-navbar .profile-info {
+        display: none;
+    }
+
+
+    .petugas-navbar .profile-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+
+    .petugas-navbar .logout-button {
+        padding: 8px 10px;
+
+        font-size: 11px;
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .petugas-navbar .institution-name {
+        max-width: 170px;
+
+        overflow: hidden;
+
+        text-overflow: ellipsis;
+
+        white-space: nowrap;
+    }
+
+}

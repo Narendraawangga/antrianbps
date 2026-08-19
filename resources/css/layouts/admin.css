@@ -1,0 +1,46 @@
+/* =====================================
+   LAYOUT UTAMA ADMIN
+===================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+     margin: 0;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #f5f7fb;
+    color: #222;
+}
+
+
+/* =====================================
+   AREA ISI HALAMAN ADMIN
+===================================== */
+
+.admin-main-content {
+    margin-left: 250px;
+
+    padding-top: 72px;
+
+    min-height: 100vh;
+
+    width: calc(100% - 250px);
+}
+
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width: 700px) {
+
+    .admin-main-content {
+        margin-left: 70px;
+
+        width: calc(100% - 70px);
+    }
+
+}

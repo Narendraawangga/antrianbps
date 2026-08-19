@@ -1,0 +1,703 @@
+/* =========================================
+   DASHBOARD PETUGAS
+========================================= */
+
+.petugas-dashboard {
+    padding: 30px;
+    min-height: calc(100vh - 72px);
+    background: #f5f7fb;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.petugas-dashboard .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+.petugas-dashboard .page-header h1 {
+    margin: 0;
+
+    color: #1f3f8f;
+
+    font-size: 27px;
+    font-weight: 700;
+}
+
+.petugas-dashboard .page-header p {
+    margin: 7px 0 0;
+
+    color: #777;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   TANGGAL
+========================================= */
+
+.petugas-dashboard .current-date {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 14px;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+
+    color: #555;
+
+    font-size: 11px;
+}
+
+.petugas-dashboard .date-icon {
+    font-size: 20px;
+}
+
+
+/* =========================================
+   STATISTIK
+========================================= */
+
+.petugas-dashboard .stats-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+}
+
+.petugas-dashboard .stat-card {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    padding: 19px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 115px;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .025);
+}
+
+.petugas-dashboard .stat-label {
+    color: #777;
+
+    font-size: 11px;
+}
+
+.petugas-dashboard .stat-number {
+    margin-top: 5px;
+
+    color: #1f3f8f;
+
+    font-size: 29px;
+    font-weight: 700;
+}
+
+.petugas-dashboard .stat-description {
+    margin-top: 3px;
+
+    color: #aaa;
+
+    font-size: 10px;
+}
+
+.petugas-dashboard .stat-icon {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 10px;
+
+    background: #eef3ff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 21px;
+}
+
+
+/* =========================================
+   GRID
+========================================= */
+
+.petugas-dashboard .dashboard-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 18px;
+
+    margin-bottom: 18px;
+}
+
+
+/* =========================================
+   PANEL
+========================================= */
+
+.petugas-dashboard .queue-panel,
+.petugas-dashboard .next-panel,
+.petugas-dashboard .service-panel {
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .025);
+}
+
+.petugas-dashboard .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 20px;
+
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.petugas-dashboard .panel-header h2 {
+    margin: 0;
+
+    color: #24438f;
+
+    font-size: 15px;
+}
+
+.petugas-dashboard .panel-header p {
+    margin: 4px 0 0;
+
+    color: #999;
+
+    font-size: 10px;
+}
+
+
+/* =========================================
+   STATUS ONLINE
+========================================= */
+
+.petugas-dashboard .live-status {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    color: #16a34a;
+
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.petugas-dashboard .live-dot {
+    width: 7px;
+    height: 7px;
+
+    background: #22c55e;
+
+    border-radius: 50%;
+}
+
+
+/* =========================================
+   ANTREAN SAAT INI
+========================================= */
+
+.petugas-dashboard .current-queue {
+    text-align: center;
+
+    padding: 28px 20px;
+}
+
+.petugas-dashboard .queue-label {
+    color: #999;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+}
+
+.petugas-dashboard .queue-number {
+    margin: 7px 0;
+
+    color: #2349ad;
+
+    font-size: 55px;
+    font-weight: 700;
+}
+
+.petugas-dashboard .queue-service {
+    color: #777;
+
+    font-size: 11px;
+}
+
+
+/* =========================================
+   TOMBOL ANTREAN
+========================================= */
+
+.petugas-dashboard .queue-actions {
+    display: flex;
+
+    gap: 10px;
+
+    padding: 0 20px 20px;
+}
+
+.petugas-dashboard .btn-call,
+.petugas-dashboard .btn-finish {
+    flex: 1;
+
+    border: none;
+    border-radius: 7px;
+
+    padding: 11px;
+
+    cursor: pointer;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.petugas-dashboard .btn-call {
+    background: #2349ad;
+
+    color: white;
+}
+
+.petugas-dashboard .btn-call:hover {
+    background: #1d3e96;
+}
+
+.petugas-dashboard .btn-finish {
+    background: #ecfdf3;
+
+    color: #15803d;
+}
+
+
+/* =========================================
+   ANTREAN BERIKUTNYA
+========================================= */
+
+.petugas-dashboard .view-all {
+    color: #2349ad;
+
+    text-decoration: none;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.petugas-dashboard .queue-list {
+    padding: 8px 20px 15px;
+}
+
+.petugas-dashboard .queue-item {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.petugas-dashboard .queue-code {
+    width: 48px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eef3ff;
+
+    color: #2349ad;
+
+    border-radius: 7px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.petugas-dashboard .queue-detail {
+    flex: 1;
+}
+
+.petugas-dashboard .queue-name {
+    color: #555;
+
+    font-size: 11px;
+}
+
+.petugas-dashboard .queue-time {
+    margin-top: 3px;
+
+    color: #aaa;
+
+    font-size: 9px;
+}
+
+.petugas-dashboard .queue-status {
+    padding: 5px 8px;
+
+    border-radius: 20px;
+
+    font-size: 8px;
+}
+
+.petugas-dashboard .waiting-status {
+    background: #fff7ed;
+
+    color: #c2410c;
+}
+
+
+/* =========================================
+   ANTREAN KOSONG
+========================================= */
+
+.petugas-dashboard .queue-empty {
+    padding: 22px;
+
+    text-align: center;
+
+    color: #aaa;
+
+    font-size: 11px;
+}
+
+.petugas-dashboard .empty-icon {
+    margin-bottom: 6px;
+
+    font-size: 25px;
+}
+
+
+/* =========================================
+   INFORMASI LAYANAN
+========================================= */
+
+.petugas-dashboard .service-panel {
+    margin-bottom: 20px;
+}
+
+.petugas-dashboard .service-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 15px;
+
+    padding: 18px 20px;
+}
+
+.petugas-dashboard .service-info {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px;
+
+    background: #f8faff;
+
+    border-radius: 8px;
+}
+
+.petugas-dashboard .service-icon {
+    font-size: 21px;
+}
+
+.petugas-dashboard .service-label {
+    color: #999;
+
+    font-size: 9px;
+}
+
+.petugas-dashboard .service-value {
+    margin-top: 4px;
+
+    color: #444;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   RESPONSIVE TABLET
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .petugas-dashboard .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 800px) {
+
+    .petugas-dashboard {
+        padding: 20px;
+    }
+
+    .petugas-dashboard .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .petugas-dashboard .service-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .petugas-dashboard {
+        padding: 15px;
+    }
+
+    .petugas-dashboard .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .petugas-dashboard .page-header h1 {
+        font-size: 22px;
+    }
+
+    .petugas-dashboard .current-date {
+        width: 100%;
+    }
+
+    .petugas-dashboard .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .petugas-dashboard .queue-actions {
+        flex-direction: column;
+    }
+
+}
+
+
+.petugas-dashboard .queue-actions form {
+    flex: 1;
+}
+
+.petugas-dashboard .queue-actions form .btn-call {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.petugas-dashboard .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.petugas-dashboard .btn-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.petugas-dashboard .btn-start {
+    width: 100%;
+    padding: 12px 18px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.petugas-dashboard .btn-start:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+.petugas-dashboard .btn-start:active {
+    transform: translateY(0);
+}
+/* =========================================
+   UKURAN TOMBOL AKSI ANTREAN
+========================================= */
+
+.petugas-dashboard .queue-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.petugas-dashboard .queue-actions form {
+    flex: 1;
+    margin: 0;
+}
+
+.petugas-dashboard .queue-actions .btn-call,
+.petugas-dashboard .queue-actions .btn-start,
+.petugas-dashboard .queue-actions .btn-finish {
+    width: 100%;
+    min-height: 44px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 18px;
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.petugas-dashboard .btn-skip {
+    width: 100%;
+    min-height: 44px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+
+    background: #f59e0b;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.petugas-dashboard .btn-skip:hover {
+    background: #d97706;
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+.petugas-dashboard .btn-skip:active {
+    transform: translateY(0);
+}
+
+/* =========================================
+   ANTREAN DILEWATI
+========================================= */
+
+.petugas-dashboard .skipped-panel {
+    margin-top: 20px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.petugas-dashboard .skipped-panel .queue-list {
+    margin-top: 16px;
+}
+
+
+/* =========================================
+   TOMBOL PANGGIL ULANG
+========================================= */
+
+.petugas-dashboard .btn-recall {
+    min-height: 40px;
+    padding: 10px 16px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.petugas-dashboard .btn-recall:hover:not(:disabled) {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.petugas-dashboard .btn-recall:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.petugas-dashboard .btn-recall:active:not(:disabled) {
+    transform: translateY(0);
+}

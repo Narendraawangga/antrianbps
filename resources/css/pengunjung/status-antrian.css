@@ -1,0 +1,103 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #1f2937;
+}
+
+.status-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+.status-card {
+    width: 100%;
+    max-width: 520px;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 32px;
+    text-align: center;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+}
+
+.status-title {
+    margin: 0 0 28px;
+    font-size: 26px;
+}
+
+.queue-label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.queue-number {
+    margin: 0 0 28px;
+    font-size: 64px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.queue-info {
+    text-align: left;
+    margin-top: 24px;
+}
+
+.info-row {
+    padding: 14px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.info-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.info-value {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fff3cd;
+    color: #856404;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.status-waiting {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-called {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-serving {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.status-completed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-skipped {
+    background: #fee2e2;
+    color: #991b1b;
+}

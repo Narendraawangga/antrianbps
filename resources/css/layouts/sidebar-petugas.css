@@ -1,0 +1,291 @@
+/* =====================================
+   SIDEBAR PETUGAS
+===================================== */
+
+.petugas-sidebar {
+    position: fixed;
+
+    top: 72px;
+    left: 0;
+    bottom: 0;
+
+    width: 250px;
+
+    background: #ffffff;
+
+    border-right: 1px solid #e5e7eb;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow-y: auto;
+
+    z-index: 900;
+
+    box-shadow: 2px 0 8px rgba(0, 0, 0, .03);
+}
+
+
+/* =====================================
+   HEADER
+===================================== */
+
+.petugas-sidebar .sidebar-header {
+    padding: 22px 20px 18px;
+
+    border-bottom: 1px solid #f0f0f0;
+}
+
+
+.petugas-sidebar .sidebar-title {
+    color: #2349ad;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    letter-spacing: .5px;
+}
+
+
+.petugas-sidebar .sidebar-subtitle {
+    margin-top: 4px;
+
+    color: #999;
+
+    font-size: 11px;
+}
+
+
+/* =====================================
+   SECTION
+===================================== */
+
+.petugas-sidebar .sidebar-section {
+    padding: 16px 12px 4px;
+}
+
+
+.petugas-sidebar .section-title {
+    padding: 0 10px;
+
+    margin-bottom: 7px;
+
+    color: #9ca3af;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+
+/* =====================================
+   MENU
+===================================== */
+
+.petugas-sidebar .petugas-menu-item {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 11px 12px;
+
+    margin-bottom: 3px;
+
+    border-radius: 7px;
+
+    color: #555;
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    transition:
+        background .2s ease,
+        color .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.petugas-sidebar .petugas-menu-item:hover {
+    background: #f2f5ff;
+
+    color: #2349ad;
+}
+
+
+/* =====================================
+   MENU AKTIF
+===================================== */
+
+.petugas-sidebar .petugas-menu-item.active {
+    background: #2349ad;
+
+    color: #ffffff;
+
+    font-weight: 600;
+
+    box-shadow: 0 3px 7px rgba(35, 73, 173, .18);
+}
+
+
+.petugas-sidebar .petugas-menu-item.active::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 7px;
+    bottom: 7px;
+
+    width: 3px;
+
+    border-radius: 0 3px 3px 0;
+
+    background: #ffffff;
+}
+
+
+/* =====================================
+   ICON
+===================================== */
+
+.petugas-sidebar .menu-icon {
+    width: 24px;
+    min-width: 24px;
+
+    text-align: center;
+
+    font-size: 17px;
+
+    line-height: 1;
+}
+
+
+.petugas-sidebar .menu-text {
+    white-space: nowrap;
+}
+
+
+/* =====================================
+   BAGIAN BAWAH
+===================================== */
+
+.petugas-sidebar .sidebar-bottom {
+    margin-top: auto;
+
+    padding: 15px;
+
+    border-top: 1px solid #eeeeee;
+}
+
+
+.petugas-sidebar .system-status {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 10px;
+
+    font-size: 11px;
+
+    color: #555;
+}
+
+
+.petugas-sidebar .status-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #22c55e;
+
+    box-shadow: 0 0 0 3px #dcfce7;
+}
+
+
+.petugas-sidebar .sidebar-version {
+    color: #888;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+.petugas-sidebar .sidebar-version span {
+    color: #aaa;
+}
+
+
+/* =====================================
+   SCROLLBAR
+===================================== */
+
+.petugas-sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+.petugas-sidebar::-webkit-scrollbar-thumb {
+    background: #ddd;
+
+    border-radius: 10px;
+}
+
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media (max-width: 700px) {
+
+    .petugas-sidebar {
+        width: 70px;
+    }
+
+
+    .petugas-sidebar .sidebar-header {
+        padding: 20px 10px;
+
+        text-align: center;
+    }
+
+
+    .petugas-sidebar .sidebar-title {
+        font-size: 9px;
+    }
+
+
+    .petugas-sidebar .sidebar-subtitle,
+    .petugas-sidebar .section-title,
+    .petugas-sidebar .menu-text,
+    .petugas-sidebar .sidebar-bottom {
+        display: none;
+    }
+
+
+    .petugas-sidebar .sidebar-section {
+        padding: 12px 8px;
+    }
+
+
+    .petugas-sidebar .petugas-menu-item {
+        justify-content: center;
+
+        padding: 12px 5px;
+    }
+
+
+    .petugas-sidebar .menu-icon {
+        font-size: 18px;
+    }
+
+}
