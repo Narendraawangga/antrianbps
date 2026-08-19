@@ -63,24 +63,6 @@
 
         </div>
 
-
-        <div class="filter-group">
-
-            <label>Layanan</label>
-
-            <select class="filter-input">
-
-                <option>Semua Layanan</option>
-                <option>Pelayanan Perpustakaan</option>
-                <option>Pelayanan Konsultasi</option>
-                <option>Penjualan Produk Statistik</option>
-                <option>Pelayanan Rekomendasi</option>
-
-            </select>
-
-        </div>
-
-
         <button
             type="button"
             class="btn-filter">

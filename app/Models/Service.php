@@ -18,4 +18,12 @@ class Service extends Model
     {
         return $this->hasMany(Queue::class);
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(
+            Schedule::class,
+            'service_id'
+        );
+    }
 }
