@@ -91,9 +91,14 @@ Route::middleware([
         '/admin/pengguna',
         [UserController::class, 'store']
     )->name('admin.users.store');
-
 });
 
+Route::get(
+    '/admin/jadwal',
+    function () {
+        return view('admin.jadwal');
+    }
+)->name('admin.jadwal');
 
 /*
 |--------------------------------------------------------------------------
@@ -106,35 +111,33 @@ Route::middleware([
     'role:petugas'
 ])->group(function () {
 
-   Route::get(
-    '/petugas/dashboard',
-    [PetugasQueueController::class, 'dashboard']
+    Route::get(
+        '/petugas/dashboard',
+        [PetugasQueueController::class, 'dashboard']
     )->name('petugas.dashboard');
 
     Route::post(
-    '/petugas/antrean/panggil',
-    [PetugasQueueController::class, 'panggil']
+        '/petugas/antrean/panggil',
+        [PetugasQueueController::class, 'panggil']
     )->name('petugas.antrean.panggil');
 
     Route::post(
-    '/petugas/antrean/{id}/panggil-ulang',
-    [PetugasQueueController::class, 'panggilUlang']
+        '/petugas/antrean/{id}/panggil-ulang',
+        [PetugasQueueController::class, 'panggilUlang']
     )->name('petugas.antrean.panggil-ulang');
 
     Route::post(
-    '/petugas/antrean/mulai',
-    [PetugasQueueController::class, 'mulai']
+        '/petugas/antrean/mulai',
+        [PetugasQueueController::class, 'mulai']
     )->name('petugas.antrean.mulai');
 
     Route::post(
-    '/petugas/antrean/lewati',
-    [PetugasQueueController::class, 'lewati']
+        '/petugas/antrean/lewati',
+        [PetugasQueueController::class, 'lewati']
     )->name('petugas.antrean.lewati');
 
-     Route::post(
+    Route::post(
         '/petugas/antrean/selesai',
         [PetugasQueueController::class, 'selesai']
     )->name('petugas.antrean.selesai');
-
-
 });

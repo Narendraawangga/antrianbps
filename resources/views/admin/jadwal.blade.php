@@ -1,7 +1,10 @@
 @extends('layouts.admin')
 
-@section('content')
+@push('styles')
+@vite('resources/css/admin/jadwal.css')
+@endpush
 
+@section('content')
 <div class="jadwal-page">
 
     <!-- HEADER -->
@@ -444,39 +447,34 @@
 <!-- JAVASCRIPT -->
 
 <script>
+    function openJadwalModal() {
+        document
+            .getElementById('jadwalModal')
+            .classList
+            .add('show');
+    }
 
-function openJadwalModal()
-{
+
+    function closeJadwalModal() {
+        document
+            .getElementById('jadwalModal')
+            .classList
+            .remove('show');
+    }
+
+
     document
         .getElementById('jadwalModal')
-        .classList
-        .add('show');
-}
+        .addEventListener(
+            'click',
+            function(event) {
+                if (event.target === this) {
 
+                    closeJadwalModal();
 
-function closeJadwalModal()
-{
-    document
-        .getElementById('jadwalModal')
-        .classList
-        .remove('show');
-}
-
-
-document
-    .getElementById('jadwalModal')
-    .addEventListener(
-        'click',
-        function(event)
-        {
-            if (event.target === this) {
-
-                closeJadwalModal();
-
+                }
             }
-        }
-    );
-
+        );
 </script>
 
 
