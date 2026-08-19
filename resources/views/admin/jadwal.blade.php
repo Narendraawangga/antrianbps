@@ -10,14 +10,28 @@
 <div class="jadwal-page">
 
 
-    {{-- =========================================================
-         NOTIFIKASI
-    ========================================================== --}}
+    {{-- =====================================
+     POPUP VALIDASI
+===================================== --}}
 
     @if (session('success'))
 
-    <div class="alert-success">
-        ✓ {{ session('success') }}
+    <div
+        class="validation-popup success"
+        id="successPopup">
+
+        <div class="popup-icon">
+            ✓
+        </div>
+
+        <div class="popup-title">
+            Berhasil
+        </div>
+
+        <div class="popup-message">
+            {{ session('success') }}
+        </div>
+
     </div>
 
     @endif
@@ -25,23 +39,21 @@
 
     @if ($errors->any())
 
-    <div class="alert-error">
+    <div
+        class="validation-popup error"
+        id="errorPopup">
 
-        <strong>
-            Terjadi kesalahan:
-        </strong>
+        <div class="popup-icon">
+            !
+        </div>
 
-        <ul>
+        <div class="popup-title">
+            Gagal
+        </div>
 
-            @foreach ($errors->all() as $error)
-
-            <li>
-                {{ $error }}
-            </li>
-
-            @endforeach
-
-        </ul>
+        <div class="popup-message">
+            {{ $errors->first() }}
+        </div>
 
     </div>
 
@@ -344,20 +356,6 @@
                         <td>
 
                             <div class="user-info">
-
-                                <div class="user-avatar">
-
-                                    {{ strtoupper(
-                                            substr(
-                                                $schedule->user->name,
-                                                0,
-                                                1
-                                            )
-                                        ) }}
-
-                                </div>
-
-
                                 <span>
 
                                     {{ $schedule->user->name }}
@@ -429,24 +427,67 @@
                             <div class="action-buttons">
 
 
-                                <button
-                                    type="button"
+                                <a
+                                    href="{{ route(
+        'admin.jadwal.edit',
+        $schedule->id
+    ) }}"
                                     class="action-btn edit"
-                                    title="Edit">
+                                    title="Edit Jadwal">
 
-                                    ✏️
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        aria-hidden="true">
 
-                                </button>
+                                        <path d="M12 20h9" />
+
+                                        <path
+                                            d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z" />
+
+                                    </svg>
+
+                                </a>
 
 
-                                <button
-                                    type="button"
-                                    class="action-btn delete"
-                                    title="Hapus">
+                                <form
+                                    method="POST"
+                                    action="{{ route(
+        'admin.jadwal.destroy',
+        $schedule->id
+    ) }}"
+                                    style="display:inline;"
+                                    onsubmit="return confirm(
+        'Apakah Anda yakin ingin menghapus jadwal ini?'
+    );">
 
-                                    🗑️
+                                    @csrf
 
-                                </button>
+                                    @method('DELETE')
+
+                                    <button
+                                        type="submit"
+                                        class="action-btn delete"
+                                        title="Hapus Jadwal">
+
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            aria-hidden="true">
+
+                                            <path d="M3 6h18" />
+
+                                            <path d="M8 6V4h8v2" />
+
+                                            <path d="M19 6l-1 15H6L5 6" />
+
+                                            <path d="M10 11v6" />
+
+                                            <path d="M14 11v6" />
+
+                                        </svg>
+
+                                    </button>
+
+                                </form>
 
 
                             </div>
@@ -813,6 +854,89 @@
 
     }
 </script>
+<script>
+    document.addEventListener(
+        'DOMContentLoaded',
+        function() {
+
+            const successPopup =
+                document.getElementById(
+                    'successPopup'
+                );
+
+            const errorPopup =
+                document.getElementById(
+                    'errorPopup'
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | BERHASIL
+            |--------------------------------------------------------------------------
+            */
+
+            if (successPopup) {
+
+                setTimeout(function() {
+
+                    closeValidationPopup(
+                        successPopup
+                    );
+
+                }, 3000);
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | ERROR
+            |--------------------------------------------------------------------------
+            */
+
+            if (errorPopup) {
+
+                setTimeout(function() {
+
+                    closeValidationPopup(
+                        errorPopup
+                    );
+
+                }, 3000);
+
+            }
+
+        }
+    );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CLOSE POPUP
+    |--------------------------------------------------------------------------
+    */
+
+    function closeValidationPopup(popup) {
+
+        if (!popup) {
+            return;
+        }
+
+
+        popup.style.animation =
+            'popupHide .25s ease forwards';
+
+
+        setTimeout(function() {
+
+            popup.remove();
+
+        }, 250);
+
+    }
+</script>
+
 
 
 @endsection

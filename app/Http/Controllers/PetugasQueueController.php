@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Queue;
 use App\Services\QueueScheduleService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PetugasQueueController extends Controller
 {
@@ -80,6 +81,7 @@ class PetugasQueueController extends Controller
             ->orderByDesc('called_at')
             ->first();
 
+
         /*
         |--------------------------------------------------------------------------
         | JUMLAH PELAYANAN SELESAI HARI INI
@@ -99,6 +101,7 @@ class PetugasQueueController extends Controller
                 'completed'
             )
             ->count();
+
 
         /*
         |--------------------------------------------------------------------------
@@ -120,6 +123,7 @@ class PetugasQueueController extends Controller
                 'asc'
             )
             ->get();
+
 
         /*
         |--------------------------------------------------------------------------
@@ -144,7 +148,7 @@ class PetugasQueueController extends Controller
         |--------------------------------------------------------------------------
         */
 
-       return view(
+        return view(
             'petugas.dashboard',
             compact(
                 'waitingQueues',
@@ -173,8 +177,8 @@ class PetugasQueueController extends Controller
             ->periodEnd()
             ->utc();
 
-        
-                /*
+
+        /*
         |--------------------------------------------------------------------------
         | CEK APAKAH PETUGAS MASIH PUNYA ANTREAN AKTIF
         |--------------------------------------------------------------------------
@@ -184,14 +188,22 @@ class PetugasQueueController extends Controller
             'created_at',
             [$periodStart, $periodEnd]
         )
-            ->where('served_by', auth()->id())
-            ->whereIn('status', [
-                'called',
-                'serving',
-            ])
+            ->where(
+                'served_by',
+                auth()->id()
+            )
+            ->whereIn(
+                'status',
+                [
+                    'called',
+                    'serving',
+                ]
+            )
             ->exists();
 
+
         if ($activeQueue) {
+
             return redirect()
                 ->route('petugas.dashboard')
                 ->with(
@@ -243,280 +255,295 @@ class PetugasQueueController extends Controller
             ->route('petugas.dashboard');
     }
 
-    /*
-|--------------------------------------------------------------------------
-| MULAI PELAYANAN
-|--------------------------------------------------------------------------
-*/
-
-public function mulai()
-{
-    $periodStart = $this->schedule
-        ->periodStart()
-        ->utc();
-
-    $periodEnd = $this->schedule
-        ->periodEnd()
-        ->utc();
-
 
     /*
     |--------------------------------------------------------------------------
-    | CARI ANTREAN YANG SUDAH DIPANGGIL
+    | MULAI PELAYANAN
     |--------------------------------------------------------------------------
     */
 
-    $queue = Queue::whereBetween(
-        'created_at',
-        [$periodStart, $periodEnd]
-    )
-        ->where(
-            'served_by',
-            auth()->id()
-        )
-        ->where(
-            'status',
-            'called'
-        )
-        ->orderByDesc('called_at')
-        ->first();
+    public function mulai()
+    {
+        $periodStart = $this->schedule
+            ->periodStart()
+            ->utc();
 
+        $periodEnd = $this->schedule
+            ->periodEnd()
+            ->utc();
 
-    /*
-    |--------------------------------------------------------------------------
-    | JIKA TIDAK ADA ANTREAN
-    |--------------------------------------------------------------------------
-    */
-
-    if (!$queue) {
-        return redirect()
-            ->route('petugas.dashboard');
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | UBAH MENJADI SEDANG DILAYANI
-    |--------------------------------------------------------------------------
-    */
-
-    $queue->update([
-        'status' => 'serving',
-
-        'started_at' => $this->schedule
-            ->now()
-            ->utc(),
-    ]);
-
-
-    return redirect()
-        ->route('petugas.dashboard');
-}
-
-/*
-|--------------------------------------------------------------------------
-| LEWATI ANTREAN
-|--------------------------------------------------------------------------
-*/
-
-        public function lewati()
-        {
-            $periodStart = $this->schedule
-                ->periodStart()
-                ->utc();
-
-            $periodEnd = $this->schedule
-                ->periodEnd()
-                ->utc();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | CARI ANTREAN YANG SUDAH DIPANGGIL
-            |--------------------------------------------------------------------------
-            */
-
-            $queue = Queue::whereBetween(
-                'created_at',
-                [$periodStart, $periodEnd]
-            )
-                ->where(
-                    'served_by',
-                    auth()->id()
-                )
-                ->where(
-                    'status',
-                    'called'
-                )
-                ->orderByDesc('called_at')
-                ->first();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | JIKA TIDAK ADA ANTREAN
-            |--------------------------------------------------------------------------
-            */
-
-            if (!$queue) {
-                return redirect()
-                    ->route('petugas.dashboard');
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | UBAH STATUS MENJADI DILEWATI
-            |--------------------------------------------------------------------------
-            */
-
-            $queue->update([
-                'status' => 'skipped',
-            ]);
-
-
-            return redirect()
-                ->route('petugas.dashboard');
-        }
 
         /*
         |--------------------------------------------------------------------------
-        | PANGGIL ULANG ANTREAN YANG DILEWATI
+        | CARI ANTREAN YANG SUDAH DIPANGGIL
         |--------------------------------------------------------------------------
         */
 
-        /*
-|--------------------------------------------------------------------------
-| PANGGIL ULANG ANTREAN YANG DILEWATI
-|--------------------------------------------------------------------------
-*/
-
-        public function panggilUlang(int $id)
-        {
-            $periodStart = $this->schedule
-                ->periodStart()
-                ->utc();
-
-            $periodEnd = $this->schedule
-                ->periodEnd()
-                ->utc();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | CEK ANTREAN AKTIF PETUGAS
-            |--------------------------------------------------------------------------
-            */
-
-            $activeQueue = Queue::whereBetween(
-                'created_at',
-                [$periodStart, $periodEnd]
+        $queue = Queue::whereBetween(
+            'created_at',
+            [$periodStart, $periodEnd]
+        )
+            ->where(
+                'served_by',
+                auth()->id()
             )
-                ->where('served_by', auth()->id())
-                ->whereIn('status', [
-                    'called',
-                    'serving',
-                ])
-                ->exists();
+            ->where(
+                'status',
+                'called'
+            )
+            ->orderByDesc('called_at')
+            ->first();
 
 
-            if ($activeQueue) {
-                return redirect()
-                    ->route('petugas.dashboard')
-                    ->with(
-                        'error',
-                        'Selesaikan antrean aktif terlebih dahulu.'
-                    );
-            }
+        /*
+        |--------------------------------------------------------------------------
+        | JIKA TIDAK ADA ANTREAN
+        |--------------------------------------------------------------------------
+        */
 
-
-            /*
-            |--------------------------------------------------------------------------
-            | CARI ANTREAN YANG DIPILIH
-            |--------------------------------------------------------------------------
-            */
-
-            $queue = Queue::where('id', $id)
-                ->whereBetween(
-                    'created_at',
-                    [$periodStart, $periodEnd]
-                )
-                ->where('status', 'skipped')
-                ->firstOrFail();
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | PANGGIL KEMBALI
-            |--------------------------------------------------------------------------
-            */
-
-            $queue->update([
-                'status' => 'called',
-
-                'called_at' => $this->schedule
-                    ->now()
-                    ->utc(),
-
-                'served_by' => auth()->id(),
-            ]);
-
+        if (!$queue) {
 
             return redirect()
                 ->route('petugas.dashboard');
         }
-    /*
-|--------------------------------------------------------------------------
-| SELESAIKAN ANTREAN
-|--------------------------------------------------------------------------
-*/
-
-public function selesai()
-{
-    $periodStart = $this->schedule
-        ->periodStart()
-        ->utc();
-
-    $periodEnd = $this->schedule
-        ->periodEnd()
-        ->utc();
 
 
-    $queue = Queue::whereBetween(
-        'created_at',
-        [$periodStart, $periodEnd]
-    )
-        ->where(
-            'served_by',
-            auth()->id()
-        )
-        ->whereIn(
-            'status',
-            [
-                'called',
-                'serving',
-            ]
-        )
-        ->orderByDesc('called_at')
-        ->first();
+        /*
+        |--------------------------------------------------------------------------
+        | UBAH MENJADI SEDANG DILAYANI
+        |--------------------------------------------------------------------------
+        */
+
+        $queue->update([
+            'status' => 'serving',
+
+            'started_at' => $this->schedule
+                ->now()
+                ->utc(),
+        ]);
 
 
-    if (!$queue) {
         return redirect()
             ->route('petugas.dashboard');
     }
 
 
-    $queue->update([
-        'status' => 'completed',
+    /*
+    |--------------------------------------------------------------------------
+    | LEWATI ANTREAN
+    |--------------------------------------------------------------------------
+    */
 
-        'completed_at' => $this->schedule
-            ->now()
-            ->utc(),
-    ]);
+    public function lewati()
+    {
+        $periodStart = $this->schedule
+            ->periodStart()
+            ->utc();
+
+        $periodEnd = $this->schedule
+            ->periodEnd()
+            ->utc();
 
 
-    return redirect()
-        ->route('petugas.dashboard');
-}
+        /*
+        |--------------------------------------------------------------------------
+        | CARI ANTREAN YANG SUDAH DIPANGGIL
+        |--------------------------------------------------------------------------
+        */
+
+        $queue = Queue::whereBetween(
+            'created_at',
+            [$periodStart, $periodEnd]
+        )
+            ->where(
+                'served_by',
+                auth()->id()
+            )
+            ->where(
+                'status',
+                'called'
+            )
+            ->orderByDesc('called_at')
+            ->first();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | JIKA TIDAK ADA ANTREAN
+        |--------------------------------------------------------------------------
+        */
+
+        if (!$queue) {
+
+            return redirect()
+                ->route('petugas.dashboard');
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | UBAH STATUS MENJADI DILEWATI
+        |--------------------------------------------------------------------------
+        */
+
+        $queue->update([
+            'status' => 'skipped',
+        ]);
+
+
+        return redirect()
+            ->route('petugas.dashboard');
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PANGGIL ULANG ANTREAN YANG DILEWATI
+    |--------------------------------------------------------------------------
+    */
+
+    public function panggilUlang(int $id)
+    {
+        $periodStart = $this->schedule
+            ->periodStart()
+            ->utc();
+
+        $periodEnd = $this->schedule
+            ->periodEnd()
+            ->utc();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CEK ANTREAN AKTIF PETUGAS
+        |--------------------------------------------------------------------------
+        */
+
+        $activeQueue = Queue::whereBetween(
+            'created_at',
+            [$periodStart, $periodEnd]
+        )
+            ->where(
+                'served_by',
+                auth()->id()
+            )
+            ->whereIn(
+                'status',
+                [
+                    'called',
+                    'serving',
+                ]
+            )
+            ->exists();
+
+
+        if ($activeQueue) {
+
+            return redirect()
+                ->route('petugas.dashboard')
+                ->with(
+                    'error',
+                    'Selesaikan antrean aktif terlebih dahulu.'
+                );
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CARI ANTREAN YANG DIPILIH
+        |--------------------------------------------------------------------------
+        */
+
+        $queue = Queue::where(
+            'id',
+            $id
+        )
+            ->whereBetween(
+                'created_at',
+                [$periodStart, $periodEnd]
+            )
+            ->where(
+                'status',
+                'skipped'
+            )
+            ->firstOrFail();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PANGGIL KEMBALI
+        |--------------------------------------------------------------------------
+        */
+
+        $queue->update([
+            'status' => 'called',
+
+            'called_at' => $this->schedule
+                ->now()
+                ->utc(),
+
+            'served_by' => auth()->id(),
+        ]);
+
+
+        return redirect()
+            ->route('petugas.dashboard');
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SELESAIKAN ANTREAN
+    |--------------------------------------------------------------------------
+    */
+
+    public function selesai()
+    {
+        $periodStart = $this->schedule
+            ->periodStart()
+            ->utc();
+
+        $periodEnd = $this->schedule
+            ->periodEnd()
+            ->utc();
+
+
+        $queue = Queue::whereBetween(
+            'created_at',
+            [$periodStart, $periodEnd]
+        )
+            ->where(
+                'served_by',
+                auth()->id()
+            )
+            ->whereIn(
+                'status',
+                [
+                    'called',
+                    'serving',
+                ]
+            )
+            ->orderByDesc('called_at')
+            ->first();
+
+
+        if (!$queue) {
+
+            return redirect()
+                ->route('petugas.dashboard');
+        }
+
+
+        $queue->update([
+            'status' => 'completed',
+
+            'completed_at' => $this->schedule
+                ->now()
+                ->utc(),
+        ]);
+
+
+        return redirect()
+            ->route('petugas.dashboard');
+    }
 }

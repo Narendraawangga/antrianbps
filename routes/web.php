@@ -87,7 +87,6 @@ Route::middleware([
     'role:admin_utama'
 ])->group(function () {
 
-
     /*
     |--------------------------------------------------------------------------
     | DASHBOARD ADMIN
@@ -101,6 +100,22 @@ Route::middleware([
         }
     )->name('dashboard');
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | ANTREAN ADMIN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/admin/antrean',
+        [QueueController::class, 'adminIndex']
+    )->name('admin.antrean');
+
+    Route::delete(
+        '/admin/antrean/{id}',
+        [QueueController::class, 'destroyAdmin']
+    )->name('admin.antrean.destroy');
 
     /*
     |--------------------------------------------------------------------------
@@ -136,6 +151,24 @@ Route::middleware([
         '/admin/jadwal',
         [ScheduleController::class, 'store']
     )->name('admin.jadwal.store');
+
+
+    Route::get(
+        '/admin/jadwal/{id}/edit',
+        [ScheduleController::class, 'edit']
+    )->name('admin.jadwal.edit');
+
+
+    Route::put(
+        '/admin/jadwal/{id}',
+        [ScheduleController::class, 'update']
+    )->name('admin.jadwal.update');
+
+
+    Route::delete(
+        '/admin/jadwal/{id}',
+        [ScheduleController::class, 'destroy']
+    )->name('admin.jadwal.destroy');
 });
 
 
@@ -149,7 +182,6 @@ Route::middleware([
     'auth',
     'role:petugas'
 ])->group(function () {
-
 
     /*
     |--------------------------------------------------------------------------
