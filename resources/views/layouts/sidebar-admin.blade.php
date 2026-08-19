@@ -41,9 +41,8 @@
 
 
         <!-- ANTREAN -->
-        <a
-            href="#"
-            class="admin-menu-item">
+        <a href="{{ route('admin.antrean') }}"
+            class="admin-menu-item {{ request()->routeIs('admin.antrean') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 🎫

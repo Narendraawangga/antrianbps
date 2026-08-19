@@ -18,6 +18,17 @@ class QueueController extends Controller
         $this->schedule = $schedule;
     }
 
+    public function adminIndex()
+    {
+        $antrians = \App\Models\Queue::with([
+            'user',
+            'service'
+        ])
+            ->latest()
+            ->get();
+
+        return view('admin.antrean', compact('antrians'));
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +45,7 @@ class QueueController extends Controller
         return view('layanan', compact('services'));
     }
 
-        /*
+    /*
     |--------------------------------------------------------------------------
     | STATUS ANTREAN PENGUNJUNG
     |--------------------------------------------------------------------------
@@ -373,29 +384,43 @@ class QueueController extends Controller
         |--------------------------------------------------------------------------
         */
 
-            return response()->json([
-        'success' => true,
+        return response()->json([
+            'success' => true,
 
-        'message' => 'Nomor antrean berhasil dibuat.',
+            'message' => 'Nomor antrean berhasil dibuat.',
 
-        'queue' => [
-            'id' => $queue->id,
+            'queue' => [
+                'id' => $queue->id,
 
-            'number' => $queue->queue_number,
+                'number' => $queue->queue_number,
 
-            'service' => $service->name,
+                'service' => $service->name,
 
-            'photo' => asset(
-                'storage/' . $fileName
-            ),
+                'photo' => asset(
+                    'storage/' . $fileName
+                ),
 
-            'public_token' => $queue->public_token,
+                'public_token' => $queue->public_token,
 
-            'status_url' => route(
-                'status.antrian',
-                $queue->public_token
-            ),
-        ],
-    ]);
+                'status_url' => route(
+                    'status.antrian',
+                    $queue->public_token
+                ),
+            ],
+        ]);
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | HAPUS ANTREAN ADMIN
+    |--------------------------------------------------------------------------
+    */
+
+    public function destroyAdmin($id)
+    {
+        $antrian = Queue::findOrFail($id);
+
+        $antrian->delete();
+
+        return redirect()->route('admin.antrean');
     }
 }
