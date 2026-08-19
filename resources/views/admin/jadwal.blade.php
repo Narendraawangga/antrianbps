@@ -4,20 +4,70 @@
 @vite('resources/css/admin/jadwal.css')
 @endpush
 
+
 @section('content')
+
 <div class="jadwal-page">
 
-    <!-- HEADER -->
+
+    {{-- =========================================================
+         NOTIFIKASI
+    ========================================================== --}}
+
+    @if (session('success'))
+
+    <div class="alert-success">
+        ✓ {{ session('success') }}
+    </div>
+
+    @endif
+
+
+    @if ($errors->any())
+
+    <div class="alert-error">
+
+        <strong>
+            Terjadi kesalahan:
+        </strong>
+
+        <ul>
+
+            @foreach ($errors->all() as $error)
+
+            <li>
+                {{ $error }}
+            </li>
+
+            @endforeach
+
+        </ul>
+
+    </div>
+
+    @endif
+
+
+
+    {{-- =========================================================
+         HEADER
+    ========================================================== --}}
+
     <div class="page-header">
 
         <div>
-            <h1>Jadwal Petugas</h1>
+
+            <h1>
+                Jadwal Petugas
+            </h1>
 
             <p>
                 Kelola jadwal piket dan penempatan petugas
                 pelayanan BPS Kolaka Utara.
             </p>
+
         </div>
+
 
         <button
             type="button"
@@ -31,37 +81,72 @@
     </div>
 
 
-    <!-- FILTER -->
+
+    {{-- =========================================================
+         FILTER
+    ========================================================== --}}
+
     <div class="filter-card">
 
+
         <div class="filter-group">
 
-            <label>Bulan</label>
+            <label>
+                Bulan
+            </label>
 
-            <select class="filter-input">
+            <select
+                class="filter-input"
+                id="filterBulan">
 
-                <option>Agustus 2026</option>
-                <option>September 2026</option>
-                <option>Oktober 2026</option>
+                <option value="">
+                    Semua Bulan
+                </option>
+
+                <option value="08">
+                    Agustus 2026
+                </option>
+
+                <option value="09">
+                    September 2026
+                </option>
+
+                <option value="10">
+                    Oktober 2026
+                </option>
 
             </select>
 
         </div>
 
 
+
         <div class="filter-group">
 
-            <label>Petugas</label>
+            <label>
+                Petugas
+            </label>
 
-            <select class="filter-input">
+            <select
+                class="filter-input"
+                id="filterPetugas">
 
-                <option>Semua Petugas</option>
-                <option>Petugas 1</option>
-                <option>Petugas 2</option>
+                <option value="">
+                    Semua Petugas
+                </option>
+
+                @foreach ($petugas as $user)
+
+                <option value="{{ $user->id }}">
+                    {{ $user->name }}
+                </option>
+
+                @endforeach
 
             </select>
 
         </div>
+
 
         <button
             type="button"
@@ -74,8 +159,15 @@
     </div>
 
 
-    <!-- STATISTIK -->
+
+    {{-- =========================================================
+         STATISTIK
+    ========================================================== --}}
+
     <div class="stats-grid">
+
+
+        {{-- TOTAL JADWAL --}}
 
         <div class="stat-card">
 
@@ -86,11 +178,11 @@
                 </div>
 
                 <div class="stat-number">
-                    0
+                    {{ $schedules->count() }}
                 </div>
 
                 <div class="stat-desc">
-                    Jadwal bulan ini
+                    Total jadwal
                 </div>
 
             </div>
@@ -102,6 +194,9 @@
         </div>
 
 
+
+        {{-- PETUGAS BERTUGAS --}}
+
         <div class="stat-card">
 
             <div>
@@ -111,11 +206,11 @@
                 </div>
 
                 <div class="stat-number">
-                    0
+                    {{ $schedules->pluck('user_id')->unique()->count() }}
                 </div>
 
                 <div class="stat-desc">
-                    Petugas aktif
+                    Petugas memiliki jadwal
                 </div>
 
             </div>
@@ -127,6 +222,9 @@
         </div>
 
 
+
+        {{-- HARI INI --}}
+
         <div class="stat-card">
 
             <div>
@@ -136,7 +234,12 @@
                 </div>
 
                 <div class="stat-number">
-                    0
+
+                    {{ $schedules->where(
+                        'date',
+                        now()->format('Y-m-d')
+                    )->count() }}
+
                 </div>
 
                 <div class="stat-desc">
@@ -154,8 +257,13 @@
     </div>
 
 
-    <!-- TABEL -->
+
+    {{-- =========================================================
+         TABEL
+    ========================================================== --}}
+
     <div class="table-card">
+
 
         <div class="table-header">
 
@@ -174,6 +282,7 @@
         </div>
 
 
+
         <div class="table-wrapper">
 
             <table>
@@ -182,19 +291,173 @@
 
                     <tr>
 
-                        <th>TANGGAL</th>
-                        <th>PETUGAS</th>
-                        <th>LAYANAN</th>
-                        <th>JAM</th>
-                        <th>STATUS</th>
-                        <th>AKSI</th>
+                        <th>
+                            TANGGAL
+                        </th>
+
+                        <th>
+                            PETUGAS
+                        </th>
+
+                        <th>
+                            JAM
+                        </th>
+
+                        <th>
+                            KETERANGAN
+                        </th>
+
+                        <th>
+                            STATUS
+                        </th>
+
+                        <th>
+                            AKSI
+                        </th>
 
                     </tr>
 
                 </thead>
 
 
+
                 <tbody>
+
+
+                    @forelse ($schedules as $schedule)
+
+                    <tr>
+
+
+                        {{-- TANGGAL --}}
+
+                        <td>
+
+                            {{ $schedule->date->format('d/m/Y') }}
+
+                        </td>
+
+
+
+                        {{-- PETUGAS --}}
+
+                        <td>
+
+                            <div class="user-info">
+
+                                <div class="user-avatar">
+
+                                    {{ strtoupper(
+                                            substr(
+                                                $schedule->user->name,
+                                                0,
+                                                1
+                                            )
+                                        ) }}
+
+                                </div>
+
+
+                                <span>
+
+                                    {{ $schedule->user->name }}
+
+                                </span>
+
+                            </div>
+
+                        </td>
+
+
+
+                        {{-- JAM --}}
+
+                        <td>
+
+                            {{ substr($schedule->start_time, 0, 5) }}
+
+                            -
+
+                            {{ substr($schedule->end_time, 0, 5) }}
+
+                        </td>
+
+
+
+                        {{-- KETERANGAN --}}
+
+                        <td>
+
+                            {{ $schedule->notes ?: '-' }}
+
+                        </td>
+
+
+
+                        {{-- STATUS --}}
+
+                        <td>
+
+                            @if ($schedule->status === 'aktif')
+
+                            <span class="status-badge active">
+                                ● Aktif
+                            </span>
+
+                            @elseif ($schedule->status === 'selesai')
+
+                            <span class="status-badge selesai">
+                                ● Selesai
+                            </span>
+
+                            @else
+
+                            <span class="status-badge inactive">
+                                ● Dibatalkan
+                            </span>
+
+                            @endif
+
+                        </td>
+
+
+
+                        {{-- AKSI --}}
+
+                        <td>
+
+                            <div class="action-buttons">
+
+
+                                <button
+                                    type="button"
+                                    class="action-btn edit"
+                                    title="Edit">
+
+                                    ✏️
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="action-btn delete"
+                                    title="Hapus">
+
+                                    🗑️
+
+                                </button>
+
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    @empty
+
 
                     <tr>
 
@@ -215,6 +478,7 @@
                                     untuk mulai mengatur piket.
                                 </p>
 
+
                                 <button
                                     type="button"
                                     class="btn-primary"
@@ -230,6 +494,10 @@
 
                     </tr>
 
+
+                    @endforelse
+
+
                 </tbody>
 
             </table>
@@ -241,7 +509,10 @@
 </div>
 
 
-<!-- MODAL TAMBAH JADWAL -->
+
+{{-- =============================================================
+     MODAL TAMBAH JADWAL
+============================================================= --}}
 
 <div
     class="modal"
@@ -249,6 +520,8 @@
 
     <div class="modal-box">
 
+
+        {{-- HEADER MODAL --}}
 
         <div class="modal-header">
 
@@ -277,186 +550,268 @@
         </div>
 
 
-        <div class="modal-body">
+
+        {{-- =====================================================
+             FORM
+        ====================================================== --}}
+
+        <form
+            method="POST"
+            action="{{ route('admin.jadwal.store') }}">
+
+            @csrf
 
 
-            <div class="form-group">
-
-                <label>
-                    Petugas
-                </label>
-
-                <select class="form-input">
-
-                    <option value="">
-                        Pilih Petugas
-                    </option>
-
-                    <option>
-                        Petugas 1
-                    </option>
-
-                    <option>
-                        Petugas 2
-                    </option>
-
-                </select>
-
-            </div>
+            <div class="modal-body">
 
 
-            <div class="form-group">
-
-                <label>
-                    Tanggal
-                </label>
-
-                <input
-                    type="date"
-                    class="form-input">
-
-            </div>
-
-
-            <div class="form-row">
+                {{-- PETUGAS --}}
 
                 <div class="form-group">
 
                     <label>
-                        Jam Mulai
+                        Petugas
                     </label>
 
-                    <input
-                        type="time"
+
+                    <select
+                        name="user_id"
                         class="form-input"
-                        value="08:00">
+                        required>
+
+                        <option value="">
+                            Pilih Petugas
+                        </option>
+
+
+                        @foreach ($petugas as $user)
+
+                        <option
+                            value="{{ $user->id }}"
+                            {{ old('user_id') == $user->id ? 'selected' : '' }}>
+
+                            {{ $user->name }}
+
+                        </option>
+
+                        @endforeach
+
+                    </select>
+
+
+                    @error('user_id')
+
+                    <small class="error-message">
+                        {{ $message }}
+                    </small>
+
+                    @enderror
 
                 </div>
 
+
+
+                {{-- TANGGAL --}}
 
                 <div class="form-group">
 
                     <label>
-                        Jam Selesai
+                        Tanggal
                     </label>
 
+
                     <input
-                        type="time"
+                        type="date"
+                        name="date"
                         class="form-input"
-                        value="16:00">
+                        value="{{ old('date', date('Y-m-d')) }}"
+                        required>
+
+
+                    @error('date')
+
+                    <small class="error-message">
+                        {{ $message }}
+                    </small>
+
+                    @enderror
 
                 </div>
 
+
+
+                {{-- JAM --}}
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Jam Mulai
+                        </label>
+
+
+                        <input
+                            type="time"
+                            name="start_time"
+                            class="form-input"
+                            value="{{ old('start_time', '08:00') }}"
+                            required>
+
+
+                        @error('start_time')
+
+                        <small class="error-message">
+                            {{ $message }}
+                        </small>
+
+                        @enderror
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Jam Selesai
+                        </label>
+
+
+                        <input
+                            type="time"
+                            name="end_time"
+                            class="form-input"
+                            value="{{ old('end_time', '16:00') }}"
+                            required>
+
+
+                        @error('end_time')
+
+                        <small class="error-message">
+                            {{ $message }}
+                        </small>
+
+                        @enderror
+
+                    </div>
+
+                </div>
+
+
+
+                {{-- KETERANGAN --}}
+
+                <div class="form-group">
+
+                    <label>
+                        Keterangan
+                    </label>
+
+
+                    <textarea
+                        name="notes"
+                        class="form-input"
+                        rows="3"
+                        placeholder="Keterangan tambahan (opsional)">{{ old('notes') }}</textarea>
+
+
+                    @error('notes')
+
+                    <small class="error-message">
+                        {{ $message }}
+                    </small>
+
+                    @enderror
+
+                </div>
+
+
             </div>
 
 
-            <div class="form-group">
 
-                <label>
-                    Layanan
-                </label>
+            {{-- FOOTER MODAL --}}
 
-                <select class="form-input">
+            <div class="modal-footer">
 
-                    <option value="">
-                        Pilih Layanan
-                    </option>
 
-                    <option>
-                        Pelayanan Perpustakaan
-                    </option>
+                <button
+                    type="button"
+                    class="btn-cancel"
+                    onclick="closeJadwalModal()">
 
-                    <option>
-                        Pelayanan Konsultasi
-                    </option>
+                    Batal
 
-                    <option>
-                        Penjualan Produk Statistik
-                    </option>
+                </button>
 
-                    <option>
-                        Pelayanan Rekomendasi
-                    </option>
 
-                </select>
+                <button
+                    type="submit"
+                    class="btn-primary">
+
+                    Simpan Jadwal
+
+                </button>
+
 
             </div>
 
 
-            <div class="form-group">
-
-                <label>
-                    Keterangan
-                </label>
-
-                <textarea
-                    class="form-input"
-                    rows="3"
-                    placeholder="Keterangan tambahan (opsional)"></textarea>
-
-            </div>
-
-        </div>
-
-
-        <div class="modal-footer">
-
-            <button
-                type="button"
-                class="btn-cancel"
-                onclick="closeJadwalModal()">
-
-                Batal
-
-            </button>
-
-
-            <button
-                type="button"
-                class="btn-primary">
-
-                Simpan Jadwal
-
-            </button>
-
-        </div>
+        </form>
 
     </div>
 
 </div>
 
 
-<!-- JAVASCRIPT -->
+
+{{-- =============================================================
+     JAVASCRIPT
+============================================================= --}}
 
 <script>
     function openJadwalModal() {
+
         document
             .getElementById('jadwalModal')
             .classList
             .add('show');
+
     }
 
 
     function closeJadwalModal() {
+
         document
             .getElementById('jadwalModal')
             .classList
             .remove('show');
+
     }
 
 
-    document
-        .getElementById('jadwalModal')
-        .addEventListener(
+    const jadwalModal =
+        document.getElementById('jadwalModal');
+
+
+    if (jadwalModal) {
+
+        jadwalModal.addEventListener(
             'click',
             function(event) {
+
                 if (event.target === this) {
 
                     closeJadwalModal();
 
                 }
+
             }
         );
+
+    }
 </script>
 
 
