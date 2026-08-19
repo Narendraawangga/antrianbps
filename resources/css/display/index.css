@@ -1,4 +1,76 @@
 /* =========================================================
+   DISPLAY ANTREAN BPS KOLAKA UTARA
+   MODERN BPS STYLE — v2
+========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+:root {
+    /* Warna identitas BPS */
+    --bps-navy: #0e2a5c;
+    --bps-navy-deep: #081a3d;
+    --bps-blue: #1768c9;
+    --bps-blue-bright: #2f8fe6;
+    --bps-light-blue: #eaf4ff;
+
+    --bps-cyan: #22b3e6;
+    --bps-green: #43ad5c;
+    --bps-orange: #ffa23f;
+
+    /* Warna teks */
+    --text-dark: #16213f;
+    --text-medium: #5c6a8a;
+    --text-light: #93a1bf;
+
+    /* Permukaan */
+    --background: #eef3fb;
+    --surface: #ffffff;
+    --surface-soft: #f6f9ff;
+    --surface-tint: #eef5ff;
+
+    --border: #e2e9f5;
+    --border-strong: #cddbef;
+
+    /* Bayangan */
+    --shadow:
+        0 20px 48px -16px
+        rgba(14, 42, 92, 0.20);
+
+    --shadow-soft:
+        0 8px 22px -8px
+        rgba(14, 42, 92, 0.12);
+
+    --shadow-lift:
+        0 10px 26px -10px
+        rgba(14, 42, 92, 0.22);
+
+    /* Radius */
+    --radius-xl: 26px;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+
+    /* Tipografi */
+    --font-display:
+        "Plus Jakarta Sans",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    --font-body:
+        "Inter",
+        "Segoe UI",
+        Arial,
+        sans-serif;
+}
+
+
+/* =========================================================
    RESET
 ========================================================= */
 
@@ -8,107 +80,92 @@
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
 }
 
+
 body {
-    min-height: 100vh;
+    font-family: var(--font-body);
 
-    font-family:
-        "Instrument Sans",
-        Arial,
-        Helvetica,
-        sans-serif;
+    color: var(--text-dark);
 
-    color: #0f172a;
-
-    background:
-        radial-gradient(
-            circle at top left,
-            rgba(37, 99, 235, 0.12),
-            transparent 32%
-        ),
-        radial-gradient(
-            circle at bottom right,
-            rgba(14, 165, 233, 0.10),
-            transparent 35%
-        ),
-        linear-gradient(
-            135deg,
-            #f8fafc 0%,
-            #eef4ff 50%,
-            #f8fafc 100%
-        );
+    background: var(--background);
 
     overflow-x: hidden;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 
 /* =========================================================
-   PAGE
+   LATAR AMBIENT
+   (blob lembut agar mata lebih nyaman, bukan flat polos)
 ========================================================= */
 
 .display-page {
     position: relative;
 
+    width: 100%;
     min-height: 100vh;
 
     display: flex;
     flex-direction: column;
+
+    isolation: isolate;
 }
 
 
-/* dekorasi background */
-
-.display-page::before {
-    content: "";
-
-    position: fixed;
-
-    width: 420px;
-    height: 420px;
-
-    top: -170px;
-    right: -140px;
-
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(37, 99, 235, 0.14),
-            rgba(14, 165, 233, 0.04)
-        );
-
-    filter: blur(5px);
-
-    pointer-events: none;
-    z-index: 0;
-}
-
+.display-page::before,
 .display-page::after {
     content: "";
 
     position: fixed;
 
-    width: 350px;
-    height: 350px;
-
-    left: -150px;
-    bottom: -160px;
+    width: 620px;
+    height: 620px;
 
     border-radius: 50%;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(59, 130, 246, 0.10),
-            rgba(99, 102, 241, 0.04)
-        );
+    filter: blur(120px);
+
+    z-index: -1;
 
     pointer-events: none;
-    z-index: 0;
+}
+
+
+.display-page::before {
+    top: -220px;
+    left: -160px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(23, 104, 201, 0.16),
+            rgba(23, 104, 201, 0)
+            70%
+        );
+}
+
+
+.display-page::after {
+    right: -200px;
+    bottom: -220px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34, 179, 230, 0.14),
+            rgba(255, 162, 63, 0.05)
+            60%,
+            rgba(34, 179, 230, 0)
+            75%
+        );
 }
 
 
@@ -117,332 +174,524 @@ body {
 ========================================================= */
 
 .display-header {
-    position: relative;
-    z-index: 10;
-
-    min-height: 105px;
-
-    padding: 22px 48px;
+    min-height: 122px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
+    padding:
+        20px
+        42px;
+
     background:
-        rgba(255, 255, 255, 0.88);
+        rgba(255, 255, 255, 0.9);
 
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
 
     border-bottom:
-        1px solid rgba(148, 163, 184, 0.18);
+        1px solid var(--border);
 
     box-shadow:
-        0 10px 35px rgba(15, 23, 42, 0.04);
-}
+        0 10px 30px
+        rgba(14, 42, 92, 0.06);
 
-
-/* =========================================================
-   TITLE
-========================================================= */
-
-.display-title {
     position: relative;
 
-    padding-left: 20px;
+    z-index: 2;
 }
 
-.display-title::before {
+
+/*
+   Garis identitas BPS — versi lembut
+*/
+
+.display-header::after {
     content: "";
 
     position: absolute;
 
-    left: 0;
-    top: 3px;
+    left: 42px;
+    right: 42px;
+    bottom: 0;
 
-    width: 5px;
-    height: 52px;
+    height: 3px;
 
-    border-radius: 20px;
+    border-radius: 999px 999px 0 0;
+
+    background:
+        linear-gradient(
+            90deg,
+
+            var(--bps-blue) 0%,
+            var(--bps-blue) 42%,
+
+            var(--bps-cyan) 42%,
+            var(--bps-cyan) 64%,
+
+            var(--bps-green) 64%,
+            var(--bps-green) 83%,
+
+            var(--bps-orange) 83%,
+            var(--bps-orange) 100%
+        );
+
+    opacity: 0.85;
+}
+
+
+/* =========================================================
+   IDENTITAS BPS
+========================================================= */
+
+.display-title {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+}
+
+
+.display-logo {
+    width: clamp(52px, 5vw, 72px);
+    height: clamp(52px, 5vw, 72px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+
+.display-logo-image {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    display: block;
+}
+
+
+
+
+.display-title h1 {
+    font-family: var(--font-display);
+
+    color: var(--bps-navy);
+
+    font-size: 32px;
+    line-height: 1.15;
+
+    font-weight: 750;
+
+    letter-spacing: -0.6px;
+}
+
+
+.display-title p {
+    margin-top: 6px;
+
+    color: var(--text-medium);
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   JAM
+========================================================= */
+
+.display-clock {
+    min-width: 225px;
+
+    padding:
+        13px
+        24px;
+
+    text-align: center;
 
     background:
         linear-gradient(
             180deg,
-            #2563eb,
-            #0ea5e9
-        );
-
-    box-shadow:
-        0 4px 15px rgba(37, 99, 235, 0.25);
-}
-
-.display-title h1 {
-    font-size: 27px;
-    font-weight: 800;
-
-    letter-spacing: -0.6px;
-
-    color: #172554;
-}
-
-.display-title p {
-    margin-top: 7px;
-
-    font-size: 13px;
-    font-weight: 500;
-
-    color: #64748b;
-
-    letter-spacing: 0.2px;
-}
-
-
-/* =========================================================
-   CLOCK
-========================================================= */
-
-.display-clock {
-    min-width: 190px;
-
-    padding: 13px 18px;
-
-    text-align: right;
-
-    border-radius: 16px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(239, 246, 255, 0.9),
-            rgba(255, 255, 255, 0.92)
+            #ffffff,
+            var(--surface-tint)
         );
 
     border:
-        1px solid rgba(59, 130, 246, 0.10);
+        1px solid var(--border-strong);
+
+    border-radius: var(--radius-md);
+
+    box-shadow: var(--shadow-soft);
 }
+
 
 .display-time {
-    font-size: 29px;
+    font-family: var(--font-display);
+
+    background:
+        linear-gradient(
+            95deg,
+            var(--bps-navy),
+            var(--bps-blue-bright)
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    font-size: 36px;
+    line-height: 1;
+
     font-weight: 800;
 
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 
-    color: #1d4ed8;
+    font-variant-numeric: tabular-nums;
 }
 
+
 .display-date {
-    margin-top: 4px;
+    margin-top: 7px;
 
-    font-size: 12px;
+    color: var(--text-medium);
+
+    font-size: 13px;
     font-weight: 600;
-
-    color: #64748b;
 }
 
 
 /* =========================================================
-   CONTENT
+   MAIN LAYOUT
 ========================================================= */
 
-.display-content {
-    position: relative;
-    z-index: 5;
-
+.monitor-layout {
     flex: 1;
 
     width: 100%;
 
-    padding: 40px 48px 55px;
-}
-
-
-/* =========================================================
-   HEADING
-========================================================= */
-
-.queue-heading {
-    max-width: 760px;
-
-    margin:
-        0 auto
-        34px;
-
-    text-align: center;
-}
-
-.queue-heading h2 {
-    font-size: 30px;
-    font-weight: 800;
-
-    letter-spacing: -0.7px;
-
-    color: #172554;
-}
-
-.queue-heading p {
-    margin-top: 9px;
-
-    font-size: 14px;
-    line-height: 1.6;
-
-    color: #64748b;
-}
-
-
-/* =========================================================
-   QUEUE GRID
-========================================================= */
-
-.queue-grid {
     display: grid;
 
     grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(300px, 1fr)
-        );
+        minmax(330px, 35%)
+        minmax(0, 65%);
 
-    gap: 24px;
+    gap: 22px;
 
-    width: 100%;
-    max-width: 1380px;
+    padding:
+        24px
+        28px
+        30px;
 
-    margin: 0 auto;
+    position: relative;
+
+    z-index: 1;
 }
 
 
 /* =========================================================
-   QUEUE CARD
+   PANEL KIRI
+========================================================= */
+
+.monitor-left {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: var(--radius-xl);
+
+    box-shadow: var(--shadow);
+}
+
+
+/* =========================================================
+   HEADER ANTREAN
+========================================================= */
+
+.queue-panel-title {
+    padding:
+        22px
+        24px
+        20px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            var(--surface-soft)
+        );
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+
+.queue-panel-label {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding:
+        8px
+        18px;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--bps-light-blue),
+            #ffffff
+        );
+
+    color: var(--bps-blue);
+
+    border:
+        1px solid
+        #cfe4fb;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    letter-spacing: 1.1px;
+
+    box-shadow: var(--shadow-soft);
+}
+
+
+.queue-panel-label::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: var(--bps-blue);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(23, 104, 201, 0.14);
+}
+
+
+.queue-panel-title p {
+    margin-top: 10px;
+
+    color: var(--text-medium);
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   ANTREAN UTAMA
+========================================================= */
+
+.current-queue-container {
+    flex: 1;
+
+    min-height: 320px;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: var(--surface);
+}
+
+
+/*
+   Dibuat oleh JavaScript
+*/
+
+.queue-grid {
+    width: 100%;
+
+    display: flex;
+
+    align-items: stretch;
+
+    gap: 16px;
+}
+
+
+/* =========================================================
+   CARD ANTREAN
 ========================================================= */
 
 .queue-card {
     position: relative;
 
-    min-height: 250px;
-
-    padding: 34px 28px;
+    width: 100%;
+    min-height: 320px;
 
     display: flex;
     flex-direction: column;
+
     align-items: center;
     justify-content: center;
 
-    overflow: hidden;
-
     text-align: center;
 
-    border-radius: 24px;
+    padding:
+        32px
+        24px;
+
+    border:
+        1px solid
+        var(--border-strong);
+
+    border-radius: var(--radius-lg);
 
     background:
         linear-gradient(
-            145deg,
-            rgba(255, 255, 255, 0.96),
-            rgba(248, 250, 252, 0.93)
+            175deg,
+            #ffffff 0%,
+            var(--surface-soft) 100%
         );
 
-    border:
-        1px solid rgba(148, 163, 184, 0.18);
+    box-shadow: var(--shadow-lift);
 
-    box-shadow:
-        0 20px 45px rgba(15, 23, 42, 0.07),
-        0 3px 12px rgba(15, 23, 42, 0.04);
+    overflow: hidden;
 
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+    animation:
+        queueEnter
+        0.4s
+        cubic-bezier(0.2, 0.7, 0.3, 1);
 }
+
+
+/*
+   Cahaya lembut di belakang nomor — elemen penanda halaman ini
+*/
 
 .queue-card::before {
     content: "";
 
     position: absolute;
 
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 46%;
+    left: 50%;
 
-    height: 5px;
+    width: 340px;
+    height: 340px;
 
-    background:
-        linear-gradient(
-            90deg,
-            #1d4ed8,
-            #2563eb,
-            #0ea5e9
-        );
-}
-
-.queue-card::after {
-    content: "";
-
-    position: absolute;
-
-    width: 170px;
-    height: 170px;
-
-    right: -80px;
-    bottom: -90px;
+    transform: translate(-50%, -50%);
 
     border-radius: 50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(37, 99, 235, 0.08),
-            transparent 70%
+            rgba(23, 104, 201, 0.14),
+            rgba(34, 179, 230, 0.05)
+            55%,
+            rgba(34, 179, 230, 0)
+            75%
         );
+
+    filter: blur(6px);
+
+    pointer-events: none;
 }
 
-.queue-card:hover {
-    transform:
-        translateY(-4px);
 
-    box-shadow:
-        0 24px 55px rgba(15, 23, 42, 0.10),
-        0 5px 15px rgba(15, 23, 42, 0.05);
+/*
+   Garis aksen atas card
+*/
+
+.queue-card::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 18%;
+
+    width: 64%;
+    height: 4px;
+
+    border-radius: 0 0 6px 6px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--bps-blue),
+            var(--bps-cyan)
+        );
 }
 
 
 /* =========================================================
-   QUEUE NUMBER
+   NOMOR ANTREAN
 ========================================================= */
 
 .queue-number {
     position: relative;
-    z-index: 2;
 
-    font-size: 62px;
-    font-weight: 900;
+    font-family: var(--font-display);
 
-    line-height: 1;
+    color: var(--bps-navy);
 
-    letter-spacing: 2px;
+    font-size:
+        clamp(
+            72px,
+            7vw,
+            122px
+        );
 
-    color: #1d4ed8;
+    line-height: 0.95;
+
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+
+    font-variant-numeric: tabular-nums;
 
     text-shadow:
-        0 5px 18px rgba(37, 99, 235, 0.12);
+        0 6px 18px
+        rgba(14, 42, 92, 0.14);
 }
 
 
 /* =========================================================
-   SERVICE
+   LAYANAN
 ========================================================= */
 
 .queue-service {
     position: relative;
-    z-index: 2;
 
-    margin-top: 17px;
+    margin-top: 18px;
 
-    max-width: 330px;
+    max-width: 95%;
 
-    font-size: 17px;
-    font-weight: 700;
+    color: var(--text-dark);
 
-    line-height: 1.45;
+    font-size: 19px;
+    line-height: 1.4;
 
-    color: #334155;
+    font-weight: 650;
 }
 
 
@@ -452,140 +701,631 @@ body {
 
 .queue-status {
     position: relative;
-    z-index: 2;
 
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+
+    gap: 8px;
 
     margin-top: 22px;
 
-    padding: 9px 18px;
+    padding:
+        9px
+        20px;
 
-    border-radius: 50px;
+    border-radius: 999px;
 
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 800;
 
-    letter-spacing: 0.4px;
+    letter-spacing: 0.9px;
 
     text-transform: uppercase;
 }
 
 
-/* DIPANGGIL */
+.queue-status::before {
+    content: "";
 
-.status-called {
-    color: #1d4ed8;
+    width: 7px;
+    height: 7px;
 
-    background:
-        linear-gradient(
-            135deg,
-            #dbeafe,
-            #eff6ff
-        );
+    border-radius: 50%;
 
-    border:
-        1px solid #bfdbfe;
+    background: currentColor;
 }
 
 
-/* SEDANG DILAYANI */
-
-.status-serving {
-    color: #15803d;
+.status-called {
+    color: #ffffff;
 
     background:
         linear-gradient(
-            135deg,
-            #dcfce7,
-            #f0fdf4
+            120deg,
+            var(--bps-blue),
+            var(--bps-blue-bright)
         );
 
-    border:
-        1px solid #bbf7d0;
+    box-shadow:
+        0 6px 16px
+        rgba(23, 104, 201, 0.35);
+
+    animation:
+        statusPulse
+        1.8s
+        ease-in-out
+        infinite;
+}
+
+
+.status-called::before {
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(255, 255, 255, 0.35);
+}
+
+
+.status-serving {
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            120deg,
+            var(--bps-green),
+            #59c072
+        );
+
+    box-shadow:
+        0 6px 16px
+        rgba(67, 173, 92, 0.30);
 }
 
 
 /* =========================================================
-   EMPTY STATE
+   EMPTY ANTREAN
 ========================================================= */
 
 .queue-empty {
-    position: relative;
+    width: 100%;
 
-    max-width: 620px;
+    min-height: 310px;
 
-    margin: 70px auto;
+    display: flex;
+    flex-direction: column;
 
-    padding: 60px 35px;
+    align-items: center;
+    justify-content: center;
 
     text-align: center;
 
-    border-radius: 26px;
-
-    background:
-        rgba(255, 255, 255, 0.88);
-
-    backdrop-filter: blur(15px);
-
-    border:
-        1px solid rgba(148, 163, 184, 0.18);
-
-    box-shadow:
-        0 20px 50px rgba(15, 23, 42, 0.07);
+    padding: 25px;
 }
 
-.queue-empty-icon {
-    width: 82px;
-    height: 82px;
 
-    margin:
-        0 auto
-        20px;
+.queue-empty-icon {
+    width: 76px;
+    height: 76px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 22px;
-
-    font-size: 38px;
+    margin-bottom: 20px;
 
     background:
         linear-gradient(
-            135deg,
-            #eff6ff,
-            #dbeafe
+            150deg,
+            var(--bps-light-blue),
+            #ffffff
         );
 
-    box-shadow:
-        0 10px 25px rgba(37, 99, 235, 0.10);
+    border: 1px solid #d9eafd;
+
+    border-radius: 50%;
+
+    color: var(--bps-blue);
+
+    box-shadow: var(--shadow-soft);
+
+    /*
+       font-size: 0 menyembunyikan karakter/emoji apa pun yang
+       mungkin masih disisipkan lewat JavaScript (mis. tiket 🎫),
+       sehingga ikon yang tampil selalu versi modern di bawah ini —
+       tidak tergantung markup lama.
+    */
+    font-size: 0;
+    line-height: 0;
 }
+
+
+/*
+   Ikon tiket modern, digambar murni via CSS mask
+   (bukan emoji/gambar), jadi selalu konsisten & tajam
+   di resolusi berapa pun.
+*/
+.queue-empty-icon::before {
+    content: "";
+
+    display: block;
+
+    width: 34px;
+    height: 34px;
+
+    background-color: currentColor;
+
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cmask id='notch'%3E%3Crect x='2.5' y='6.5' width='19' height='11' rx='3' fill='%23fff'/%3E%3Ccircle cx='2.5' cy='12' r='1.8' fill='%23000'/%3E%3Ccircle cx='21.5' cy='12' r='1.8' fill='%23000'/%3E%3Cline x1='12.5' y1='8.3' x2='12.5' y2='15.7' stroke='%23000' stroke-width='1.3' stroke-linecap='round' stroke-dasharray='1.2 1.6'/%3E%3C/mask%3E%3Crect x='2.5' y='6.5' width='19' height='11' rx='3' fill='%23fff' mask='url(%23notch)'/%3E%3C/svg%3E");
+
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cmask id='notch'%3E%3Crect x='2.5' y='6.5' width='19' height='11' rx='3' fill='%23fff'/%3E%3Ccircle cx='2.5' cy='12' r='1.8' fill='%23000'/%3E%3Ccircle cx='21.5' cy='12' r='1.8' fill='%23000'/%3E%3Cline x1='12.5' y1='8.3' x2='12.5' y2='15.7' stroke='%23000' stroke-width='1.3' stroke-linecap='round' stroke-dasharray='1.2 1.6'/%3E%3C/mask%3E%3Crect x='2.5' y='6.5' width='19' height='11' rx='3' fill='%23fff' mask='url(%23notch)'/%3E%3C/svg%3E");
+
+    -webkit-mask-size: contain;
+    mask-size: contain;
+
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+
+/*
+   Jika suatu saat markup memakai <svg> langsung (bukan mask),
+   tetap dirapikan agar tidak tabrakan dengan ikon di atas.
+*/
+.queue-empty-icon svg {
+    display: none;
+}
+
 
 .queue-empty h2 {
-    font-size: 24px;
-    font-weight: 800;
+    font-family: var(--font-display);
 
-    color: #172554;
+    color: var(--text-dark);
+
+    font-size: 20px;
+
+    font-weight: 700;
 }
 
+
 .queue-empty p {
-    max-width: 420px;
+    margin-top: 8px;
 
-    margin:
-        10px auto
-        0;
+    max-width: 360px;
 
-    font-size: 14px;
-    line-height: 1.7;
+    color: var(--text-light);
 
-    color: #64748b;
+    font-size: 13.5px;
+    line-height: 1.6;
 }
 
 
 /* =========================================================
-   ANIMATION
+   ANTREAN BERIKUTNYA
+========================================================= */
+
+.next-queue-section {
+    background: var(--surface-soft);
+
+    border-top:
+        1px solid var(--border);
+}
+
+
+.next-queue-header {
+    padding:
+        16px
+        22px
+        10px;
+
+    color: var(--text-dark);
+
+    font-size: 13.5px;
+    font-weight: 700;
+
+    letter-spacing: 0.2px;
+}
+
+
+.next-queue-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    padding:
+        0
+        18px
+        18px;
+}
+
+
+.next-queue-empty {
+    padding:
+        14px;
+
+    text-align: center;
+
+    border:
+        1px dashed
+        var(--border-strong);
+
+    border-radius: var(--radius-sm);
+
+    background: #ffffff;
+
+    color: var(--text-light);
+
+    font-size: 12.5px;
+}
+
+
+/* =========================================================
+   ITEM ANTREAN BERIKUTNYA
+========================================================= */
+
+.next-queue-item {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding:
+        10px
+        14px;
+
+    background: #ffffff;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: var(--radius-sm);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+.next-queue-item strong {
+    flex-shrink: 0;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 46px;
+
+    padding:
+        6px
+        11px;
+
+    background: var(--surface-tint);
+
+    border-radius: 9px;
+
+    color: var(--bps-blue);
+
+    font-family: var(--font-display);
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    font-variant-numeric: tabular-nums;
+}
+
+
+.next-queue-item span {
+    max-width: 65%;
+
+    color: var(--text-medium);
+
+    text-align: right;
+
+    font-size: 12.5px;
+
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   PANEL VIDEO
+========================================================= */
+
+.monitor-right {
+    min-width: 0;
+
+    display: flex;
+}
+
+
+.video-panel {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: var(--radius-xl);
+
+    box-shadow: var(--shadow);
+}
+
+
+/* =========================================================
+   HEADER VIDEO
+========================================================= */
+
+.video-panel-header {
+    min-height: 78px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding:
+        16px
+        23px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            var(--surface-soft)
+        );
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+
+.video-panel-header h2 {
+    font-family: var(--font-display);
+
+    color: var(--bps-navy);
+
+    font-size: 19px;
+
+    font-weight: 750;
+}
+
+
+.video-panel-header p {
+    margin-top: 4px;
+
+    color: var(--text-medium);
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   BADGE VIDEO
+========================================================= */
+
+.video-live-badge {
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        7px
+        13px;
+
+    border-radius: 999px;
+
+    border:
+        1px solid
+        #d8e7f7;
+
+    background: var(--surface-tint);
+
+    color: var(--bps-blue);
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.video-live-dot {
+    position: relative;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: var(--bps-green);
+}
+
+
+.video-live-dot::after {
+    content: "";
+
+    position: absolute;
+
+    inset: -4px;
+
+    border-radius: 50%;
+
+    background: var(--bps-green);
+
+    opacity: 0.35;
+
+    animation:
+        liveDotPing
+        1.8s
+        ease-out
+        infinite;
+}
+
+
+/* =========================================================
+   VIDEO
+========================================================= */
+
+.video-wrapper {
+    position: relative;
+
+    flex: 1;
+
+    width: 100%;
+
+    min-height: 400px;
+
+    background: #0b1220;
+
+    overflow: hidden;
+
+    /*
+       Jadikan wrapper ini acuan ukuran (container query)
+       supaya video bisa dihitung ulang menyesuaikan rasio
+       panel, bukan rasio bawaan player YouTube.
+    */
+    container-type: size;
+    container-name: videobox;
+}
+
+
+/*
+   Fallback dasar (browser lama tanpa container query):
+   video tetap mengisi penuh wrapper seperti sebelumnya.
+*/
+#bpsYoutubePlayer,
+.video-wrapper iframe {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    border: 0;
+}
+
+
+/*
+   Browser modern: video di-"cover" (dizoom & dipotong secukupnya)
+   agar selalu memenuhi kotak panel tanpa bilah hitam kiri-kanan,
+   berapa pun rasio panel & ukuran asli player-nya.
+*/
+@supports (container-type: size) {
+
+    #bpsYoutubePlayer,
+    .video-wrapper iframe {
+        inset: auto;
+
+        top: 50%;
+        left: 50%;
+
+        transform: translate(-50%, -50%);
+
+        /* 16 / 9 = 1.7778, 9 / 16 = 0.5625 */
+        width: max(100cqw, 177.8cqh) !important;
+        height: max(100cqh, 56.3cqw) !important;
+    }
+
+}
+
+
+/* =========================================================
+   FOOTER VIDEO
+========================================================= */
+
+.video-footer {
+    min-height: 66px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        13px
+        22px
+        13px
+        27px;
+
+    background: #ffffff;
+
+    border-top:
+        1px solid var(--border);
+
+    position: relative;
+}
+
+
+.video-footer::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+
+    width: 4px;
+
+    border-radius: 4px;
+
+    background:
+        linear-gradient(
+            180deg,
+
+            var(--bps-blue),
+            var(--bps-cyan),
+            var(--bps-green),
+            var(--bps-orange)
+        );
+}
+
+
+.video-footer-item {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.video-footer-item strong {
+    font-family: var(--font-display);
+
+    color: var(--bps-navy);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+.video-footer-item span {
+    color: var(--text-medium);
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   ANIMASI MASUK
 ========================================================= */
 
 @keyframes queueEnter {
@@ -594,8 +1334,8 @@ body {
         opacity: 0;
 
         transform:
-            translateY(15px)
-            scale(0.98);
+            translateY(10px)
+            scale(0.985);
     }
 
     to {
@@ -605,72 +1345,165 @@ body {
             translateY(0)
             scale(1);
     }
-}
 
-.queue-card {
-    animation:
-        queueEnter
-        0.45s ease;
 }
 
 
 /* =========================================================
-   LARGE DISPLAY / TV
+   STATUS DIPANGGIL
 ========================================================= */
 
-@media (min-width: 1500px) {
+@keyframes statusPulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 6px 16px
+            rgba(23, 104, 201, 0.35),
+            0 0 0 0
+            rgba(23, 104, 201, 0.24);
+    }
+
+    50% {
+        box-shadow:
+            0 6px 16px
+            rgba(23, 104, 201, 0.35),
+            0 0 0 9px
+            rgba(23, 104, 201, 0);
+    }
+
+}
+
+
+/* =========================================================
+   LIVE DOT PING
+========================================================= */
+
+@keyframes liveDotPing {
+
+    0% {
+        transform: scale(1);
+        opacity: 0.45;
+    }
+
+    100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+
+}
+
+
+/* =========================================================
+   AKSESIBILITAS GERAK
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+}
+
+
+/* =========================================================
+   MONITOR 1366
+========================================================= */
+
+@media (
+    max-width: 1400px
+) {
 
     .display-header {
+        min-height: 106px;
+
         padding:
-            26px
-            65px;
+            16px
+            32px;
     }
+
+
+    .display-logo {
+        width: 56px;
+        height: 56px;
+    }
+
+
+    .logo-text {
+        font-size: 17px;
+    }
+
 
     .display-title h1 {
-        font-size: 34px;
+        font-size: 28px;
     }
 
-    .display-title p {
-        font-size: 15px;
-    }
 
     .display-time {
-        font-size: 36px;
+        font-size: 32px;
     }
 
-    .display-date {
-        font-size: 14px;
-    }
 
-    .display-content {
+    .monitor-layout {
+        gap: 18px;
+
         padding:
-            52px
-            65px;
+            20px
+            22px
+            24px;
     }
 
-    .queue-heading h2 {
-        font-size: 36px;
+
+    .current-queue-container {
+        min-height: 290px;
     }
 
-    .queue-heading p {
+
+    .queue-card {
+        min-height: 285px;
+    }
+
+
+    .queue-number {
+        font-size: 82px;
+    }
+
+}
+
+
+/* =========================================================
+   LAPTOP
+========================================================= */
+
+@media (
+    max-width: 1100px
+) {
+
+    .monitor-layout {
+        grid-template-columns:
+            38% 62%;
+    }
+
+
+    .display-title h1 {
+        font-size: 24px;
+    }
+
+
+    .queue-number {
+        font-size: 70px;
+    }
+
+
+    .queue-service {
         font-size: 16px;
     }
 
-    .queue-card {
-        min-height: 300px;
-    }
-
-    .queue-number {
-        font-size: 78px;
-    }
-
-    .queue-service {
-        font-size: 20px;
-    }
-
-    .queue-status {
-        font-size: 14px;
-    }
 }
 
 
@@ -678,35 +1511,42 @@ body {
    TABLET
 ========================================================= */
 
-@media (max-width: 900px) {
+@media (
+    max-width: 900px
+) {
 
     .display-header {
         padding:
-            18px
-            25px;
+            16px
+            20px;
     }
+
 
     .display-title h1 {
-        font-size: 22px;
+        font-size: 21px;
     }
+
+
+    .display-clock {
+        min-width: 175px;
+    }
+
 
     .display-time {
-        font-size: 24px;
+        font-size: 27px;
     }
 
-    .display-content {
-        padding:
-            30px
-            25px;
+
+    .monitor-layout {
+        grid-template-columns:
+            1fr;
     }
 
-    .queue-heading h2 {
-        font-size: 26px;
+
+    .video-wrapper {
+        min-height: 450px;
     }
 
-    .queue-number {
-        font-size: 52px;
-    }
 }
 
 
@@ -714,95 +1554,1013 @@ body {
    MOBILE
 ========================================================= */
 
-@media (max-width: 600px) {
+@media (
+    max-width: 600px
+) {
 
     .display-header {
-        gap: 15px;
+        flex-direction: column;
 
-        padding:
-            16px
-            18px;
+        align-items: stretch;
+
+        gap: 14px;
     }
 
-    .display-title {
-        padding-left: 14px;
+
+    .display-header::after {
+        left: 20px;
+        right: 20px;
     }
 
-    .display-title::before {
-        height: 45px;
-    }
-
-    .display-title h1 {
-        font-size: 17px;
-    }
-
-    .display-title p {
-        font-size: 10px;
-    }
 
     .display-clock {
-        min-width: auto;
-
-        padding:
-            9px
-            10px;
+        width: 100%;
     }
 
-    .display-time {
+
+    .display-title h1 {
         font-size: 19px;
     }
 
-    .display-date {
-        display: none;
+
+    .monitor-layout {
+        padding: 12px;
+
+        gap: 14px;
     }
 
-    .display-content {
+
+    .monitor-left,
+    .video-panel {
+        border-radius: var(--radius-lg);
+    }
+
+
+    .queue-number {
+        font-size: 60px;
+    }
+
+
+    .video-panel-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+
+    .video-wrapper {
+        min-height: 260px;
+    }
+
+}
+
+/* =========================================================
+   RESPONSIVE FINAL FIX
+   MENYESUAIKAN LAPTOP, MONITOR, TV, TABLET, MOBILE
+========================================================= */
+
+
+/* =========================================================
+   DASAR
+========================================================= */
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+img,
+iframe,
+video {
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   DESKTOP / LAPTOP / TV
+   Semua isi display dipaksa pas 1 layar
+========================================================= */
+
+@media (min-width: 901px) {
+
+    html,
+    body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .display-page {
+        width: 100%;
+        height: 100dvh;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .display-header {
+        flex: 0 0 auto;
+
+        min-height: 0;
+
+        height: clamp(
+            88px,
+            12vh,
+            118px
+        );
+
         padding:
+            clamp(12px, 2vh, 20px)
+            clamp(20px, 2.5vw, 42px);
+    }
+
+
+    .display-logo {
+        width: clamp(
+            48px,
+            4vw,
+            64px
+        );
+
+        height: clamp(
+            48px,
+            4vw,
+            64px
+        );
+    }
+
+
+    .logo-text {
+        font-size: clamp(
+            15px,
+            1.25vw,
+            19px
+        );
+    }
+
+
+    .display-title {
+        gap: clamp(
+            11px,
+            1.2vw,
+            18px
+        );
+    }
+
+
+    .display-title h1 {
+        font-size: clamp(
+            20px,
+            2.15vw,
+            32px
+        );
+
+        white-space: nowrap;
+    }
+
+
+    .display-title p {
+        font-size: clamp(
+            11px,
+            0.9vw,
+            14px
+        );
+    }
+
+
+    /* =========================
+       JAM
+    ========================= */
+
+    .display-clock {
+        min-width: 0;
+
+        width: clamp(
+            180px,
+            15vw,
+            225px
+        );
+
+        padding:
+            clamp(9px, 1.4vh, 13px)
+            clamp(14px, 1.5vw, 24px);
+    }
+
+
+    .display-time {
+        font-size: clamp(
+            27px,
+            2.5vw,
+            36px
+        );
+    }
+
+
+    .display-date {
+        font-size: clamp(
+            10px,
+            0.85vw,
+            13px
+        );
+    }
+
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .monitor-layout {
+        flex: 1;
+
+        min-height: 0;
+
+        /*
+           PENTING:
+           Jangan 35% + 65% karena masih ditambah gap.
+           Gunakan fr supaya gap dihitung otomatis.
+        */
+        grid-template-columns:
+            minmax(300px, 35fr)
+            minmax(0, 65fr);
+
+        gap: clamp(
+            12px,
+            1.4vw,
+            22px
+        );
+
+        padding:
+            clamp(12px, 1.8vh, 24px)
+            clamp(16px, 1.8vw, 28px)
+            clamp(14px, 2vh, 30px);
+
+        overflow: hidden;
+    }
+
+
+    /* =========================
+       PANEL KIRI
+    ========================= */
+
+    .monitor-left {
+        min-height: 0;
+        height: 100%;
+    }
+
+
+    .queue-panel-title {
+        flex: 0 0 auto;
+
+        padding:
+            clamp(12px, 1.7vh, 22px)
+            clamp(14px, 1.5vw, 24px)
+            clamp(10px, 1.5vh, 20px);
+    }
+
+
+    .queue-panel-label {
+        padding:
+            clamp(5px, 0.8vh, 8px)
+            clamp(11px, 1.2vw, 18px);
+
+        font-size: clamp(
+            10px,
+            0.85vw,
+            13px
+        );
+    }
+
+
+    .queue-panel-title p {
+        margin-top: clamp(
+            5px,
+            0.7vh,
+            10px
+        );
+
+        font-size: clamp(
+            10px,
+            0.85vw,
+            13px
+        );
+    }
+
+
+    /* =========================
+       ANTREAN UTAMA
+    ========================= */
+
+    .current-queue-container {
+        flex: 1;
+
+        min-height: 0 !important;
+
+        padding: clamp(
+            10px,
+            1.3vw,
+            20px
+        );
+
+        overflow: hidden;
+    }
+
+
+    .queue-grid {
+        width: 100%;
+        height: 100%;
+
+        min-height: 0;
+
+        display: grid;
+
+        /*
+           Kalau ada beberapa yang called/serving,
+           card akan otomatis menyesuaikan.
+        */
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(180px, 1fr)
+            );
+
+        gap: clamp(
+            8px,
+            1vw,
+            16px
+        );
+    }
+
+
+    .queue-card {
+        width: 100%;
+        height: 100%;
+
+        min-height: 0 !important;
+
+        padding:
+            clamp(14px, 2vh, 32px)
+            clamp(12px, 1.5vw, 24px);
+    }
+
+
+    .queue-number {
+        font-size: clamp(
+            48px,
+            5.5vw,
+            96px
+        );
+    }
+
+
+    .queue-service {
+        margin-top: clamp(
+            8px,
+            1.3vh,
+            18px
+        );
+
+        font-size: clamp(
+            13px,
+            1.25vw,
+            19px
+        );
+    }
+
+
+    .queue-status {
+        margin-top: clamp(
+            10px,
+            1.4vh,
+            22px
+        );
+
+        padding:
+            clamp(6px, 0.8vh, 9px)
+            clamp(12px, 1.3vw, 20px);
+
+        font-size: clamp(
+            9px,
+            0.8vw,
+            12.5px
+        );
+    }
+
+
+    /* =========================
+       EMPTY
+    ========================= */
+
+    .queue-empty {
+        width: 100%;
+        height: 100%;
+
+        min-height: 0 !important;
+
+        padding: clamp(
+            12px,
+            1.5vw,
             25px
-            15px;
+        );
     }
 
-    .queue-heading {
-        margin-bottom: 22px;
+
+    .queue-empty-icon {
+        width: clamp(
+            50px,
+            4.7vw,
+            76px
+        );
+
+        height: clamp(
+            50px,
+            4.7vw,
+            76px
+        );
+
+        margin-bottom: clamp(
+            10px,
+            1.3vh,
+            20px
+        );
     }
 
-    .queue-heading h2 {
+
+    .queue-empty h2 {
+        font-size: clamp(
+            15px,
+            1.35vw,
+            20px
+        );
+    }
+
+
+    .queue-empty p {
+        font-size: clamp(
+            10px,
+            0.9vw,
+            13.5px
+        );
+    }
+
+
+    /* =========================
+       ANTREAN BERIKUTNYA
+    ========================= */
+
+    .next-queue-section {
+        flex: 0 0 auto;
+
+        /*
+           Batasi supaya tidak membuat panel memanjang
+           keluar layar.
+        */
+        max-height: 30%;
+
+        overflow: hidden;
+    }
+
+
+    .next-queue-header {
+        padding:
+            clamp(8px, 1vh, 16px)
+            clamp(12px, 1.4vw, 22px)
+            clamp(6px, 0.8vh, 10px);
+
+        font-size: clamp(
+            10px,
+            0.9vw,
+            13.5px
+        );
+    }
+
+
+    .next-queue-list {
+        gap: clamp(
+            4px,
+            0.6vh,
+            8px
+        );
+
+        padding:
+            0
+            clamp(10px, 1.2vw, 18px)
+            clamp(8px, 1.2vh, 18px);
+
+        overflow-y: auto;
+    }
+
+
+    .next-queue-item {
+        padding:
+            clamp(6px, 0.7vh, 10px)
+            clamp(9px, 1vw, 14px);
+    }
+
+
+    .next-queue-item strong {
+        font-size: clamp(
+            12px,
+            1.1vw,
+            17px
+        );
+
+        padding:
+            clamp(4px, 0.5vh, 6px)
+            clamp(7px, 0.8vw, 11px);
+    }
+
+
+    .next-queue-item span {
+        font-size: clamp(
+            9px,
+            0.8vw,
+            12.5px
+        );
+    }
+
+
+    /* =========================
+       PANEL VIDEO
+    ========================= */
+
+    .monitor-right,
+    .video-panel {
+        min-height: 0;
+        height: 100%;
+    }
+
+
+    .video-panel-header {
+        flex: 0 0 auto;
+
+        min-height: 0;
+
+        padding:
+            clamp(10px, 1.4vh, 16px)
+            clamp(14px, 1.5vw, 23px);
+    }
+
+
+    .video-panel-header h2 {
+        font-size: clamp(
+            14px,
+            1.3vw,
+            19px
+        );
+    }
+
+
+    .video-panel-header p {
+        font-size: clamp(
+            9px,
+            0.8vw,
+            12px
+        );
+    }
+
+
+    .video-live-badge {
+        font-size: clamp(
+            8px,
+            0.7vw,
+            11px
+        );
+    }
+
+
+    /* =========================
+       VIDEO
+    ========================= */
+
+    .video-wrapper {
+        flex: 1;
+
+        min-height: 0 !important;
+
+        height: auto;
+    }
+
+
+    /* =========================
+       FOOTER VIDEO
+    ========================= */
+
+    .video-footer {
+        flex: 0 0 auto;
+
+        min-height: 0;
+
+        padding:
+            clamp(8px, 1.1vh, 13px)
+            clamp(15px, 1.5vw, 22px)
+            clamp(8px, 1.1vh, 13px)
+            clamp(18px, 1.8vw, 27px);
+    }
+
+
+    .video-footer-item strong {
+        font-size: clamp(
+            9px,
+            0.85vw,
+            13px
+        );
+    }
+
+
+    .video-footer-item span {
+        font-size: clamp(
+            8px,
+            0.72vw,
+            11px
+        );
+    }
+
+}
+
+
+/* =========================================================
+   LAYAR PENDEK
+   Contoh laptop 1366 x 768
+========================================================= */
+
+@media (
+    min-width: 901px
+) and (
+    max-height: 800px
+) {
+
+    .display-header {
+        height: 88px;
+    }
+
+
+    .display-logo {
+        width: 48px;
+        height: 48px;
+    }
+
+
+    .display-title h1 {
         font-size: 22px;
     }
 
-    .queue-heading p {
-        font-size: 12px;
+
+    .display-title p {
+        margin-top: 3px;
+
+        font-size: 11px;
     }
 
-    .queue-grid {
-        grid-template-columns: 1fr;
 
-        gap: 15px;
-    }
-
-    .queue-card {
-        min-height: 210px;
-
+    .display-clock {
         padding:
-            25px
+            8px
+            16px;
+    }
+
+
+    .display-time {
+        font-size: 27px;
+    }
+
+
+    .display-date {
+        margin-top: 4px;
+    }
+
+
+    .monitor-layout {
+        padding:
+            12px
+            18px
+            14px;
+
+        gap: 14px;
+    }
+
+
+    .queue-panel-title {
+        padding:
+            10px
+            16px;
+    }
+
+
+    .queue-panel-title p {
+        margin-top: 5px;
+    }
+
+
+    .current-queue-container {
+        padding: 10px;
+    }
+
+
+    .queue-number {
+        font-size: clamp(
+            45px,
+            4.5vw,
+            70px
+        );
+    }
+
+
+    .next-queue-section {
+        max-height: 27%;
+    }
+
+
+    .video-panel-header {
+        padding:
+            9px
+            16px;
+    }
+
+
+    .video-footer {
+        padding:
+            8px
+            18px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (
+    min-width: 601px
+) and (
+    max-width: 900px
+) {
+
+    html,
+    body {
+        overflow-y: auto;
+    }
+
+
+    .display-page {
+        min-height: 100dvh;
+    }
+
+
+    .display-header {
+        padding:
+            15px
             20px;
     }
 
-    .queue-number {
-        font-size: 48px;
+
+    .display-title h1 {
+        font-size: clamp(
+            18px,
+            3vw,
+            23px
+        );
     }
+
+
+    .display-clock {
+        min-width: 165px;
+    }
+
+
+    .monitor-layout {
+        display: grid;
+
+        grid-template-columns:
+            1fr;
+
+        gap: 16px;
+
+        padding:
+            16px;
+    }
+
+
+    .current-queue-container {
+        min-height: 300px;
+    }
+
+
+    .queue-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                auto-fit,
+                minmax(220px, 1fr)
+            );
+
+        gap: 12px;
+    }
+
+
+    .queue-card {
+        min-height: 260px;
+    }
+
+
+    .video-wrapper {
+        min-height: 420px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (
+    max-width: 600px
+) {
+
+    html,
+    body {
+        overflow-y: auto;
+    }
+
+
+    .display-page {
+        min-height: 100dvh;
+    }
+
+
+    .display-header {
+        min-height: auto;
+
+        padding:
+            14px
+            16px;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 12px;
+    }
+
+
+    .display-title {
+        gap: 11px;
+    }
+
+
+    .display-logo {
+        width: 48px;
+        height: 48px;
+
+        border-radius: 13px;
+    }
+
+
+    .display-title h1 {
+        font-size: clamp(
+            17px,
+            5vw,
+            21px
+        );
+
+        letter-spacing: -0.3px;
+    }
+
+
+    .display-title p {
+        font-size: 11px;
+    }
+
+
+    .display-clock {
+        width: 100%;
+
+        padding:
+            10px
+            14px;
+    }
+
+
+    .display-time {
+        font-size: 28px;
+    }
+
+
+    .monitor-layout {
+        display: flex;
+
+        flex-direction: column;
+
+        padding: 10px;
+
+        gap: 12px;
+    }
+
+
+    .monitor-left,
+    .video-panel {
+        width: 100%;
+
+        border-radius: 16px;
+    }
+
+
+    .current-queue-container {
+        min-height: 260px;
+
+        padding: 12px;
+    }
+
+
+    .queue-grid {
+        display: grid;
+
+        grid-template-columns:
+            1fr;
+
+        gap: 10px;
+    }
+
+
+    .queue-card {
+        min-height: 230px;
+
+        padding:
+            20px
+            14px;
+    }
+
+
+    .queue-number {
+        font-size: clamp(
+            54px,
+            18vw,
+            75px
+        );
+    }
+
 
     .queue-service {
         font-size: 15px;
     }
 
-    .queue-empty {
-        margin:
-            35px
-            auto;
+
+    .next-queue-section {
+        max-height: none;
+    }
+
+
+    .video-panel-header {
+        flex-direction: row;
+
+        align-items: center;
 
         padding:
-            40px
-            20px;
+            12px
+            14px;
     }
+
+
+    .video-panel-header h2 {
+        font-size: 15px;
+    }
+
+
+    .video-panel-header p {
+        font-size: 10px;
+    }
+
+
+    .video-live-badge {
+        padding:
+            5px
+            8px;
+
+        font-size: 8px;
+    }
+
+
+    .video-wrapper {
+        min-height: 220px;
+    }
+
+
+    .video-footer {
+        padding:
+            10px
+            14px
+            10px
+            18px;
+    }
+
 }

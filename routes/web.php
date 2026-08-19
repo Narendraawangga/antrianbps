@@ -23,6 +23,11 @@ Route::get(
 )->name('display');
 
 Route::get(
+    '/display/data',
+    [DisplayController::class, 'data']
+)->name('display.data');
+
+Route::get(
     '/layanan',
     [QueueController::class, 'layanan']
 )->name('layanan');
