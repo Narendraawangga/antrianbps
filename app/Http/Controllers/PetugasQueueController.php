@@ -546,4 +546,40 @@ class PetugasQueueController extends Controller
         return redirect()
             ->route('petugas.dashboard');
     }
+    /**
+     * Menampilkan riwayat layanan petugas
+     */
+    public function riwayat()
+    {
+        $userId = auth()->id();
+
+        $riwayat = \App\Models\Queue::with('service')
+            ->where('served_by', $userId)
+            ->whereIn('status', [
+                'completed',
+                'skipped'
+            ])
+            ->orderByDesc('completed_at')
+            ->get();
+
+        $totalRiwayat = $riwayat->count();
+
+        $totalSelesai = $riwayat
+            ->where('status', 'completed')
+            ->count();
+
+        $totalDilewati = $riwayat
+            ->where('status', 'skipped')
+            ->count();
+
+        return view(
+            'petugas.riwayat',
+            compact(
+                'riwayat',
+                'totalRiwayat',
+                'totalSelesai',
+                'totalDilewati'
+            )
+        );
+    }
 }

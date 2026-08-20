@@ -116,8 +116,8 @@
 
         <!-- LAPORAN -->
         <a
-            href="#"
-            class="admin-menu-item">
+            href="{{ route('admin.laporan') }}"
+            class="admin-menu-item {{ request()->routeIs('admin.laporan') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 📊
