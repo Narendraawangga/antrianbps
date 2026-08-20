@@ -8,10 +8,9 @@
         <!-- LOGO BPS -->
         <div class="navbar-logo">
             <img
-                src="{{ asset('images/logo-bps.png') }}"
+                src="{{ asset('images/hh.png') }}"
                 alt="Logo BPS"
-                class="logo-bps"
-            >
+                class="logo-bps">
         </div>
 
 
@@ -60,14 +59,12 @@
         <form
             action="{{ route('logout') }}"
             method="POST"
-            class="logout-form"
-        >
+            class="logout-form">
             @csrf
 
             <button
                 type="submit"
-                class="logout-button"
-            >
+                class="logout-button">
                 Logout
             </button>
 

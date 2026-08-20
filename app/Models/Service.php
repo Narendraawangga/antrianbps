@@ -29,4 +29,13 @@ class Service extends Model
             User::class
         );
     }
+
+
+    public function schedules()
+    {
+        return $this->hasMany(
+            Schedule::class,
+            'service_id'
+        );
+    }
 }

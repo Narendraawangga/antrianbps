@@ -28,6 +28,7 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+
     protected function casts(): array
     {
         return [
@@ -36,10 +37,32 @@ class User extends Authenticatable
         ];
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | PELAYANAN PETUGAS
+    |--------------------------------------------------------------------------
+    */
+
     public function service()
     {
         return $this->belongsTo(
-            \App\Models\Service::class
+            Service::class
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | JADWAL PETUGAS
+    |--------------------------------------------------------------------------
+    */
+
+    public function schedules()
+    {
+        return $this->hasMany(
+            Schedule::class,
+            'user_id'
         );
     }
 }

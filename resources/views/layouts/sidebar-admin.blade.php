@@ -42,8 +42,8 @@
 
         <!-- ANTREAN -->
         <a
-            href="#"
-            class="admin-menu-item">
+            href="{{ route('admin.antrean') }}"
+            class="admin-menu-item {{ request()->routeIs('admin.antrean') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 🎫
@@ -58,8 +58,8 @@
 
         <!-- JADWAL PETUGAS -->
         <a
-            href="#"
-            class="admin-menu-item">
+            href="{{ route('admin.jadwal') }}"
+            class="admin-menu-item {{ request()->routeIs('admin.jadwal*') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 📅
@@ -85,7 +85,7 @@
         <!-- PENGGUNA -->
         <a
             href="{{ route('admin.users') }}"
-            class="admin-menu-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+            class="admin-menu-item {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 👥
@@ -100,8 +100,8 @@
 
         <!-- LAYANAN -->
         <a
-            href="#"
-            class="admin-menu-item">
+            href="{{ route('admin.layanan') }}"
+            class="admin-menu-item {{ request()->routeIs('admin.layanan*') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 🏢
@@ -116,8 +116,8 @@
 
         <!-- LAPORAN -->
         <a
-            href="#"
-            class="admin-menu-item">
+            href="{{ route('admin.laporan') }}"
+            class="admin-menu-item {{ request()->routeIs('admin.laporan') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 📊
@@ -187,4 +187,3 @@
     </div>
 
 </aside>
-

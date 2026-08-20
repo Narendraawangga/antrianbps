@@ -1,4 +1,5 @@
 @vite('resources/css/layouts/sidebar-petugas.css')
+
 <aside class="petugas-sidebar">
 
     <!-- HEADER -->
@@ -26,8 +27,7 @@
         <!-- DASHBOARD -->
         <a
             href="{{ route('petugas.dashboard') }}"
-            class="petugas-menu-item
-            {{ request()->routeIs('petugas.dashboard') ? 'active' : '' }}">
+            class="petugas-menu-item {{ request()->routeIs('petugas.dashboard') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 🏠
@@ -56,10 +56,11 @@
         </a>
 
 
-        <!-- JADWAL -->
+        <!-- JADWAL SAYA -->
         <a
-            href="#"
-            class="petugas-menu-item">
+            href="{{ route('petugas.jadwal') }}"
+            class="petugas-menu-item {{ request()->routeIs('petugas.jadwal') ? 'active' : '' }}">
+
             <span class="menu-icon">
                 📅
             </span>
@@ -73,8 +74,8 @@
 
         <!-- RIWAYAT -->
         <a
-            href="#"
-            class="petugas-menu-item">
+            href="{{ route('petugas.riwayat') }}"
+            class="petugas-menu-item {{ request()->routeIs('petugas.riwayat') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 📊
