@@ -5,70 +5,118 @@
 .petugas-antrean-page {
     min-height: 100vh;
     background: #f5f7fb;
+
+    font-family: Arial, Helvetica, sans-serif;
+    color: #333;
 }
 
 
 /* =====================================================
-   LAYOUT
+   RESET
+===================================================== */
+
+.petugas-antrean-page *,
+.petugas-antrean-page *::before,
+.petugas-antrean-page *::after {
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   AREA SETELAH NAVBAR
 ===================================================== */
 
 .petugas-antrean-page .petugas-layout {
     display: flex;
-}
 
-.petugas-antrean-content {
-    flex: 1;
-    min-width: 0;
-    padding: 30px;
-    background: #f5f7fb;
+    width: 100%;
+    min-height: calc(100vh - 70px);
+
+    position: relative;
+
+    padding-top: 70px;
 }
 
 
 /* =====================================================
-   HEADER
+   CONTENT
+===================================================== */
+
+.petugas-antrean-content {
+    width: calc(100% - 245px);
+
+    min-width: 0;
+
+    margin-left: 245px;
+
+    padding: 30px 30px 40px;
+
+    background: #f5f7fb;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =====================================================
+   HEADER HALAMAN
 ===================================================== */
 
 .antrean-page-header {
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
     gap: 20px;
+
     margin-bottom: 24px;
 }
 
 .antrean-page-header h1 {
     margin: 0;
 
-    color: #1f3f8f;
+    color: #23458f;
 
     font-size: 27px;
+
     font-weight: 700;
+
+    line-height: 1.3;
 }
 
 .antrean-page-header p {
-    margin: 7px 0 0;
+    margin: 6px 0 0;
 
-    color: #777;
+    color: #7d8797;
 
     font-size: 13px;
+
+    line-height: 1.5;
 }
 
 .antrean-online {
     display: flex;
+
     align-items: center;
+
     gap: 7px;
 
     padding: 8px 13px;
 
     background: #ecfdf3;
 
+    border: 1px solid #d1fae5;
+
     border-radius: 20px;
 
     color: #15803d;
 
     font-size: 10px;
+
     font-weight: 700;
+
+    white-space: nowrap;
 }
 
 .antrean-online span {
@@ -88,7 +136,7 @@
 .antrean-main-grid {
     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 
     gap: 18px;
 
@@ -103,11 +151,11 @@
 .antrean-card {
     background: #ffffff;
 
-    border: 1px solid #e5e7eb;
+    border: 1px solid #e7ebf2;
 
     border-radius: 12px;
 
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .025);
+    box-shadow: 0 3px 10px rgba(31, 63, 143, 0.05);
 
     overflow: hidden;
 }
@@ -128,23 +176,25 @@
 
     padding: 18px 20px;
 
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #edf0f5;
 }
 
 .antrean-card-header h2 {
     margin: 0;
 
-    color: #24438f;
+    color: #23458f;
 
-    font-size: 16px;
+    font-size: 17px;
+
+    font-weight: 700;
 }
 
 .antrean-card-header p {
-    margin: 4px 0 0;
+    margin: 5px 0 0;
 
-    color: #999;
+    color: #8a94a6;
 
-    font-size: 10px;
+    font-size: 11px;
 }
 
 
@@ -152,38 +202,44 @@
    BADGE
 ===================================================== */
 
-.live-badge {
-    padding: 6px 10px;
+.live-badge,
+.queue-count,
+.skipped-count {
+    display: inline-flex;
 
-    background: #ecfdf3;
+    align-items: center;
+
+    padding: 7px 11px;
 
     border-radius: 20px;
-
-    color: #15803d;
 
     font-size: 9px;
 
     font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.live-badge {
+    background: #ecfdf3;
+
+    border: 1px solid #d1fae5;
+
+    color: #15803d;
 }
 
 .queue-count,
 .skipped-count {
-    padding: 7px 11px;
-
     background: #eef3ff;
 
-    border-radius: 20px;
+    border: 1px solid #dbe5ff;
 
     color: #2349ad;
-
-    font-size: 9px;
-
-    font-weight: 700;
 }
 
 
 /* =====================================================
-   ANTREAN SAAT INI
+   ANTREAN AKTIF
 ===================================================== */
 
 .current-queue-body {
@@ -193,19 +249,21 @@
 }
 
 .queue-label {
-    color: #999;
+    color: #8b95a5;
 
     font-size: 10px;
+
+    font-weight: 600;
 
     letter-spacing: 1px;
 }
 
 .big-queue-number {
-    margin: 8px 0;
+    margin: 9px 0;
 
     color: #2349ad;
 
-    font-size: 58px;
+    font-size: 52px;
 
     font-weight: 700;
 
@@ -215,18 +273,22 @@
 .current-service {
     margin-top: 8px;
 
-    color: #666;
+    color: #5f6b7a;
 
     font-size: 13px;
+
+    font-weight: 500;
 }
 
 .current-status {
-    margin-top: 14px;
+    margin-top: 13px;
 }
 
 .status-called,
 .status-serving {
-    display: inline-block;
+    display: inline-flex;
+
+    align-items: center;
 
     padding: 7px 13px;
 
@@ -240,18 +302,22 @@
 .status-called {
     background: #fff7ed;
 
+    border: 1px solid #fed7aa;
+
     color: #c2410c;
 }
 
 .status-serving {
     background: #ecfdf3;
 
+    border: 1px solid #d1fae5;
+
     color: #15803d;
 }
 
 
 /* =====================================================
-   EMPTY CURRENT
+   EMPTY ANTREAN AKTIF
 ===================================================== */
 
 .empty-current {
@@ -261,23 +327,25 @@
 }
 
 .empty-icon {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 
-    font-size: 34px;
+    font-size: 32px;
 }
 
 .empty-current h3 {
     margin: 0;
 
-    color: #555;
+    color: #5c6675;
 
     font-size: 15px;
+
+    font-weight: 600;
 }
 
 .empty-current p {
     margin: 7px 0 20px;
 
-    color: #aaa;
+    color: #98a1af;
 
     font-size: 11px;
 }
@@ -306,7 +374,7 @@
 .btn-recall {
     width: 100%;
 
-    min-height: 44px;
+    min-height: 43px;
 
     display: inline-flex;
 
@@ -316,49 +384,68 @@
 
     gap: 7px;
 
+    padding: 10px 15px;
+
     border: none;
 
     border-radius: 8px;
 
-    padding: 11px 16px;
-
     cursor: pointer;
 
-    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+
+    font-size: 11px;
 
     font-weight: 600;
 
     transition: .2s ease;
 }
 
-.btn-start,
-.btn-call-main {
-    background: #2349ad;
 
-    color: white;
+/* =====================================================
+   BUTTON PANGGIL
+===================================================== */
+
+.btn-call-main,
+.btn-start {
+    background: #2850b8;
+
+    color: #ffffff;
 }
 
-.btn-start:hover,
-.btn-call-main:hover {
-    background: #1d3e96;
+.btn-call-main:hover,
+.btn-start:hover {
+    background: #21439d;
 
     transform: translateY(-1px);
 
-    box-shadow: 0 5px 12px rgba(0, 0, 0, .12);
+    box-shadow: 0 5px 12px rgba(35, 73, 173, .18);
 }
+
+
+/* =====================================================
+   BUTTON LEWATI
+===================================================== */
 
 .btn-skip {
     background: #f59e0b;
 
-    color: white;
+    color: #ffffff;
 }
 
 .btn-skip:hover {
     background: #d97706;
 }
 
+
+/* =====================================================
+   BUTTON SELESAI
+===================================================== */
+
 .btn-finish {
     background: #ecfdf3;
+
+    border: 1px solid #d1fae5;
 
     color: #15803d;
 }
@@ -367,10 +454,15 @@
     background: #dcfce7;
 }
 
-.empty-current .btn-call-main {
-    max-width: 300px;
 
-    margin: auto;
+/* =====================================================
+   BUTTON EMPTY
+===================================================== */
+
+.empty-current .btn-call-main {
+    max-width: 290px;
+
+    margin: 0 auto;
 }
 
 
@@ -379,9 +471,9 @@
 ===================================================== */
 
 .waiting-list {
-    padding: 8px 20px 5px;
+    padding: 5px 20px;
 
-    max-height: 350px;
+    max-height: 330px;
 
     overflow-y: auto;
 }
@@ -395,7 +487,7 @@
 
     padding: 12px 0;
 
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid #edf0f5;
 }
 
 .waiting-item:last-child {
@@ -404,6 +496,7 @@
 
 .waiting-number {
     width: 52px;
+
     height: 38px;
 
     display: flex;
@@ -415,6 +508,8 @@
     flex-shrink: 0;
 
     background: #eef3ff;
+
+    border: 1px solid #dce6ff;
 
     border-radius: 7px;
 
@@ -432,9 +527,11 @@
 }
 
 .waiting-service {
-    color: #555;
+    color: #4f5b6b;
 
     font-size: 11px;
+
+    font-weight: 500;
 
     white-space: nowrap;
 
@@ -444,9 +541,9 @@
 }
 
 .waiting-time {
-    margin-top: 3px;
+    margin-top: 4px;
 
-    color: #aaa;
+    color: #98a1af;
 
     font-size: 9px;
 }
@@ -455,6 +552,8 @@
     padding: 6px 9px;
 
     background: #fff7ed;
+
+    border: 1px solid #fed7aa;
 
     border-radius: 20px;
 
@@ -465,8 +564,13 @@
     font-weight: 600;
 }
 
+
+/* =====================================================
+   NEXT ACTION
+===================================================== */
+
 .next-action {
-    padding: 15px 20px 20px;
+    padding: 14px 20px 20px;
 }
 
 
@@ -475,11 +579,17 @@
 ===================================================== */
 
 .empty-list {
-    padding: 45px 20px;
+    min-height: 180px;
 
-    text-align: center;
+    display: flex;
 
-    color: #aaa;
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 30px;
+
+    color: #9aa3b1;
 
     font-size: 11px;
 }
@@ -506,7 +616,7 @@
 
     padding: 13px 0;
 
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid #edf0f5;
 }
 
 .skipped-item:last-child {
@@ -515,6 +625,7 @@
 
 .skipped-number {
     width: 52px;
+
     height: 38px;
 
     display: flex;
@@ -523,7 +634,11 @@
 
     justify-content: center;
 
+    flex-shrink: 0;
+
     background: #fff7ed;
+
+    border: 1px solid #fed7aa;
 
     border-radius: 7px;
 
@@ -536,14 +651,18 @@
 
 .skipped-info {
     flex: 1;
+
+    min-width: 0;
 }
 
 .skipped-info strong {
     display: block;
 
-    color: #555;
+    color: #4f5b6b;
 
     font-size: 11px;
+
+    font-weight: 600;
 }
 
 .skipped-info small {
@@ -551,28 +670,38 @@
 
     margin-top: 3px;
 
-    color: #aaa;
+    color: #98a1af;
 
     font-size: 9px;
 }
 
+
+/* =====================================================
+   PANGGIL ULANG
+===================================================== */
+
 .btn-recall {
     width: auto;
 
-    min-height: 38px;
+    min-height: 37px;
 
-    background: #2563eb;
+    padding: 9px 13px;
 
-    color: white;
+    background: #2850b8;
+
+    color: #ffffff;
 }
 
 .btn-recall:hover {
-    background: #1d4ed8;
+    background: #21439d;
 
     transform: translateY(-1px);
-
-    box-shadow: 0 4px 10px rgba(0, 0, 0, .12);
 }
+
+
+/* =====================================================
+   EMPTY SKIPPED
+===================================================== */
 
 .empty-skipped {
     display: flex;
@@ -585,7 +714,7 @@
 
     padding: 25px;
 
-    color: #999;
+    color: #8d97a6;
 
     font-size: 11px;
 }
@@ -598,37 +727,70 @@
 
 
 /* =====================================================
+   SCROLLBAR
+===================================================== */
+
+.waiting-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.waiting-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.waiting-list::-webkit-scrollbar-thumb {
+    background: #d7ddea;
+
+    border-radius: 10px;
+}
+
+
+/* =====================================================
    RESPONSIVE
 ===================================================== */
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
+
+    .petugas-antrean-content {
+        padding: 25px;
+    }
 
     .antrean-main-grid {
         grid-template-columns: 1fr;
     }
-
 }
 
 
 @media (max-width: 800px) {
 
     .petugas-antrean-content {
+        width: calc(100% - 220px);
+
+        margin-left: 220px;
+
         padding: 20px;
-    }
-
-}
-
-
-@media (max-width: 600px) {
-
-    .petugas-antrean-content {
-        padding: 15px;
     }
 
     .antrean-page-header {
         align-items: flex-start;
 
         flex-direction: column;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .petugas-antrean-content {
+        width: 100%;
+
+        margin-left: 0;
+
+        padding: 15px;
+    }
+
+    .petugas-antrean-page .petugas-layout {
+        padding-top: 70px;
     }
 
     .antrean-page-header h1 {
@@ -653,4 +815,7 @@
         width: 100%;
     }
 
+    .big-queue-number {
+        font-size: 45px;
+    }
 }
