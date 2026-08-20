@@ -286,7 +286,6 @@ Route::middleware([
         '/petugas/antrean/selesai',
         [PetugasQueueController::class, 'selesai']
     )->name('petugas.antrean.selesai');
-
     /*
     /*
     |--------------------------------------------------------------------------
