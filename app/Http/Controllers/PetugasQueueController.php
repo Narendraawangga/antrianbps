@@ -161,6 +161,98 @@ class PetugasQueueController extends Controller
     }
 
 
+    /**
+     * Halaman antrean petugas
+     */
+    public function antrean()
+    {
+        $periodStart = $this->schedule
+            ->periodStart()
+            ->utc();
+
+        $periodEnd = $this->schedule
+            ->periodEnd()
+            ->utc();
+
+        /*
+    |--------------------------------------------------------------------------
+    | ANTREAN MENUNGGU
+    |--------------------------------------------------------------------------
+    */
+
+        $waitingQueues = Queue::with('service')
+            ->whereBetween(
+                'created_at',
+                [$periodStart, $periodEnd]
+            )
+            ->where(
+                'status',
+                'waiting'
+            )
+            ->orderBy(
+                'created_at',
+                'asc'
+            )
+            ->get();
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | ANTREAN AKTIF
+    |--------------------------------------------------------------------------
+    */
+
+        $currentQueue = Queue::with('service')
+            ->whereBetween(
+                'created_at',
+                [$periodStart, $periodEnd]
+            )
+            ->where(
+                'served_by',
+                Auth::id()
+            )
+            ->whereIn(
+                'status',
+                [
+                    'called',
+                    'serving',
+                ]
+            )
+            ->orderByDesc('called_at')
+            ->first();
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | ANTREAN DILEWATI
+    |--------------------------------------------------------------------------
+    */
+
+        $skippedQueues = Queue::with('service')
+            ->whereBetween(
+                'created_at',
+                [$periodStart, $periodEnd]
+            )
+            ->where(
+                'status',
+                'skipped'
+            )
+            ->orderBy(
+                'created_at',
+                'asc'
+            )
+            ->get();
+
+
+        return view(
+            'petugas.antrean',
+            compact(
+                'waitingQueues',
+                'currentQueue',
+                'skippedQueues'
+            )
+        );
+    }
     /*
     |--------------------------------------------------------------------------
     | PANGGIL ANTREAN BERIKUTNYA

@@ -42,8 +42,9 @@
 
         <!-- ANTREAN -->
         <a
-            href="#"
-            class="petugas-menu-item">
+            href="{{ route('petugas.antrean') }}"
+            class="petugas-menu-item
+    {{ request()->routeIs('petugas.antrean') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 🎫

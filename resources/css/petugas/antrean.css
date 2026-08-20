@@ -1,0 +1,656 @@
+/* =====================================================
+   HALAMAN ANTREAN PETUGAS
+===================================================== */
+
+.petugas-antrean-page {
+    min-height: 100vh;
+    background: #f5f7fb;
+}
+
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+
+.petugas-antrean-page .petugas-layout {
+    display: flex;
+}
+
+.petugas-antrean-content {
+    flex: 1;
+    min-width: 0;
+    padding: 30px;
+    background: #f5f7fb;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.antrean-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.antrean-page-header h1 {
+    margin: 0;
+
+    color: #1f3f8f;
+
+    font-size: 27px;
+    font-weight: 700;
+}
+
+.antrean-page-header p {
+    margin: 7px 0 0;
+
+    color: #777;
+
+    font-size: 13px;
+}
+
+.antrean-online {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 8px 13px;
+
+    background: #ecfdf3;
+
+    border-radius: 20px;
+
+    color: #15803d;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.antrean-online span {
+    width: 7px;
+    height: 7px;
+
+    background: #22c55e;
+
+    border-radius: 50%;
+}
+
+
+/* =====================================================
+   GRID UTAMA
+===================================================== */
+
+.antrean-main-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 18px;
+
+    margin-bottom: 20px;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.antrean-card {
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 12px;
+
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .025);
+
+    overflow: hidden;
+}
+
+
+/* =====================================================
+   HEADER CARD
+===================================================== */
+
+.antrean-card-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 18px 20px;
+
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.antrean-card-header h2 {
+    margin: 0;
+
+    color: #24438f;
+
+    font-size: 16px;
+}
+
+.antrean-card-header p {
+    margin: 4px 0 0;
+
+    color: #999;
+
+    font-size: 10px;
+}
+
+
+/* =====================================================
+   BADGE
+===================================================== */
+
+.live-badge {
+    padding: 6px 10px;
+
+    background: #ecfdf3;
+
+    border-radius: 20px;
+
+    color: #15803d;
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+.queue-count,
+.skipped-count {
+    padding: 7px 11px;
+
+    background: #eef3ff;
+
+    border-radius: 20px;
+
+    color: #2349ad;
+
+    font-size: 9px;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   ANTREAN SAAT INI
+===================================================== */
+
+.current-queue-body {
+    padding: 35px 20px 25px;
+
+    text-align: center;
+}
+
+.queue-label {
+    color: #999;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+}
+
+.big-queue-number {
+    margin: 8px 0;
+
+    color: #2349ad;
+
+    font-size: 58px;
+
+    font-weight: 700;
+
+    line-height: 1;
+}
+
+.current-service {
+    margin-top: 8px;
+
+    color: #666;
+
+    font-size: 13px;
+}
+
+.current-status {
+    margin-top: 14px;
+}
+
+.status-called,
+.status-serving {
+    display: inline-block;
+
+    padding: 7px 13px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+.status-called {
+    background: #fff7ed;
+
+    color: #c2410c;
+}
+
+.status-serving {
+    background: #ecfdf3;
+
+    color: #15803d;
+}
+
+
+/* =====================================================
+   EMPTY CURRENT
+===================================================== */
+
+.empty-current {
+    padding: 45px 25px;
+
+    text-align: center;
+}
+
+.empty-icon {
+    margin-bottom: 10px;
+
+    font-size: 34px;
+}
+
+.empty-current h3 {
+    margin: 0;
+
+    color: #555;
+
+    font-size: 15px;
+}
+
+.empty-current p {
+    margin: 7px 0 20px;
+
+    color: #aaa;
+
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.antrean-actions {
+    display: flex;
+
+    gap: 10px;
+
+    padding: 0 20px 20px;
+}
+
+.antrean-actions form {
+    flex: 1;
+
+    margin: 0;
+}
+
+.btn-action,
+.btn-call-main,
+.btn-recall {
+    width: 100%;
+
+    min-height: 44px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 11px 16px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    transition: .2s ease;
+}
+
+.btn-start,
+.btn-call-main {
+    background: #2349ad;
+
+    color: white;
+}
+
+.btn-start:hover,
+.btn-call-main:hover {
+    background: #1d3e96;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 12px rgba(0, 0, 0, .12);
+}
+
+.btn-skip {
+    background: #f59e0b;
+
+    color: white;
+}
+
+.btn-skip:hover {
+    background: #d97706;
+}
+
+.btn-finish {
+    background: #ecfdf3;
+
+    color: #15803d;
+}
+
+.btn-finish:hover {
+    background: #dcfce7;
+}
+
+.empty-current .btn-call-main {
+    max-width: 300px;
+
+    margin: auto;
+}
+
+
+/* =====================================================
+   ANTREAN BERIKUTNYA
+===================================================== */
+
+.waiting-list {
+    padding: 8px 20px 5px;
+
+    max-height: 350px;
+
+    overflow-y: auto;
+}
+
+.waiting-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px 0;
+
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.waiting-item:last-child {
+    border-bottom: none;
+}
+
+.waiting-number {
+    width: 52px;
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: #eef3ff;
+
+    border-radius: 7px;
+
+    color: #2349ad;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.waiting-info {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.waiting-service {
+    color: #555;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.waiting-time {
+    margin-top: 3px;
+
+    color: #aaa;
+
+    font-size: 9px;
+}
+
+.waiting-badge {
+    padding: 6px 9px;
+
+    background: #fff7ed;
+
+    border-radius: 20px;
+
+    color: #c2410c;
+
+    font-size: 8px;
+
+    font-weight: 600;
+}
+
+.next-action {
+    padding: 15px 20px 20px;
+}
+
+
+/* =====================================================
+   EMPTY LIST
+===================================================== */
+
+.empty-list {
+    padding: 45px 20px;
+
+    text-align: center;
+
+    color: #aaa;
+
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   ANTREAN DILEWATI
+===================================================== */
+
+.skipped-card {
+    margin-bottom: 20px;
+}
+
+.skipped-list {
+    padding: 5px 20px 15px;
+}
+
+.skipped-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 13px 0;
+
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.skipped-item:last-child {
+    border-bottom: none;
+}
+
+.skipped-number {
+    width: 52px;
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #fff7ed;
+
+    border-radius: 7px;
+
+    color: #c2410c;
+
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.skipped-info {
+    flex: 1;
+}
+
+.skipped-info strong {
+    display: block;
+
+    color: #555;
+
+    font-size: 11px;
+}
+
+.skipped-info small {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #aaa;
+
+    font-size: 9px;
+}
+
+.btn-recall {
+    width: auto;
+
+    min-height: 38px;
+
+    background: #2563eb;
+
+    color: white;
+}
+
+.btn-recall:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .12);
+}
+
+.empty-skipped {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 25px;
+
+    color: #999;
+
+    font-size: 11px;
+}
+
+.empty-skipped span {
+    color: #16a34a;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .antrean-main-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .petugas-antrean-content {
+        padding: 20px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .petugas-antrean-content {
+        padding: 15px;
+    }
+
+    .antrean-page-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .antrean-page-header h1 {
+        font-size: 22px;
+    }
+
+    .antrean-actions {
+        flex-direction: column;
+    }
+
+    .skipped-item {
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+    }
+
+    .skipped-item form {
+        width: 100%;
+    }
+
+    .btn-recall {
+        width: 100%;
+    }
+
+}
