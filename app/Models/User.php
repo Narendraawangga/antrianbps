@@ -15,6 +15,7 @@ use Illuminate\Notifications\Notifiable;
     'password',
     'role',
     'is_active',
+    'service_id',
 ])]
 
 #[Hidden([
@@ -33,5 +34,12 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(
+            \App\Models\Service::class
+        );
     }
 }

@@ -14,8 +14,19 @@ class Service extends Model
         'is_active',
     ];
 
+
     public function queues(): HasMany
     {
-        return $this->hasMany(Queue::class);
+        return $this->hasMany(
+            Queue::class
+        );
+    }
+
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(
+            User::class
+        );
     }
 }

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -12,23 +15,70 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::orderBy('created_at', 'desc')->get();
+        /*
+        |--------------------------------------------------------------------------
+        | AMBIL USER + PELAYANANNYA
+        |--------------------------------------------------------------------------
+        */
+
+        $users = User::with('service')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | STATISTIK USER
+        |--------------------------------------------------------------------------
+        */
 
         $totalUsers = User::count();
 
-        $totalAdmin = User::whereIn('role', [
-            'admin',
+        $totalAdmin = User::where(
+            'role',
             'admin_utama'
-        ])->count();
+        )->count();
 
-        $totalPetugas = User::where('role', 'petugas')->count();
+        $totalPetugas = User::where(
+            'role',
+            'petugas'
+        )->count();
 
-        return view('admin.users', compact(
-            'users',
-            'totalUsers',
-            'totalAdmin',
-            'totalPetugas'
-        ));
+
+        /*
+        |--------------------------------------------------------------------------
+        | AMBIL PELAYANAN AKTIF
+        |--------------------------------------------------------------------------
+        |
+        | Hanya pelayanan aktif yang akan muncul
+        | pada dropdown Tambah Petugas.
+        |
+        */
+
+        $services = Service::where(
+            'is_active',
+            true
+        )
+            ->orderBy('name')
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | TAMPILKAN HALAMAN
+        |--------------------------------------------------------------------------
+        */
+
+        return view(
+            'admin.users',
+            compact(
+                'users',
+                'totalUsers',
+                'totalAdmin',
+                'totalPetugas',
+                'services'
+            )
+        );
     }
 
 
@@ -37,6 +87,12 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDASI
+        |--------------------------------------------------------------------------
+        */
+
         $validated = $request->validate([
 
             'name' => [
@@ -60,50 +116,162 @@ class UserController extends Controller
                 'confirmed',
             ],
 
+            /*
+            |--------------------------------------------------------------------------
+            | ROLE
+            |--------------------------------------------------------------------------
+            |
+            | Hanya ada:
+            |
+            | admin_utama
+            | petugas
+            |
+            */
+
             'role' => [
                 'required',
-                'in:admin,petugas',
+                Rule::in([
+                    'admin_utama',
+                    'petugas',
+                ]),
+            ],
+
+            /*
+            |--------------------------------------------------------------------------
+            | PELAYANAN
+            |--------------------------------------------------------------------------
+            |
+            | service_id wajib jika role = petugas.
+            |
+            | Admin Utama tidak perlu pelayanan.
+            |
+            */
+
+            'service_id' => [
+                'nullable',
+                'required_if:role,petugas',
+
+                Rule::exists(
+                    'services',
+                    'id'
+                )->where(
+                    function ($query) {
+
+                        $query->where(
+                            'is_active',
+                            true
+                        );
+
+                    }
+                ),
             ],
 
         ], [
 
+            /*
+            |--------------------------------------------------------------------------
+            | PESAN VALIDASI
+            |--------------------------------------------------------------------------
+            */
+
             'name.required' =>
-            'Nama lengkap wajib diisi.',
+                'Nama lengkap wajib diisi.',
 
             'username.required' =>
-            'Username wajib diisi.',
+                'Username wajib diisi.',
 
             'username.min' =>
-            'Username minimal 4 karakter.',
+                'Username minimal 4 karakter.',
 
             'username.unique' =>
-            'Username sudah digunakan.',
+                'Username sudah digunakan.',
 
             'password.required' =>
-            'Password wajib diisi.',
+                'Password wajib diisi.',
 
             'password.min' =>
-            'Password minimal 8 karakter.',
+                'Password minimal 8 karakter.',
 
             'password.confirmed' =>
-            'Konfirmasi password tidak sama.',
+                'Konfirmasi password tidak sama.',
 
             'role.required' =>
-            'Role wajib dipilih.',
+                'Role wajib dipilih.',
 
             'role.in' =>
-            'Role tidak valid.',
+                'Role tidak valid.',
+
+            'service_id.required_if' =>
+                'Pelayanan wajib dipilih untuk petugas.',
+
+            'service_id.exists' =>
+                'Pelayanan yang dipilih tidak valid.',
+
         ]);
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | TENTUKAN PELAYANAN
+        |--------------------------------------------------------------------------
+        |
+        | Petugas:
+        | service_id disimpan.
+        |
+        | Admin Utama:
+        | service_id = NULL.
+        |
+        */
+
+        $serviceId = null;
+
+        if (
+            $validated['role']
+            === 'petugas'
+        ) {
+
+            $serviceId =
+                $validated['service_id'];
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SIMPAN USER
+        |--------------------------------------------------------------------------
+        */
 
         User::create([
-            'name' => $validated['name'],
-            'username' => $validated['username'],
-            'password' => $validated['password'],
-            'role' => $validated['role'],
-            'is_active' => true,
+
+            'name' =>
+                $validated['name'],
+
+            'username' =>
+                $validated['username'],
+
+            'password' =>
+                Hash::make(
+                    $validated['password']
+                ),
+
+            'role' =>
+                $validated['role'],
+
+            'service_id' =>
+                $serviceId,
+
+            'is_active' =>
+                true,
+
         ]);
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | KEMBALI KE HALAMAN PENGGUNA
+        |--------------------------------------------------------------------------
+        */
 
         return redirect()
             ->route('admin.users')

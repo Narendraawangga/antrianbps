@@ -28,9 +28,12 @@
                 <strong>
                     {{ Auth::user()->name ?? 'Petugas' }}
                 </strong>.
-                Kelola antrean pelayanan Anda di sini.
-            </p>
 
+                Anda bertugas di
+                <strong>
+                    {{ $petugasService?->name ?? 'Pelayanan belum ditentukan' }}
+                </strong>.
+            </p>
         </div>
 
 
@@ -683,15 +686,7 @@
 
                     <div class="service-value">
 
-                        @if ($currentQueue)
-
-                            {{ $currentQueue->service->name }}
-
-                        @else
-
-                            Belum ditentukan
-
-                        @endif
+                        {{ $petugasService?->name ?? 'Pelayanan belum ditentukan' }}
 
                     </div>
 
