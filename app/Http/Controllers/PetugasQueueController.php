@@ -219,94 +219,194 @@ class PetugasQueueController extends Controller
      * Halaman antrean petugas
      */
     public function antrean()
-    {
-        $periodStart = $this->schedule
-            ->periodStart()
-            ->utc();
+{
+    /*
+    |--------------------------------------------------------------------------
+    | PETUGAS YANG LOGIN
+    |--------------------------------------------------------------------------
+    */
 
-        $periodEnd = $this->schedule
-            ->periodEnd()
-            ->utc();
+    $user = auth()->user();
 
-        /*
+
+    /*
+    |--------------------------------------------------------------------------
+    | PETUGAS WAJIB PUNYA PELAYANAN
+    |--------------------------------------------------------------------------
+    */
+
+    if (!$user->service_id) {
+
+        return redirect()
+            ->route('petugas.dashboard')
+            ->with(
+                'error',
+                'Akun petugas belum memiliki pelayanan.'
+            );
+    }
+
+
+    $serviceId = $user->service_id;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PERIODE ANTREAN HARI INI
+    |--------------------------------------------------------------------------
+    */
+
+    $periodStart = $this->schedule
+        ->periodStart()
+        ->utc();
+
+    $periodEnd = $this->schedule
+        ->periodEnd()
+        ->utc();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ANTREAN YANG SEDANG DITANGANI PETUGAS
+    |--------------------------------------------------------------------------
+    |
+    | Harus:
+    | - pelayanan sama
+    | - ditangani petugas yang sedang login
+    |
+    */
+
+    $currentQueue = Queue::with('service')
+
+        ->whereBetween(
+            'created_at',
+            [
+                $periodStart,
+                $periodEnd
+            ]
+        )
+
+        ->where(
+            'service_id',
+            $serviceId
+        )
+
+        ->where(
+            'served_by',
+            $user->id
+        )
+
+        ->whereIn(
+            'status',
+            [
+                'called',
+                'serving'
+            ]
+        )
+
+        ->orderByDesc('called_at')
+
+        ->first();
+
+
+    /*
     |--------------------------------------------------------------------------
     | ANTREAN MENUNGGU
     |--------------------------------------------------------------------------
+    |
+    | HANYA pelayanan petugas.
+    |
     */
 
-        $waitingQueues = Queue::with('service')
-            ->whereBetween(
-                'created_at',
-                [$periodStart, $periodEnd]
-            )
-            ->where(
-                'status',
-                'waiting'
-            )
-            ->orderBy(
-                'created_at',
-                'asc'
-            )
-            ->get();
+    $waitingQueues = Queue::with('service')
+
+        ->whereBetween(
+            'created_at',
+            [
+                $periodStart,
+                $periodEnd
+            ]
+        )
+
+        ->where(
+            'service_id',
+            $serviceId
+        )
+
+        ->where(
+            'status',
+            'waiting'
+        )
+
+        ->orderBy(
+            'created_at',
+            'asc'
+        )
+
+        ->get();
 
 
-        /*
-    |--------------------------------------------------------------------------
-    | ANTREAN AKTIF
-    |--------------------------------------------------------------------------
-    */
-
-        $currentQueue = Queue::with('service')
-            ->whereBetween(
-                'created_at',
-                [$periodStart, $periodEnd]
-            )
-            ->where(
-                'served_by',
-                Auth::id()
-            )
-            ->whereIn(
-                'status',
-                [
-                    'called',
-                    'serving',
-                ]
-            )
-            ->orderByDesc('called_at')
-            ->first();
-
-
-        /*
+    /*
     |--------------------------------------------------------------------------
     | ANTREAN DILEWATI
     |--------------------------------------------------------------------------
+    |
+    | Juga hanya pelayanan petugas.
+    |
     */
 
-        $skippedQueues = Queue::with('service')
-            ->whereBetween(
-                'created_at',
-                [$periodStart, $periodEnd]
-            )
-            ->where(
-                'status',
-                'skipped'
-            )
-            ->orderBy(
-                'created_at',
-                'asc'
-            )
-            ->get();
+    $skippedQueues = Queue::with('service')
+
+        ->whereBetween(
+            'created_at',
+            [
+                $periodStart,
+                $periodEnd
+            ]
+        )
+
+        ->where(
+            'service_id',
+            $serviceId
+        )
+
+        ->where(
+            'status',
+            'skipped'
+        )
+
+        ->orderBy(
+            'created_at',
+            'asc'
+        )
+
+        ->get();
 
 
-        return view(
-            'petugas.antrean',
-            compact(
-                'waitingQueues',
-                'currentQueue',
-                'skippedQueues'
-            )
-        );
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | INFORMASI PELAYANAN PETUGAS
+    |--------------------------------------------------------------------------
+    */
+
+    $petugasService = $user->service;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | TAMPILKAN HALAMAN ANTREAN
+    |--------------------------------------------------------------------------
+    */
+
+    return view(
+        'petugas.antrean',
+        compact(
+            'currentQueue',
+            'waitingQueues',
+            'skippedQueues',
+            'petugasService'
+        )
+    );
+}
     /*
     |--------------------------------------------------------------------------
     | PANGGIL ANTREAN BERIKUTNYA

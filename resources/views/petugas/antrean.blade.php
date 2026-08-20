@@ -1,399 +1,736 @@
 @vite('resources/css/petugas/antrean.css')
 
-<div class="petugas-antrean-page">
+<div class="queue-desk-page">
 
     {{-- NAVBAR --}}
     @include('layouts.navbar-petugas')
 
-    <div class="petugas-layout">
+
+    <div class="queue-desk-layout">
 
         {{-- SIDEBAR --}}
         @include('layouts.sidebar-petugas')
 
 
-        {{-- CONTENT --}}
-        <main class="petugas-antrean-content">
+        {{-- =====================================================
+            CONTENT
+        ====================================================== --}}
 
-            {{-- HEADER --}}
-            <div class="antrean-page-header">
+        <main class="queue-desk-content">
+
+
+            {{-- =================================================
+                HEADER
+            ================================================== --}}
+
+            <section class="desk-header">
 
                 <div>
-                    <h1>Antrean Petugas</h1>
+
+                    <span class="desk-eyebrow">
+                        QUEUE CONTROL DESK
+                    </span>
+
+                    <h1>
+                        Antrean Pelayanan
+                    </h1>
 
                     <p>
-                        Kelola antrean pelayanan Anda sebagai petugas BPS Kolaka Utara.
+                        Panggil dan kelola antrean pelayanan Anda.
                     </p>
+
                 </div>
 
-                <div class="antrean-online">
-                    <span></span>
-                    ONLINE
+
+                <div class="desk-online">
+
+                    <span class="online-dot"></span>
+
+                    Sistem Online
+
                 </div>
 
-            </div>
+            </section>
 
 
-            {{-- GRID UTAMA --}}
-            <div class="antrean-main-grid">
+
+            {{-- =================================================
+                IDENTITAS PETUGAS
+            ================================================== --}}
+
+            <section class="operator-bar">
 
 
-                {{-- ANTREAN SAAT INI --}}
-                <section class="antrean-card current-card">
+                <div class="operator-item">
 
-                    <div class="antrean-card-header">
+                    <div class="operator-icon">
+                        👤
+                    </div>
 
-                        <div>
-                            <h2>Antrean Saat Ini</h2>
+                    <div>
 
-                            <p>
-                                Antrean yang sedang Anda tangani
-                            </p>
-                        </div>
-
-                        <span class="live-badge">
-                            ● Aktif
+                        <span class="operator-label">
+                            Petugas
                         </span>
 
-                    </div>
-
-
-                    @if($currentQueue)
-
-                    <div class="current-queue-body">
-
-                        <div class="queue-label">
-                            NOMOR ANTREAN
-                        </div>
-
-                        <div class="big-queue-number">
-                            {{ $currentQueue->queue_number }}
-                        </div>
-
-                        <div class="current-service">
-                            {{ $currentQueue->service->name ?? 'Layanan' }}
-                        </div>
-
-
-                        <div class="current-status">
-
-                            @if($currentQueue->status === 'called')
-
-                            <span class="status-called">
-                                Dipanggil
-                            </span>
-
-                            @elseif($currentQueue->status === 'serving')
-
-                            <span class="status-serving">
-                                Sedang Dilayani
-                            </span>
-
-                            @endif
-
-                        </div>
+                        <strong>
+                            {{ Auth::user()->name ?? 'Petugas' }}
+                        </strong>
 
                     </div>
 
-
-                    {{-- AKSI --}}
-                    <div class="antrean-actions">
-
-                        @if($currentQueue->status === 'called')
-
-                        <form
-                            method="POST"
-                            action="{{ route('petugas.antrean.mulai') }}">
-
-                            @csrf
-
-                            <button
-                                type="submit"
-                                class="btn-action btn-start">
-
-                                ▶
-                                Mulai Melayani
-
-                            </button>
-
-                        </form>
+                </div>
 
 
-                        <form
-                            method="POST"
-                            action="{{ route('petugas.antrean.lewati') }}">
 
-                            @csrf
+                <div class="operator-divider"></div>
 
-                            <button
-                                type="submit"
-                                class="btn-action btn-skip">
 
-                                ⏭
-                                Lewati
 
-                            </button>
+                <div class="operator-item">
 
-                        </form>
+                    <div class="operator-icon">
+                        🏢
+                    </div>
 
-                        @elseif($currentQueue->status === 'serving')
+                    <div>
 
-                        <form
-                            method="POST"
-                            action="{{ route('petugas.antrean.selesai') }}">
+                        <span class="operator-label">
+                            Pelayanan
+                        </span>
 
-                            @csrf
+                        <strong>
+                            {{
+                                Auth::user()->service?->name
+                                ?? 'Pelayanan belum ditentukan'
+                            }}
+                        </strong>
 
-                            <button
-                                type="submit"
-                                class="btn-action btn-finish">
+                    </div>
 
-                                ✓
-                                Selesaikan Pelayanan
+                </div>
 
-                            </button>
 
-                        </form>
+
+                <div class="operator-divider"></div>
+
+
+
+                <div class="operator-item">
+
+                    <div class="operator-icon">
+                        🎫
+                    </div>
+
+                    <div>
+
+                        <span class="operator-label">
+                            Menunggu
+                        </span>
+
+                        <strong>
+                            {{ $waitingQueues->count() }} antrean
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            {{-- =================================================
+                CONTROL DESK
+            ================================================== --}}
+
+            <div class="control-grid">
+
+
+                {{-- =============================================
+                    ANTREAN AKTIF
+                ============================================== --}}
+
+                <section class="control-current">
+
+
+                    <div class="section-heading">
+
+                        <div>
+
+                            <span class="section-kicker">
+                                LOKET ANDA
+                            </span>
+
+                            <h2>
+                                Sedang Ditangani
+                            </h2>
+
+                        </div>
+
+
+                        @if ($currentQueue)
+
+                            <span
+                                class="
+                                    active-status
+                                    status-{{ $currentQueue->status }}
+                                "
+                            >
+
+                                {{ $currentQueue->status_label }}
+
+                            </span>
 
                         @endif
 
                     </div>
 
-                    @else
 
-                    <div class="empty-current">
 
-                        <div class="empty-icon">
-                            🎫
+                    @if ($currentQueue)
+
+
+                        {{-- NOMOR AKTIF --}}
+
+                        <div class="active-queue">
+
+
+                            <span class="active-label">
+                                NOMOR ANTREAN
+                            </span>
+
+
+                            <div class="active-number">
+
+                                {{ $currentQueue->queue_number }}
+
+                            </div>
+
+
+                            <div class="active-service">
+
+                                {{
+                                    $currentQueue->service->name
+                                    ?? 'Pelayanan'
+                                }}
+
+                            </div>
+
                         </div>
 
-                        <h3>
-                            Belum Ada Antrean Aktif
-                        </h3>
 
-                        <p>
-                            Panggil antrean berikutnya untuk memulai pelayanan.
-                        </p>
 
-                        <form
-                            method="POST"
-                            action="{{ route('petugas.antrean.panggil') }}">
+                        {{-- ACTION --}}
 
-                            @csrf
+                        <div class="main-actions">
 
-                            <button
-                                type="submit"
-                                class="btn-call-main">
 
-                                🔊
-                                Panggil Antrean Berikutnya
+                            {{-- CALLED --}}
 
-                            </button>
+                            @if (
+                                $currentQueue->status
+                                === 'called'
+                            )
 
-                        </form>
+                                <form
+                                    method="POST"
+                                    action="{{
+                                        route(
+                                            'petugas.antrean.mulai'
+                                        )
+                                    }}"
+                                >
 
-                    </div>
+                                    @csrf
+
+                                    <button
+                                        type="submit"
+                                        class="desk-btn btn-start"
+                                    >
+
+                                        <span>
+                                            ▶
+                                        </span>
+
+                                        Mulai Melayani
+
+                                    </button>
+
+                                </form>
+
+
+                                <form
+                                    method="POST"
+                                    action="{{
+                                        route(
+                                            'petugas.antrean.lewati'
+                                        )
+                                    }}"
+                                >
+
+                                    @csrf
+
+                                    <button
+                                        type="submit"
+                                        class="desk-btn btn-skip"
+                                    >
+
+                                        <span>
+                                            ⏭
+                                        </span>
+
+                                        Lewati
+
+                                    </button>
+
+                                </form>
+
+                            @endif
+
+
+
+                            {{-- SERVING --}}
+
+                            @if (
+                                $currentQueue->status
+                                === 'serving'
+                            )
+
+                                <form
+                                    method="POST"
+                                    action="{{
+                                        route(
+                                            'petugas.antrean.selesai'
+                                        )
+                                    }}"
+                                >
+
+                                    @csrf
+
+                                    <button
+                                        type="submit"
+                                        class="desk-btn btn-finish"
+                                    >
+
+                                        <span>
+                                            ✓
+                                        </span>
+
+                                        Selesaikan Pelayanan
+
+                                    </button>
+
+                                </form>
+
+                            @endif
+
+
+                        </div>
+
+
+                    @else
+
+
+                        {{-- BELUM ADA ANTREAN AKTIF --}}
+
+                        <div class="active-empty">
+
+
+                            <div class="empty-symbol">
+                                🎫
+                            </div>
+
+
+                            <h3>
+                                Loket Siap Melayani
+                            </h3>
+
+
+                            <p>
+
+                                Belum ada antrean yang sedang
+                                Anda tangani.
+
+                            </p>
+
+
+                            <form
+                                method="POST"
+                                action="{{
+                                    route(
+                                        'petugas.antrean.panggil'
+                                    )
+                                }}"
+                            >
+
+                                @csrf
+
+                                <button
+                                    type="submit"
+                                    class="call-next-btn"
+                                    @disabled(
+                                        $waitingQueues->isEmpty()
+                                    )
+                                >
+
+                                    <span>
+                                        🔊
+                                    </span>
+
+                                    Panggil Antrean Berikutnya
+
+                                </button>
+
+                            </form>
+
+
+                            @if ($waitingQueues->isEmpty())
+
+                                <small class="empty-note">
+
+                                    Belum ada pengunjung
+                                    yang menunggu.
+
+                                </small>
+
+                            @endif
+
+
+                        </div>
+
 
                     @endif
+
 
                 </section>
 
 
 
-                {{-- ANTREAN BERIKUTNYA --}}
-                <section class="antrean-card next-card">
+                {{-- =============================================
+                    WAITING LIST
+                ============================================== --}}
 
-                    <div class="antrean-card-header">
+                <section class="waiting-panel">
+
+
+                    <div class="section-heading">
+
 
                         <div>
-                            <h2>Antrean Berikutnya</h2>
 
-                            <p>
-                                Daftar antrean yang sedang menunggu
-                            </p>
+                            <span class="section-kicker">
+                                DAFTAR TUNGGU
+                            </span>
+
+                            <h2>
+                                Antrean Berikutnya
+                            </h2>
+
                         </div>
 
-                        <span class="queue-count">
-                            {{ $waitingQueues->count() }} Antrean
+
+                        <span class="waiting-counter">
+
+                            {{ $waitingQueues->count() }}
+
                         </span>
 
                     </div>
 
 
-                    @if($waitingQueues->count())
 
-                    <div class="waiting-list">
+                    <div class="waiting-table-header">
 
-                        @foreach($waitingQueues as $queue)
+                        <span>
+                            POSISI
+                        </span>
 
-                        <div class="waiting-item">
+                        <span>
+                            ANTREAN
+                        </span>
 
-                            <div class="waiting-number">
+                        <span>
+                            WAKTU
+                        </span>
+
+                        <span>
+                            STATUS
+                        </span>
+
+                    </div>
+
+
+
+                    <div class="waiting-scroll">
+
+
+                        @forelse (
+                            $waitingQueues
+                            as $index => $queue
+                        )
+
+
+                            <div class="waiting-row">
+
+
+                                <div class="waiting-position">
+
+                                    {{ $index + 1 }}
+
+                                </div>
+
+
+                                <div class="waiting-code">
+
+                                    {{ $queue->queue_number }}
+
+                                </div>
+
+
+                                <div class="waiting-clock">
+
+                                    {{
+                                        $queue->created_at
+                                            ->timezone(
+                                                'Asia/Makassar'
+                                            )
+                                            ->format('H:i')
+                                    }}
+
+                                    <small>
+                                        WITA
+                                    </small>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span class="waiting-status">
+                                        Menunggu
+                                    </span>
+
+                                </div>
+
+
+                            </div>
+
+
+                        @empty
+
+
+                            <div class="waiting-empty">
+
+                                <div class="waiting-empty-icon">
+                                    📭
+                                </div>
+
+                                <strong>
+                                    Tidak ada antrean menunggu
+                                </strong>
+
+                                <span>
+                                    Daftar antrean akan muncul
+                                    ketika pengunjung mengambil
+                                    nomor antrean.
+                                </span>
+
+                            </div>
+
+
+                        @endforelse
+
+
+                    </div>
+
+
+
+                    {{-- PANGGIL DARI LIST --}}
+
+                    @if (
+                        !$currentQueue
+                        &&
+                        $waitingQueues->isNotEmpty()
+                    )
+
+                        <div class="waiting-footer">
+
+                            <form
+                                method="POST"
+                                action="{{
+                                    route(
+                                        'petugas.antrean.panggil'
+                                    )
+                                }}"
+                            >
+
+                                @csrf
+
+                                <button
+                                    type="submit"
+                                    class="call-next-btn"
+                                >
+
+                                    <span>
+                                        🔊
+                                    </span>
+
+                                    Panggil Nomor
+                                    {{ $waitingQueues->first()->queue_number }}
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    @endif
+
+
+                </section>
+
+
+            </div>
+
+
+
+            {{-- =================================================
+                ANTREAN DILEWATI
+            ================================================== --}}
+
+            <section class="skipped-section">
+
+
+                <div class="section-heading">
+
+
+                    <div>
+
+                        <span class="section-kicker">
+                            PERLU TINDAKAN
+                        </span>
+
+                        <h2>
+                            Antrean Dilewati
+                        </h2>
+
+                        <p>
+
+                            Pengunjung yang belum hadir
+                            saat nomor dipanggil.
+
+                        </p>
+
+                    </div>
+
+
+                    <span class="skipped-counter">
+
+                        {{ $skippedQueues->count() }}
+
+                    </span>
+
+                </div>
+
+
+
+                <div class="skipped-list">
+
+
+                    @forelse (
+                        $skippedQueues
+                        as $queue
+                    )
+
+
+                        <div class="skipped-row">
+
+
+                            <div class="skipped-number">
 
                                 {{ $queue->queue_number }}
 
                             </div>
 
 
-                            <div class="waiting-info">
+                            <div class="skipped-detail">
 
-                                <div class="waiting-service">
+                                <strong>
 
-                                    {{ $queue->service->name ?? 'Layanan' }}
+                                    {{
+                                        $queue->service->name
+                                        ?? 'Pelayanan'
+                                    }}
 
-                                </div>
+                                </strong>
 
-                                <div class="waiting-time">
-
-                                    {{ $queue->created_at->timezone('Asia/Makassar')->format('H:i') }}
-                                    WITA
-
-                                </div>
+                                <span>
+                                    Antrean dilewati
+                                </span>
 
                             </div>
 
 
-                            <span class="waiting-badge">
-                                Menunggu
+                            <form
+                                method="POST"
+                                action="{{
+                                    route(
+                                        'petugas.antrean.panggil-ulang',
+                                        $queue->id
+                                    )
+                                }}"
+                            >
+
+                                @csrf
+
+                                <button
+                                    type="submit"
+                                    class="recall-btn"
+                                    @disabled($currentQueue)
+                                >
+
+                                    🔊 Panggil Ulang
+
+                                </button>
+
+                            </form>
+
+
+                        </div>
+
+
+                    @empty
+
+
+                        <div class="skipped-empty">
+
+                            <span class="skipped-check">
+                                ✓
                             </span>
 
+                            <div>
+
+                                <strong>
+                                    Semua antrean tertangani
+                                </strong>
+
+                                <p>
+                                    Tidak ada antrean yang dilewati.
+                                </p>
+
+                            </div>
+
                         </div>
 
-                        @endforeach
 
-                    </div>
+                    @endforelse
 
-
-                    @if(!$currentQueue)
-
-                    <div class="next-action">
-
-                        <form
-                            method="POST"
-                            action="{{ route('petugas.antrean.panggil') }}">
-
-                            @csrf
-
-                            <button
-                                type="submit"
-                                class="btn-call-main">
-
-                                🔊
-                                Panggil Antrean Berikutnya
-
-                            </button>
-
-                        </form>
-
-                    </div>
-
-                    @endif
-
-                    @else
-
-                    <div class="empty-list">
-
-                        <div class="empty-icon">
-                            📭
-                        </div>
-
-                        <p>
-                            Tidak ada antrean yang menunggu.
-                        </p>
-
-                    </div>
-
-                    @endif
-
-                </section>
-
-            </div>
-
-
-
-            {{-- ANTREAN DILEWATI --}}
-            <section class="antrean-card skipped-card">
-
-                <div class="antrean-card-header">
-
-                    <div>
-                        <h2>Antrean Dilewati</h2>
-
-                        <p>
-                            Antrean yang belum hadir saat dipanggil
-                        </p>
-                    </div>
-
-                    <span class="skipped-count">
-                        {{ $skippedQueues->count() }} Dilewati
-                    </span>
 
                 </div>
-
-
-                @if($skippedQueues->count())
-
-                <div class="skipped-list">
-
-                    @foreach($skippedQueues as $queue)
-
-                    <div class="skipped-item">
-
-                        <div class="skipped-number">
-
-                            {{ $queue->queue_number }}
-
-                        </div>
-
-
-                        <div class="skipped-info">
-
-                            <strong>
-                                {{ $queue->service->name ?? 'Layanan' }}
-                            </strong>
-
-                            <small>
-                                Antrean dilewati
-                            </small>
-
-                        </div>
-
-
-                        <form
-                            method="POST"
-                            action="{{ route('petugas.antrean.panggil-ulang', $queue->id) }}">
-
-                            @csrf
-
-                            <button
-                                type="submit"
-                                class="btn-recall">
-
-                                🔊
-                                Panggil Ulang
-
-                            </button>
-
-                        </form>
-
-                    </div>
-
-                    @endforeach
-
-                </div>
-
-                @else
-
-                <div class="empty-skipped">
-
-                    <span>✓</span>
-
-                    Tidak ada antrean yang dilewati.
-
-                </div>
-
-                @endif
 
             </section>
+
 
         </main>
 
