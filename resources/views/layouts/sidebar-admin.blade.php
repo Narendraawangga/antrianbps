@@ -41,7 +41,8 @@
 
 
         <!-- ANTREAN -->
-        <a href="{{ route('admin.antrean') }}"
+        <a
+            href="{{ route('admin.antrean') }}"
             class="admin-menu-item {{ request()->routeIs('admin.antrean') ? 'active' : '' }}">
 
             <span class="menu-icon">
@@ -84,7 +85,7 @@
         <!-- PENGGUNA -->
         <a
             href="{{ route('admin.users') }}"
-            class="admin-menu-item {{ request()->routeIs('admin.users') ? 'active' : '' }}">
+            class="admin-menu-item {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 👥
@@ -99,8 +100,8 @@
 
         <!-- LAYANAN -->
         <a
-            href="#"
-            class="admin-menu-item">
+            href="{{ route('admin.layanan') }}"
+            class="admin-menu-item {{ request()->routeIs('admin.layanan*') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 🏢
