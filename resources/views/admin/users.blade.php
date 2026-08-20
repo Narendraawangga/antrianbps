@@ -2,70 +2,105 @@
 <html lang="id">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Manajemen Pengguna - BPS Kolaka Utara</title>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Manajemen Pengguna - BPS Kolaka Utara
+    </title>
+
 
     <style>
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
             background: #f5f7fb;
             color: #222;
+
             overflow-x: hidden;
         }
 
-        /* ==============================
+
+        /* =========================================================
            CONTENT
-        ============================== */
+        ========================================================= */
 
         .admin-content {
             margin-left: 250px;
             padding-top: 72px;
+
             min-height: 100vh;
         }
 
+
         .content {
-            padding: 28px;
             max-width: 1600px;
+
             margin: auto;
+
+            padding: 28px;
         }
 
-        /* ==============================
+
+        /* =========================================================
            HEADER
-        ============================== */
+        ========================================================= */
 
         .page-header {
             display: flex;
+
             align-items: center;
             justify-content: space-between;
+
             gap: 20px;
+
             margin-bottom: 25px;
         }
 
+
         .page-title h1 {
             color: #1d2f5f;
+
             font-size: 25px;
+
             margin-bottom: 6px;
         }
 
+
         .page-title p {
             color: #777;
+
             font-size: 14px;
         }
 
-        /* ==============================
-           ADD BUTTON
-        ============================== */
+
+        /* =========================================================
+           BUTTON TAMBAH
+        ========================================================= */
 
         .add-user-btn {
             border: none;
+
             background: #2349ad;
             color: white;
 
@@ -80,30 +115,74 @@
 
             display: flex;
             align-items: center;
+
             gap: 8px;
 
             transition: .2s;
         }
 
+
         .add-user-btn:hover {
             background: #193b92;
         }
 
-        /* ==============================
-           STATISTICS
-        ============================== */
+
+        /* =========================================================
+           ALERT
+        ========================================================= */
+
+        .alert {
+            padding: 13px 16px;
+
+            margin-bottom: 20px;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+        }
+
+
+        .alert-success {
+            color: #166534;
+
+            background: #dcfce7;
+
+            border: 1px solid #bbf7d0;
+        }
+
+
+        .alert-error {
+            color: #991b1b;
+
+            background: #fee2e2;
+
+            border: 1px solid #fecaca;
+        }
+
+
+        /* =========================================================
+           STATISTIK
+        ========================================================= */
 
         .user-stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
             gap: 18px;
+
             margin-bottom: 22px;
         }
 
+
         .stat-card {
             background: white;
+
             border: 1px solid #e5e7eb;
+
             border-radius: 10px;
+
             padding: 18px;
 
             display: flex;
@@ -111,17 +190,23 @@
             justify-content: space-between;
         }
 
+
         .stat-label {
             color: #777;
+
             font-size: 12px;
+
             margin-bottom: 7px;
         }
 
+
         .stat-number {
             color: #1d2f5f;
+
             font-size: 27px;
             font-weight: 700;
         }
+
 
         .stat-icon {
             width: 45px;
@@ -138,9 +223,10 @@
             font-size: 20px;
         }
 
-        /* ==============================
-           TABLE CARD
-        ============================== */
+
+        /* =========================================================
+           CARD
+        ========================================================= */
 
         .users-card {
             background: white;
@@ -152,8 +238,10 @@
             overflow: hidden;
 
             box-shadow:
-                0 2px 6px rgba(0, 0, 0, .03);
+                0 2px 6px
+                rgba(0, 0, 0, .03);
         }
+
 
         .card-header {
             padding: 18px 20px;
@@ -167,14 +255,16 @@
             gap: 15px;
         }
 
+
         .card-header h2 {
             font-size: 16px;
+
             color: #25365d;
         }
 
-        .search-box {
-            width: 230px;
 
+        .search-box {
+            width: 250px;
             height: 36px;
 
             border: 1px solid #ddd;
@@ -188,24 +278,31 @@
             font-size: 12px;
         }
 
+
         .search-box:focus {
             border-color: #2349ad;
         }
 
-        /* ==============================
+
+        /* =========================================================
            TABLE
-        ============================== */
+        ========================================================= */
 
         .table-wrapper {
             width: 100%;
+
             overflow-x: auto;
         }
 
+
         table {
             width: 100%;
-            min-width: 700px;
+
+            min-width: 850px;
+
             border-collapse: collapse;
         }
+
 
         th {
             padding: 13px 20px;
@@ -221,6 +318,7 @@
             font-weight: 600;
         }
 
+
         td {
             padding: 14px 20px;
 
@@ -231,19 +329,25 @@
             color: #444;
         }
 
-        /* ==============================
+
+        /* =========================================================
            USER
-        ============================== */
+        ========================================================= */
 
         .user-profile {
             display: flex;
+
             align-items: center;
+
             gap: 10px;
         }
+
 
         .avatar {
             width: 36px;
             height: 36px;
+
+            flex-shrink: 0;
 
             border-radius: 50%;
 
@@ -256,23 +360,30 @@
             justify-content: center;
 
             font-size: 13px;
+
             font-weight: bold;
         }
 
+
         .user-name {
             font-weight: 600;
+
             color: #333;
+
             margin-bottom: 3px;
         }
 
-        .user-email {
+
+        .user-username {
             color: #999;
+
             font-size: 11px;
         }
 
-        /* ==============================
+
+        /* =========================================================
            ROLE
-        ============================== */
+        ========================================================= */
 
         .role {
             display: inline-block;
@@ -286,24 +397,54 @@
             font-weight: 600;
         }
 
-        .role.super-admin {
-            background: #eee9ff;
+
+        .role.admin-utama {
             color: #6b3fb5;
+
+            background: #eee9ff;
         }
 
-        .role.admin {
-            background: #e8f0ff;
-            color: #2349ad;
-        }
 
         .role.petugas {
-            background: #e5f7ec;
             color: #168044;
+
+            background: #e5f7ec;
         }
 
-        /* ==============================
+
+        /* =========================================================
+           PELAYANAN
+        ========================================================= */
+
+        .service-badge {
+            display: inline-block;
+
+            max-width: 240px;
+
+            padding: 6px 10px;
+
+            border-radius: 7px;
+
+            color: #2349ad;
+
+            background: #eef3ff;
+
+            font-size: 11px;
+
+            line-height: 1.4;
+        }
+
+
+        .service-none {
+            color: #999;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
            STATUS
-        ============================== */
+        ========================================================= */
 
         .status {
             display: inline-flex;
@@ -313,89 +454,79 @@
             gap: 6px;
 
             font-size: 11px;
+        }
 
+
+        .status.active {
             color: #168044;
         }
+
+
+        .status.inactive {
+            color: #dc2626;
+        }
+
 
         .status-dot {
             width: 7px;
             height: 7px;
 
             border-radius: 50%;
+        }
 
+
+        .status.active .status-dot {
             background: #22c55e;
         }
 
-        /* ==============================
-           ACTION
-        ============================== */
 
-        .actions {
-            display: flex;
-            gap: 7px;
+        .status.inactive .status-dot {
+            background: #ef4444;
         }
 
-        .action-btn {
-            border: 1px solid #ddd;
 
-            background: white;
-
-            padding: 7px 10px;
-
-            border-radius: 6px;
-
-            font-size: 11px;
-
-            cursor: pointer;
-
-            transition: .2s;
-        }
-
-        .action-btn:hover {
-            background: #f5f7fb;
-        }
-
-        .action-btn.delete:hover {
-            color: #dc2626;
-            border-color: #fecaca;
-            background: #fff5f5;
-        }
-
-        /* ==============================
+        /* =========================================================
            EMPTY
-        ============================== */
+        ========================================================= */
 
         .empty-state {
             text-align: center;
+
             padding: 55px 20px;
+
             color: #999;
         }
 
+
         .empty-icon {
             font-size: 40px;
+
             margin-bottom: 12px;
         }
 
+
         .empty-state h3 {
             color: #555;
+
             font-size: 16px;
+
             margin-bottom: 6px;
         }
+
 
         .empty-state p {
             font-size: 12px;
         }
 
-        /* ==============================
+
+        /* =========================================================
            MODAL
-        ============================== */
+        ========================================================= */
 
         .modal {
             position: fixed;
 
             inset: 0;
-
-            background: rgba(0, 0, 0, .45);
 
             display: none;
 
@@ -404,26 +535,36 @@
 
             padding: 20px;
 
+            background:
+                rgba(0, 0, 0, .45);
+
             z-index: 2000;
         }
+
 
         .modal.show {
             display: flex;
         }
 
+
         .modal-box {
-            width: 480px;
+            width: 500px;
+
             max-width: 100%;
+
+            max-height: 90vh;
 
             background: white;
 
             border-radius: 12px;
 
             box-shadow:
-                0 15px 50px rgba(0, 0, 0, .2);
+                0 15px 50px
+                rgba(0, 0, 0, .2);
 
-            overflow: hidden;
+            overflow-y: auto;
         }
+
 
         .modal-header {
             padding: 18px 20px;
@@ -435,13 +576,17 @@
             justify-content: space-between;
         }
 
+
         .modal-header h2 {
             color: #25365d;
+
             font-size: 17px;
         }
 
+
         .close-modal {
             border: none;
+
             background: transparent;
 
             font-size: 22px;
@@ -451,13 +596,20 @@
             cursor: pointer;
         }
 
+
         .modal-body {
             padding: 20px;
         }
 
+
+        /* =========================================================
+           FORM
+        ========================================================= */
+
         .form-group {
             margin-bottom: 16px;
         }
+
 
         .form-group label {
             display: block;
@@ -471,10 +623,15 @@
             font-weight: 600;
         }
 
+
+        .required {
+            color: #dc2626;
+        }
+
+
         .form-input,
         .form-select {
             width: 100%;
-
             height: 40px;
 
             border: 1px solid #ddd;
@@ -490,10 +647,77 @@
             background: white;
         }
 
+
         .form-input:focus,
         .form-select:focus {
             border-color: #2349ad;
         }
+
+
+        .form-input.input-error,
+        .form-select.input-error {
+            border-color: #dc2626;
+
+            background: #fff8f8;
+        }
+
+
+        .field-help {
+            display: block;
+
+            margin-top: 5px;
+
+            color: #999;
+
+            font-size: 10px;
+        }
+
+
+        .field-error {
+            display: block;
+
+            margin-top: 5px;
+
+            color: #dc2626;
+
+            font-size: 11px;
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PELAYANAN
+        |--------------------------------------------------------------------------
+        */
+
+        #serviceGroup[hidden] {
+            display: none;
+        }
+
+
+        .service-info {
+            padding: 10px 12px;
+
+            margin-bottom: 16px;
+
+            color: #1e40af;
+
+            background: #eff6ff;
+
+            border:
+                1px solid #dbeafe;
+
+            border-radius: 7px;
+
+            font-size: 11px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================================================
+           MODAL FOOTER
+        ========================================================= */
 
         .modal-footer {
             padding: 15px 20px;
@@ -506,6 +730,7 @@
 
             gap: 8px;
         }
+
 
         .cancel-btn {
             border: 1px solid #ddd;
@@ -521,6 +746,7 @@
             cursor: pointer;
         }
 
+
         .save-btn {
             border: none;
 
@@ -535,35 +761,10 @@
             cursor: pointer;
         }
 
-        .field-help {
-            display: block;
-            margin-top: 5px;
-            color: #999;
-            font-size: 10px;
-        }
 
-        .field-error {
-            display: block;
-            margin-top: 5px;
-            color: #dc2626;
-            font-size: 11px;
-            min-height: 14px;
-        }
-
-        .form-input.input-error,
-        .form-select.input-error {
-            border-color: #dc2626;
-            background: #fff8f8;
-        }
-
-        .form-input.input-success {
-            border-color: #22c55e;
-            background: #f7fff9;
-        }
-
-        /* ==============================
-           MOBILE
-        ============================== */
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
 
         @media (max-width: 700px) {
 
@@ -571,49 +772,42 @@
                 margin-left: 70px;
             }
 
+
             .content {
                 padding: 20px 15px;
             }
+
 
             .page-header {
                 align-items: flex-start;
             }
 
-            .page-title h1 {
-                font-size: 21px;
-            }
-
-            .page-title p {
-                font-size: 12px;
-                line-height: 1.5;
-            }
-
-            .add-user-btn {
-                padding: 10px 12px;
-            }
-
-            .add-user-btn span:last-child {
-                display: none;
-            }
 
             .user-stats {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
+                grid-template-columns:
+                    1fr 1fr;
             }
 
+
             .user-stats .stat-card:last-child {
-                grid-column: span 2;
+                grid-column:
+                    span 2;
             }
+
 
             .card-header {
                 flex-direction: column;
+
                 align-items: stretch;
             }
+
 
             .search-box {
                 width: 100%;
             }
+
         }
+
 
         @media (max-width: 450px) {
 
@@ -621,57 +815,65 @@
                 margin-left: 0;
             }
 
-            .content {
-                padding: 18px 12px;
-            }
 
             .page-header {
                 flex-direction: column;
             }
 
+
             .add-user-btn {
                 width: 100%;
+
                 justify-content: center;
             }
 
-            .add-user-btn span:last-child {
-                display: inline;
-            }
 
             .user-stats {
                 grid-template-columns: 1fr;
             }
 
+
             .user-stats .stat-card:last-child {
                 grid-column: auto;
             }
 
-            .stat-card {
-                padding: 15px;
-            }
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-    {{-- NAVBAR --}}
+
+    {{-- =========================================================
+        NAVBAR
+    ========================================================== --}}
+
     @include('layouts.navbar-admin')
 
-    {{-- SIDEBAR --}}
+
+    {{-- =========================================================
+        SIDEBAR
+    ========================================================== --}}
+
     @include('layouts.sidebar-admin')
 
 
-    <!-- ==============================
-         CONTENT
-    =============================== -->
+
+    {{-- =========================================================
+        CONTENT
+    ========================================================== --}}
 
     <main class="admin-content">
 
         <div class="content">
 
 
-            <!-- HEADER -->
+            {{-- =================================================
+                HEADER
+            ================================================== --}}
 
             <div class="page-header">
 
@@ -682,8 +884,8 @@
                     </h1>
 
                     <p>
-                        Kelola akun administrator dan petugas
-                        sistem antrian BPS Kolaka Utara.
+                        Kelola akun Admin Utama dan Petugas
+                        sistem antrean BPS Kolaka Utara.
                     </p>
 
                 </div>
@@ -692,7 +894,8 @@
                 <button
                     type="button"
                     class="add-user-btn"
-                    onclick="openUserModal()">
+                    onclick="openUserModal()"
+                >
 
                     <span>
                         ＋
@@ -707,11 +910,46 @@
             </div>
 
 
-            <!-- ==============================
-                 STATISTIK USER
-            =============================== -->
+
+            {{-- =================================================
+                SUCCESS
+            ================================================== --}}
+
+            @if (session('success'))
+
+                <div class="alert alert-success">
+
+                    {{ session('success') }}
+
+                </div>
+
+            @endif
+
+
+
+            {{-- =================================================
+                VALIDATION ERROR
+            ================================================== --}}
+
+            @if ($errors->any())
+
+                <div class="alert alert-error">
+
+                    Terdapat data yang belum benar.
+                    Silakan periksa kembali form tambah pengguna.
+
+                </div>
+
+            @endif
+
+
+
+            {{-- =================================================
+                STATISTIK
+            ================================================== --}}
 
             <div class="user-stats">
+
 
                 <div class="stat-card">
 
@@ -734,12 +972,13 @@
                 </div>
 
 
+
                 <div class="stat-card">
 
                     <div>
 
                         <div class="stat-label">
-                            Administrator
+                            Admin Utama
                         </div>
 
                         <div class="stat-number">
@@ -753,6 +992,7 @@
                     </div>
 
                 </div>
+
 
 
                 <div class="stat-card">
@@ -778,9 +1018,10 @@
             </div>
 
 
-            <!-- ==============================
-                 USER TABLE
-            =============================== -->
+
+            {{-- =================================================
+                TABLE USER
+            ================================================== --}}
 
             <div class="users-card">
 
@@ -790,10 +1031,13 @@
                         Daftar Pengguna
                     </h2>
 
+
                     <input
                         type="search"
                         class="search-box"
-                        placeholder="Cari pengguna...">
+                        id="userSearch"
+                        placeholder="Cari nama, username, pelayanan..."
+                    >
 
                 </div>
 
@@ -819,11 +1063,11 @@
                                 </th>
 
                                 <th>
-                                    STATUS
+                                    PELAYANAN
                                 </th>
 
                                 <th>
-                                    AKSI
+                                    STATUS
                                 </th>
 
                             </tr>
@@ -831,35 +1075,217 @@
                         </thead>
 
 
-                        <tbody>
+                        <tbody id="userTableBody">
 
-                            <!-- DATA NANTI DARI DATABASE -->
 
-                            <tr>
+                            @forelse ($users as $user)
 
-                                <td colspan="5">
+                                <tr
+                                    class="user-row"
+                                    data-search="
+                                        {{ strtolower(
+                                            $user->name . ' ' .
+                                            $user->username . ' ' .
+                                            ($user->service->name ?? '')
+                                        ) }}
+                                    "
+                                >
 
-                                    <div class="empty-state">
+                                    {{-- USER --}}
 
-                                        <div class="empty-icon">
-                                            👥
+                                    <td>
+
+                                        <div class="user-profile">
+
+                                            <div class="avatar">
+
+                                                {{ strtoupper(
+                                                    substr(
+                                                        $user->name,
+                                                        0,
+                                                        1
+                                                    )
+                                                ) }}
+
+                                            </div>
+
+
+                                            <div>
+
+                                                <div class="user-name">
+
+                                                    {{ $user->name }}
+
+                                                </div>
+
+                                                <div class="user-username">
+
+                                                    ID #{{ $user->id }}
+
+                                                </div>
+
+                                            </div>
+
                                         </div>
 
-                                        <h3>
-                                            Belum ada pengguna
-                                        </h3>
+                                    </td>
 
-                                        <p>
-                                            Tambahkan akun Admin atau
-                                            Petugas untuk mulai menggunakan
-                                            sistem.
-                                        </p>
 
-                                    </div>
 
-                                </td>
+                                    {{-- USERNAME --}}
 
-                            </tr>
+                                    <td>
+
+                                        {{ $user->username }}
+
+                                    </td>
+
+
+
+                                    {{-- ROLE --}}
+
+                                    <td>
+
+                                        @if (
+                                            $user->role ===
+                                            'admin_utama'
+                                        )
+
+                                            <span
+                                                class="
+                                                    role
+                                                    admin-utama
+                                                "
+                                            >
+
+                                                Admin Utama
+
+                                            </span>
+
+                                        @else
+
+                                            <span
+                                                class="
+                                                    role
+                                                    petugas
+                                                "
+                                            >
+
+                                                Petugas
+
+                                            </span>
+
+                                        @endif
+
+                                    </td>
+
+
+
+                                    {{-- PELAYANAN --}}
+
+                                    <td>
+
+                                        @if (
+                                            $user->role ===
+                                                'petugas'
+                                            &&
+                                            $user->service
+                                        )
+
+                                            <span
+                                                class="service-badge"
+                                            >
+
+                                                {{ $user->service->name }}
+
+                                            </span>
+
+                                        @else
+
+                                            <span
+                                                class="service-none"
+                                            >
+
+                                                —
+
+                                            </span>
+
+                                        @endif
+
+                                    </td>
+
+
+
+                                    {{-- STATUS --}}
+
+                                    <td>
+
+                                        @if ($user->is_active)
+
+                                            <span
+                                                class="status active"
+                                            >
+
+                                                <span
+                                                    class="status-dot"
+                                                ></span>
+
+                                                Aktif
+
+                                            </span>
+
+                                        @else
+
+                                            <span
+                                                class="status inactive"
+                                            >
+
+                                                <span
+                                                    class="status-dot"
+                                                ></span>
+
+                                                Nonaktif
+
+                                            </span>
+
+                                        @endif
+
+                                    </td>
+
+                                </tr>
+
+
+                            @empty
+
+
+                                <tr>
+
+                                    <td colspan="5">
+
+                                        <div class="empty-state">
+
+                                            <div class="empty-icon">
+                                                👥
+                                            </div>
+
+                                            <h3>
+                                                Belum ada pengguna
+                                            </h3>
+
+                                            <p>
+                                                Tambahkan akun Petugas
+                                                untuk mulai menggunakan
+                                                sistem.
+                                            </p>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+
+                            @endforelse
 
                         </tbody>
 
@@ -874,13 +1300,20 @@
     </main>
 
 
-    <!-- ==============================
-         MODAL TAMBAH PENGGUNA
-    =============================== -->
 
-    <div class="modal" id="userModal">
+    {{-- =========================================================
+        MODAL TAMBAH USER
+    ========================================================== --}}
+
+    <div
+        class="modal"
+        id="userModal"
+    >
 
         <div class="modal-box">
+
+
+            {{-- HEADER --}}
 
             <div class="modal-header">
 
@@ -891,115 +1324,200 @@
                 <button
                     type="button"
                     class="close-modal"
-                    onclick="closeUserModal()">
+                    onclick="closeUserModal()"
+                >
                     ×
                 </button>
 
             </div>
 
 
+
+            {{-- FORM --}}
+
             <form
                 method="POST"
                 action="{{ route('admin.users.store') }}"
-                id="userForm">
+                id="userForm"
+            >
 
                 @csrf
 
 
                 <div class="modal-body">
 
-                    {{-- NAMA --}}
+
+                    {{-- =================================================
+                        NAMA
+                    ================================================== --}}
 
                     <div class="form-group">
 
-                        <label>
+                        <label for="userName">
+
                             Nama Lengkap
+
+                            <span class="required">
+                                *
+                            </span>
+
                         </label>
+
 
                         <input
                             type="text"
                             name="name"
                             id="userName"
-                            class="form-input"
+                            class="
+                                form-input
+                                @error('name')
+                                    input-error
+                                @enderror
+                            "
+                            value="{{ old('name') }}"
                             placeholder="Masukkan nama lengkap"
-                            required>
+                            required
+                        >
 
-                        <small
-                            class="field-error"
-                            id="nameError">
-                        </small>
+
+                        @error('name')
+
+                            <small class="field-error">
+
+                                {{ $message }}
+
+                            </small>
+
+                        @enderror
 
                     </div>
 
 
-                    {{-- USERNAME --}}
+
+                    {{-- =================================================
+                        USERNAME
+                    ================================================== --}}
 
                     <div class="form-group">
 
-                        <label>
+                        <label for="username">
+
                             Username
+
+                            <span class="required">
+                                *
+                            </span>
+
                         </label>
+
 
                         <input
                             type="text"
                             name="username"
                             id="username"
-                            class="form-input"
+                            class="
+                                form-input
+                                @error('username')
+                                    input-error
+                                @enderror
+                            "
+                            value="{{ old('username') }}"
                             placeholder="Masukkan username"
                             minlength="4"
                             maxlength="30"
                             autocomplete="off"
-                            required>
+                            required
+                        >
+
 
                         <small class="field-help">
                             Minimal 4 karakter.
                         </small>
 
-                        <small
-                            class="field-error"
-                            id="usernameError">
-                        </small>
+
+                        @error('username')
+
+                            <small class="field-error">
+
+                                {{ $message }}
+
+                            </small>
+
+                        @enderror
 
                     </div>
 
 
-                    {{-- PASSWORD --}}
+
+                    {{-- =================================================
+                        PASSWORD
+                    ================================================== --}}
 
                     <div class="form-group">
 
-                        <label>
+                        <label for="password">
+
                             Password
+
+                            <span class="required">
+                                *
+                            </span>
+
                         </label>
+
 
                         <input
                             type="password"
                             name="password"
                             id="password"
-                            class="form-input"
+                            class="
+                                form-input
+                                @error('password')
+                                    input-error
+                                @enderror
+                            "
                             placeholder="Minimal 8 karakter"
                             minlength="8"
                             autocomplete="new-password"
-                            required>
+                            required
+                        >
+
 
                         <small class="field-help">
                             Password minimal 8 karakter.
                         </small>
 
-                        <small
-                            class="field-error"
-                            id="passwordError">
-                        </small>
+
+                        @error('password')
+
+                            <small class="field-error">
+
+                                {{ $message }}
+
+                            </small>
+
+                        @enderror
 
                     </div>
 
 
-                    {{-- KONFIRMASI PASSWORD --}}
+
+                    {{-- =================================================
+                        KONFIRMASI PASSWORD
+                    ================================================== --}}
 
                     <div class="form-group">
 
-                        <label>
+                        <label for="passwordConfirmation">
+
                             Konfirmasi Password
+
+                            <span class="required">
+                                *
+                            </span>
+
                         </label>
+
 
                         <input
                             type="password"
@@ -1009,60 +1527,191 @@
                             placeholder="Ulangi password"
                             minlength="8"
                             autocomplete="new-password"
-                            required>
-
-                        <small
-                            class="field-error"
-                            id="confirmationError">
-                        </small>
+                            required
+                        >
 
                     </div>
 
 
-                    {{-- ROLE --}}
+
+                    {{-- =================================================
+                        ROLE
+                    ================================================== --}}
 
                     <div class="form-group">
 
-                        <label>
+                        <label for="role">
+
                             Role
+
+                            <span class="required">
+                                *
+                            </span>
+
                         </label>
+
 
                         <select
                             name="role"
                             id="role"
-                            class="form-select"
-                            required>
+                            class="
+                                form-select
+                                @error('role')
+                                    input-error
+                                @enderror
+                            "
+                            required
+                        >
 
                             <option value="">
                                 Pilih Role
                             </option>
 
-                            <option value="admin">
-                                Administrator
+
+                            <option
+                                value="admin_utama"
+                                @selected(
+                                    old('role')
+                                    ===
+                                    'admin_utama'
+                                )
+                            >
+
+                                Admin Utama
+
                             </option>
 
-                            <option value="petugas">
+
+                            <option
+                                value="petugas"
+                                @selected(
+                                    old('role')
+                                    ===
+                                    'petugas'
+                                )
+                            >
+
                                 Petugas
+
                             </option>
 
                         </select>
 
-                        <small
-                            class="field-error"
-                            id="roleError">
-                        </small>
+
+                        @error('role')
+
+                            <small class="field-error">
+
+                                {{ $message }}
+
+                            </small>
+
+                        @enderror
+
+                    </div>
+
+
+
+                    {{-- =================================================
+                        PELAYANAN PETUGAS
+                    ================================================== --}}
+
+                    <div
+                        class="form-group"
+                        id="serviceGroup"
+                        @if (
+                            old('role')
+                            !==
+                            'petugas'
+                        )
+                            hidden
+                        @endif
+                    >
+
+                        <label for="serviceId">
+
+                            Pelayanan
+
+                            <span class="required">
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <div class="service-info">
+
+                            Petugas hanya akan menangani
+                            antrean dari pelayanan yang
+                            dipilih di bawah ini.
+
+                        </div>
+
+
+                        <select
+                            name="service_id"
+                            id="serviceId"
+                            class="
+                                form-select
+                                @error('service_id')
+                                    input-error
+                                @enderror
+                            "
+                        >
+
+                            <option value="">
+                                Pilih Pelayanan
+                            </option>
+
+
+                            @foreach ($services as $service)
+
+                                <option
+                                    value="{{ $service->id }}"
+                                    @selected(
+                                        old('service_id')
+                                        ==
+                                        $service->id
+                                    )
+                                >
+
+                                    {{ $service->name }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+
+                        @error('service_id')
+
+                            <small class="field-error">
+
+                                {{ $message }}
+
+                            </small>
+
+                        @enderror
 
                     </div>
 
                 </div>
 
 
+
+                {{-- =================================================
+                    FOOTER
+                ================================================== --}}
+
                 <div class="modal-footer">
+
 
                     <button
                         type="button"
                         class="cancel-btn"
-                        onclick="closeUserModal()">
+                        onclick="closeUserModal()"
+                    >
 
                         Batal
 
@@ -1072,7 +1721,7 @@
                     <button
                         type="submit"
                         class="save-btn"
-                        id="saveUserButton">
+                    >
 
                         Simpan Pengguna
 
@@ -1087,320 +1736,256 @@
     </div>
 
 
+
     <script>
-        const userForm = document.getElementById('userForm');
 
-        const usernameInput =
-            document.getElementById('username');
+        /*
+        |--------------------------------------------------------------------------
+        | ELEMENT
+        |--------------------------------------------------------------------------
+        */
 
-        const passwordInput =
-            document.getElementById('password');
-
-        const confirmationInput =
-            document.getElementById('passwordConfirmation');
-
-        // ========================================
-        // MODAL TAMBAH PENGGUNA
-        // ========================================
-
-        function openUserModal() {
-            const modal = document.getElementById('userModal');
-
-            if (modal) {
-                modal.classList.add('show');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-
-        function closeUserModal() {
-            const modal = document.getElementById('userModal');
-
-            if (modal) {
-                modal.classList.remove('show');
-                document.body.style.overflow = '';
-            }
-        }
-
-
-        // Klik area luar modal untuk menutup
-        document.getElementById('userModal').addEventListener(
-            'click',
-            function(event) {
-
-                if (event.target === this) {
-                    closeUserModal();
-                }
-
-            }
-        );
-
-
-        // Tekan ESC untuk menutup
-        document.addEventListener('keydown', function(event) {
-
-            if (event.key === 'Escape') {
-                closeUserModal();
-            }
-
-        });
-
-        // ========================================
-        // CEK USERNAME
-        // ========================================
-
-        usernameInput.addEventListener('input', function() {
-
-            const username = this.value.trim();
-
-            const error =
-                document.getElementById('usernameError');
-
-            this.classList.remove('input-error');
-            error.textContent = '';
-
-            if (username.length > 0 && username.length < 4) {
-
-                this.classList.add('input-error');
-
-                error.textContent =
-                    'Username minimal 4 karakter.';
-
-                return;
-            }
-
-        });
-
-
-        // ========================================
-        // CEK PASSWORD
-        // ========================================
-
-        passwordInput.addEventListener('input', function() {
-
-            const password = this.value;
-
-            const error =
-                document.getElementById('passwordError');
-
-            this.classList.remove('input-error');
-
-            error.textContent = '';
-
-            if (
-                password.length > 0 &&
-                password.length < 8
-            ) {
-
-                this.classList.add('input-error');
-
-                error.textContent =
-                    'Password minimal 8 karakter.';
-            }
-
-            checkPasswordMatch();
-
-        });
-
-
-        // ========================================
-        // CEK KONFIRMASI PASSWORD
-        // ========================================
-
-        confirmationInput.addEventListener(
-            'input',
-            checkPasswordMatch
-        );
-
-
-        function checkPasswordMatch() {
-
-            const password =
-                passwordInput.value;
-
-            const confirmation =
-                confirmationInput.value;
-
-            const error =
-                document.getElementById(
-                    'confirmationError'
-                );
-
-            confirmationInput.classList.remove(
-                'input-error'
+        const userModal =
+            document.getElementById(
+                'userModal'
             );
 
-            error.textContent = '';
 
-            if (
-                confirmation.length > 0 &&
-                password !== confirmation
-            ) {
+        const roleSelect =
+            document.getElementById(
+                'role'
+            );
 
-                confirmationInput.classList.add(
-                    'input-error'
-                );
 
-                error.textContent =
-                    'Konfirmasi password tidak sama.';
+        const serviceGroup =
+            document.getElementById(
+                'serviceGroup'
+            );
 
-            } else if (
-                confirmation.length >= 8 &&
-                password === confirmation
-            ) {
 
-                confirmationInput.classList.add(
-                    'input-success'
-                );
+        const serviceSelect =
+            document.getElementById(
+                'serviceId'
+            );
+
+
+        const userSearch =
+            document.getElementById(
+                'userSearch'
+            );
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | BUKA MODAL
+        |--------------------------------------------------------------------------
+        */
+
+        function openUserModal() {
+
+            userModal.classList.add(
+                'show'
+            );
+
+            document.body.style.overflow =
+                'hidden';
+
+        }
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | TUTUP MODAL
+        |--------------------------------------------------------------------------
+        */
+
+        function closeUserModal() {
+
+            userModal.classList.remove(
+                'show'
+            );
+
+            document.body.style.overflow =
+                '';
+
+        }
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ROLE -> PELAYANAN
+        |--------------------------------------------------------------------------
+        |
+        | Petugas:
+        | pelayanan ditampilkan dan wajib.
+        |
+        | Admin:
+        | pelayanan disembunyikan.
+        |
+        */
+
+        function updateServiceField() {
+
+            const isPetugas =
+                roleSelect.value
+                ===
+                'petugas';
+
+
+            if (isPetugas) {
+
+                serviceGroup.hidden =
+                    false;
+
+                serviceSelect.required =
+                    true;
+
+            } else {
+
+                serviceGroup.hidden =
+                    true;
+
+                serviceSelect.required =
+                    false;
+
+                serviceSelect.value =
+                    '';
 
             }
 
         }
 
 
-        // ========================================
-        // SUBMIT
-        // ========================================
 
-        userForm.addEventListener(
-            'submit',
-            function(event) {
-
-                let valid = true;
+        roleSelect.addEventListener(
+            'change',
+            updateServiceField
+        );
 
 
-                const name =
-                    document.getElementById(
-                        'userName'
-                    ).value.trim();
-
-                const username =
-                    usernameInput.value.trim();
-
-                const password =
-                    passwordInput.value;
-
-                const confirmation =
-                    confirmationInput.value;
-
-                const role =
-                    document.getElementById(
-                        'role'
-                    ).value;
+        updateServiceField();
 
 
-                // NAMA
 
-                if (!name) {
+        /*
+        |--------------------------------------------------------------------------
+        | KLIK LUAR MODAL
+        |--------------------------------------------------------------------------
+        */
 
-                    document.getElementById(
-                            'nameError'
-                        ).textContent =
-                        'Nama lengkap wajib diisi.';
+        userModal.addEventListener(
+            'click',
+            function (event) {
 
-                    valid = false;
+                if (
+                    event.target
+                    ===
+                    userModal
+                ) {
 
-                } else {
-
-                    document.getElementById(
-                        'nameError'
-                    ).textContent = '';
-
-                }
-
-
-                // USERNAME
-
-                if (!username) {
-
-                    document.getElementById(
-                            'usernameError'
-                        ).textContent =
-                        'Username wajib diisi.';
-
-                    usernameInput.classList.add(
-                        'input-error'
-                    );
-
-                    valid = false;
-
-                } else if (username.length < 4) {
-
-                    document.getElementById(
-                            'usernameError'
-                        ).textContent =
-                        'Username minimal 4 karakter.';
-
-                    usernameInput.classList.add(
-                        'input-error'
-                    );
-
-                    valid = false;
-
-                }
-
-
-                // PASSWORD
-
-                if (password.length < 8) {
-
-                    document.getElementById(
-                            'passwordError'
-                        ).textContent =
-                        'Password minimal 8 karakter.';
-
-                    passwordInput.classList.add(
-                        'input-error'
-                    );
-
-                    valid = false;
-
-                }
-
-
-                // KONFIRMASI
-
-                if (password !== confirmation) {
-
-                    document.getElementById(
-                            'confirmationError'
-                        ).textContent =
-                        'Konfirmasi password tidak sama.';
-
-                    confirmationInput.classList.add(
-                        'input-error'
-                    );
-
-                    valid = false;
-
-                }
-
-
-                // ROLE
-
-                if (!role) {
-
-                    document.getElementById(
-                            'roleError'
-                        ).textContent =
-                        'Silakan pilih role.';
-
-                    valid = false;
-
-                }
-
-
-                if (!valid) {
-
-                    event.preventDefault();
-
-                    return;
+                    closeUserModal();
 
                 }
 
             }
         );
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ESC
+        |--------------------------------------------------------------------------
+        */
+
+        document.addEventListener(
+            'keydown',
+            function (event) {
+
+                if (
+                    event.key
+                    ===
+                    'Escape'
+                ) {
+
+                    closeUserModal();
+
+                }
+
+            }
+        );
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SEARCH USER
+        |--------------------------------------------------------------------------
+        */
+
+        if (userSearch) {
+
+            userSearch.addEventListener(
+                'input',
+                function () {
+
+                    const keyword =
+                        this.value
+                            .toLowerCase()
+                            .trim();
+
+
+                    const rows =
+                        document.querySelectorAll(
+                            '.user-row'
+                        );
+
+
+                    rows.forEach(
+                        function (row) {
+
+                            const text =
+                                row.dataset.search
+                                    .toLowerCase();
+
+
+                            row.style.display =
+                                text.includes(
+                                    keyword
+                                )
+                                    ? ''
+                                    : 'none';
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | JIKA VALIDASI SERVER GAGAL
+        |--------------------------------------------------------------------------
+        |
+        | Modal otomatis dibuka kembali.
+        |
+        */
+
+        @if ($errors->any())
+
+            openUserModal();
+
+        @endif
+
     </script>
+
 
 </body>
 

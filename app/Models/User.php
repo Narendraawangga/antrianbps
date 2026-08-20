@@ -15,6 +15,7 @@ use Illuminate\Notifications\Notifiable;
     'password',
     'role',
     'is_active',
+    'service_id',
 ])]
 
 #[Hidden([
@@ -27,6 +28,7 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+
     protected function casts(): array
     {
         return [
@@ -34,6 +36,27 @@ class User extends Authenticatable
             'is_active' => 'boolean',
         ];
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PELAYANAN PETUGAS
+    |--------------------------------------------------------------------------
+    */
+
+    public function service()
+    {
+        return $this->belongsTo(
+            Service::class
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | JADWAL PETUGAS
+    |--------------------------------------------------------------------------
+    */
 
     public function schedules()
     {

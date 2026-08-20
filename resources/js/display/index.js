@@ -2,6 +2,13 @@
 |--------------------------------------------------------------------------
 | DISPLAY ANTREAN BPS KOLAKA UTARA
 |--------------------------------------------------------------------------
+|
+| Sistem Display 3 Pelayanan:
+|
+| - Perpustakaan
+| - Konsultasi
+| - Rekomendasi
+|
 */
 
 
@@ -14,13 +21,60 @@
 let availableVoices = [];
 let selectedVoice = null;
 
-let activeAnnouncementQueueId = null;
-let announcementTimer = null;
-
 let youtubePlayer = null;
 
-let lastQueuesSignature = null;
-let lastNextQueuesSignature = null;
+
+/*
+|--------------------------------------------------------------------------
+| DATA SUARA
+|--------------------------------------------------------------------------
+|
+| Semua antrean dengan status "called"
+| akan dimasukkan ke daftar ini.
+|
+*/
+
+let calledQueues = [];
+
+
+/*
+|--------------------------------------------------------------------------
+| SUARA YANG SEDANG AKTIF
+|--------------------------------------------------------------------------
+*/
+
+let activeAnnouncementQueueId = null;
+
+
+/*
+|--------------------------------------------------------------------------
+| TIMER PENGULANGAN
+|--------------------------------------------------------------------------
+*/
+
+let announcementTimer = null;
+
+
+/*
+|--------------------------------------------------------------------------
+| TOKEN SIKLUS SUARA
+|--------------------------------------------------------------------------
+|
+| Dipakai supaya callback suara lama tidak
+| menjalankan ulang suara setelah status berubah.
+|
+*/
+
+let announcementCycleToken = 0;
+
+
+/*
+|--------------------------------------------------------------------------
+| SIGNATURE DATA
+|--------------------------------------------------------------------------
+*/
+
+let lastServicesSignature = null;
 
 
 /*
@@ -31,46 +85,63 @@ let lastNextQueuesSignature = null;
 
 function loadVoices() {
 
-    if (!('speechSynthesis' in window)) {
+    if (
+        !('speechSynthesis' in window)
+    ) {
         return;
     }
 
+
     availableVoices =
-        window.speechSynthesis.getVoices();
+        window.speechSynthesis
+            .getVoices();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PRIORITAS BAHASA INDONESIA
+    |--------------------------------------------------------------------------
+    */
 
     selectedVoice =
         availableVoices.find(
             (voice) =>
                 voice.lang === 'id-ID'
         )
+
         ??
+
         availableVoices.find(
             (voice) =>
                 voice.lang
                     .toLowerCase()
                     .startsWith('id')
         )
-        ??
-        null;
 
+        ??
+
+        null;
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| VOICE SAAT HALAMAN DIBUKA
+| LOAD VOICE SAAT HALAMAN DIBUKA
 |--------------------------------------------------------------------------
 */
 
 loadVoices();
 
-if ('speechSynthesis' in window) {
 
-    window.speechSynthesis.addEventListener(
-        'voiceschanged',
-        loadVoices
-    );
+if (
+    'speechSynthesis' in window
+) {
 
+    window.speechSynthesis
+        .addEventListener(
+            'voiceschanged',
+            loadVoices
+        );
 }
 
 
@@ -85,288 +156,324 @@ function updateClock() {
     const now =
         new Date();
 
+
     const timeFormatter =
         new Intl.DateTimeFormat(
             'id-ID',
             {
-                timeZone: 'Asia/Makassar',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false,
+                timeZone:
+                    'Asia/Makassar',
+
+                hour:
+                    '2-digit',
+
+                minute:
+                    '2-digit',
+
+                second:
+                    '2-digit',
+
+                hour12:
+                    false,
             }
         );
+
 
     const dateFormatter =
         new Intl.DateTimeFormat(
             'id-ID',
             {
-                timeZone: 'Asia/Makassar',
-                weekday: 'long',
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric',
+                timeZone:
+                    'Asia/Makassar',
+
+                weekday:
+                    'long',
+
+                day:
+                    '2-digit',
+
+                month:
+                    'long',
+
+                year:
+                    'numeric',
             }
         );
+
 
     const timeElement =
         document.getElementById(
             'displayTime'
         );
 
+
     const dateElement =
         document.getElementById(
             'displayDate'
         );
 
+
     if (timeElement) {
 
         timeElement.textContent =
-            timeFormatter.format(now);
-
+            timeFormatter.format(
+                now
+            );
     }
+
 
     if (dateElement) {
 
         dateElement.textContent =
-            dateFormatter.format(now);
-
+            dateFormatter.format(
+                now
+            );
     }
-
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| RENDER ANTREAN AKTIF
+| UPDATE SATU KARTU PELAYANAN
 |--------------------------------------------------------------------------
-|
-| Menampilkan:
-|
-| called  = DIPANGGIL
-| serving = SEDANG DILAYANI
-|
 */
 
-function renderQueues(queues) {
+function updateServiceCard(
+    service
+) {
 
     const container =
         document.getElementById(
-            'queueContainer'
+            'serviceDisplayContainer'
         );
+
 
     if (!container) {
         return;
     }
 
-    container.replaceChildren();
-
 
     /*
     |--------------------------------------------------------------------------
-    | TIDAK ADA ANTREAN AKTIF
+    | CARI CARD SESUAI SERVICE ID
     |--------------------------------------------------------------------------
     */
 
-    if (queues.length === 0) {
-
-        const empty =
-            document.createElement(
-                'div'
-            );
-
-        empty.className =
-            'queue-empty';
-
-        empty.innerHTML = `
-
-            <div class="queue-empty-icon">
-                🎫
-            </div>
-
-            <h2>
-                Belum Ada Antrean Aktif
-            </h2>
-
-            <p>
-                Nomor antrean akan tampil ketika
-                petugas melakukan pemanggilan.
-            </p>
-
-        `;
-
-        container.appendChild(
-            empty
+    const card =
+        container.querySelector(
+            `[data-service-id="${service.service_id}"]`
         );
 
+
+    if (!card) {
         return;
     }
 
 
     /*
     |--------------------------------------------------------------------------
-    | GRID
+    | NAMA PELAYANAN
     |--------------------------------------------------------------------------
     */
 
-    const grid =
-        document.createElement(
-            'div'
+    const serviceName =
+        card.querySelector(
+            '[data-service-name]'
         );
 
-    grid.className =
-        'queue-grid';
+
+    if (serviceName) {
+
+        serviceName.textContent =
+            service.service_name;
+    }
 
 
     /*
     |--------------------------------------------------------------------------
-    | BUAT CARD
+    | ELEMENT NOMOR
     |--------------------------------------------------------------------------
     */
 
-    queues.forEach(
-        (queue) => {
-
-            const card =
-                document.createElement(
-                    'div'
-                );
-
-            card.className =
-                'queue-card';
-
-            card.dataset.queueId =
-                queue.id;
+    const numberElement =
+        card.querySelector(
+            '[data-current-number]'
+        );
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | NOMOR
-            |--------------------------------------------------------------------------
-            */
+    /*
+    |--------------------------------------------------------------------------
+    | ELEMENT STATUS
+    |--------------------------------------------------------------------------
+    */
 
-            const number =
-                document.createElement(
-                    'div'
-                );
-
-            number.className =
-                'queue-number';
-
-            number.textContent =
-                queue.number;
+    const statusElement =
+        card.querySelector(
+            '[data-current-status]'
+        );
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | LAYANAN
-            |--------------------------------------------------------------------------
-            */
+    /*
+    |--------------------------------------------------------------------------
+    | ANTREAN AKTIF
+    |--------------------------------------------------------------------------
+    */
 
-            const service =
-                document.createElement(
-                    'div'
-                );
-
-            service.className =
-                'queue-service';
-
-            service.textContent =
-                queue.service;
+    const currentQueue =
+        service.current_queue;
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | STATUS
-            |--------------------------------------------------------------------------
-            */
+    if (currentQueue) {
 
-            const status =
-                document.createElement(
-                    'div'
-                );
+        /*
+        |--------------------------------------------------------------------------
+        | NOMOR
+        |--------------------------------------------------------------------------
+        */
 
-            status.className =
-                `queue-status status-${queue.status}`;
+        if (numberElement) {
 
-            status.textContent =
-                queue.status_label;
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | MASUKKAN
-            |--------------------------------------------------------------------------
-            */
-
-            card.appendChild(
-                number
-            );
-
-            card.appendChild(
-                service
-            );
-
-            card.appendChild(
-                status
-            );
-
-            grid.appendChild(
-                card
-            );
-
+            numberElement.textContent =
+                currentQueue.number;
         }
-    );
 
-    container.appendChild(
-        grid
-    );
 
+        /*
+        |--------------------------------------------------------------------------
+        | STATUS
+        |--------------------------------------------------------------------------
+        */
+
+        if (statusElement) {
+
+            statusElement.textContent =
+                currentQueue.status_label;
+
+
+            statusElement.classList.remove(
+                'status-called',
+                'status-serving',
+                'status-empty'
+            );
+
+
+            statusElement.classList.add(
+                `status-${currentQueue.status}`
+            );
+        }
+
+    } else {
+
+        /*
+        |--------------------------------------------------------------------------
+        | TIDAK ADA ANTREAN AKTIF
+        |--------------------------------------------------------------------------
+        */
+
+        if (numberElement) {
+
+            numberElement.textContent =
+                '-';
+        }
+
+
+        if (statusElement) {
+
+            statusElement.textContent =
+                'Menunggu Panggilan';
+
+
+            statusElement.classList.remove(
+                'status-called',
+                'status-serving'
+            );
+
+
+            statusElement.classList.add(
+                'status-empty'
+            );
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ANTREAN BERIKUTNYA
+    |--------------------------------------------------------------------------
+    */
+
+    updateNextQueues(
+        card,
+        service.next_queues
+    );
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| RENDER ANTREAN BERIKUTNYA
+| UPDATE ANTREAN BERIKUTNYA
 |--------------------------------------------------------------------------
 */
 
-function renderNextQueues(queues) {
+function updateNextQueues(
+    card,
+    queues
+) {
 
     const container =
-        document.getElementById(
-            'nextQueueList'
+        card.querySelector(
+            '[data-next-list]'
         );
+
 
     if (!container) {
         return;
     }
+
 
     container.replaceChildren();
 
 
     /*
     |--------------------------------------------------------------------------
-    | TIDAK ADA YANG MENUNGGU
+    | PASTIKAN ARRAY
     |--------------------------------------------------------------------------
     */
 
-    if (queues.length === 0) {
+    const nextQueues =
+        Array.isArray(queues)
+            ? queues
+            : [];
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | TIDAK ADA ANTREAN MENUNGGU
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        nextQueues.length === 0
+    ) {
 
         const empty =
             document.createElement(
                 'div'
             );
 
+
         empty.className =
-            'next-queue-empty';
+            'service-next-empty';
+
 
         empty.textContent =
-            'Tidak ada antrean menunggu';
+            'Belum ada antrean menunggu';
+
 
         container.appendChild(
             empty
         );
+
 
         return;
     }
@@ -374,11 +481,11 @@ function renderNextQueues(queues) {
 
     /*
     |--------------------------------------------------------------------------
-    | TAMPILKAN WAITING
+    | TAMPILKAN ANTREAN
     |--------------------------------------------------------------------------
     */
 
-    queues.forEach(
+    nextQueues.forEach(
         (queue) => {
 
             const item =
@@ -386,62 +493,61 @@ function renderNextQueues(queues) {
                     'div'
                 );
 
+
             item.className =
-                'next-queue-item';
+                'service-next-item';
 
 
             const number =
                 document.createElement(
-                    'strong'
-                );
-
-            number.textContent =
-                queue.number;
-
-
-            const service =
-                document.createElement(
                     'span'
                 );
 
-            service.textContent =
-                queue.service;
+
+            number.className =
+                'service-next-number';
+
+
+            number.textContent =
+                queue.number;
 
 
             item.appendChild(
                 number
             );
 
-            item.appendChild(
-                service
-            );
 
             container.appendChild(
                 item
             );
-
         }
     );
-
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| NOMOR ANTREAN UNTUK SUARA
+| UBAH NOMOR ANTREAN UNTUK SUARA
 |--------------------------------------------------------------------------
 |
-| B-001
+| Contoh:
+|
+| A-001
 |
 | menjadi:
 |
-| B nol nol satu
+| A nol nol satu
 |
 */
 
 function queueNumberToSpeech(
     queueNumber
 ) {
+
+    if (!queueNumber) {
+        return '';
+    }
+
 
     const numbers = {
 
@@ -458,11 +564,12 @@ function queueNumberToSpeech(
 
     };
 
-    return queueNumber
+
+    return String(queueNumber)
 
         .replace(
-            '-',
-            ' '
+            /-/g,
+            ''
         )
 
         .split('')
@@ -475,7 +582,6 @@ function queueNumberToSpeech(
                     ??
                     character
                 );
-
             }
         )
 
@@ -487,7 +593,6 @@ function queueNumberToSpeech(
         )
 
         .trim();
-
 }
 
 
@@ -502,39 +607,71 @@ function announceQueue(
     onFinished = null
 ) {
 
-    if (!('speechSynthesis' in window)) {
+    if (
+        !('speechSynthesis' in window)
+    ) {
+
+        if (onFinished) {
+            onFinished();
+        }
+
         return;
     }
+
 
     const queueText =
         queueNumberToSpeech(
             queue.number
         );
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | KALIMAT PANGGILAN
+    |--------------------------------------------------------------------------
+    |
+    | Contoh:
+    |
+    | Nomor antrean A nol nol satu.
+    | Silakan menuju loket Pelayanan Perpustakaan.
+    |
+    */
+
     const message =
         `Nomor antrean ${queueText}. ` +
-        `Silakan menuju ${queue.service}.`;
+        `Silakan menuju loket ${queue.service}.`;
+
 
     const speech =
         new SpeechSynthesisUtterance(
             message
         );
 
+
     speech.lang =
         'id-ID';
+
 
     if (selectedVoice) {
 
         speech.voice =
             selectedVoice;
-
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | KECEPATAN SUARA
+    |--------------------------------------------------------------------------
+    */
+
     speech.rate =
-        0.95;
+        0.92;
+
 
     speech.pitch =
         1;
+
 
     speech.volume =
         1;
@@ -542,7 +679,7 @@ function announceQueue(
 
     /*
     |--------------------------------------------------------------------------
-    | SETELAH SELESAI
+    | SELESAI BICARA
     |--------------------------------------------------------------------------
     */
 
@@ -552,9 +689,14 @@ function announceQueue(
             if (onFinished) {
                 onFinished();
             }
-
         };
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | ERROR SPEECH
+    |--------------------------------------------------------------------------
+    */
 
     speech.onerror =
         () => {
@@ -562,16 +704,17 @@ function announceQueue(
             if (onFinished) {
                 onFinished();
             }
-
         };
 
 
-    window.speechSynthesis.resume();
+    window.speechSynthesis
+        .resume();
 
-    window.speechSynthesis.speak(
-        speech
-    );
 
+    window.speechSynthesis
+        .speak(
+            speech
+        );
 }
 
 
@@ -585,7 +728,16 @@ function stopAnnouncementLoop() {
 
     /*
     |--------------------------------------------------------------------------
-    | RESET ID DULU
+    | MATIKAN CALLBACK LAMA
+    |--------------------------------------------------------------------------
+    */
+
+    announcementCycleToken++;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RESET ID
     |--------------------------------------------------------------------------
     */
 
@@ -595,7 +747,7 @@ function stopAnnouncementLoop() {
 
     /*
     |--------------------------------------------------------------------------
-    | HENTIKAN TIMER
+    | TIMER
     |--------------------------------------------------------------------------
     */
 
@@ -607,15 +759,15 @@ function stopAnnouncementLoop() {
             announcementTimer
         );
 
+
         announcementTimer =
             null;
-
     }
 
 
     /*
     |--------------------------------------------------------------------------
-    | HENTIKAN SPEECH
+    | CANCEL SPEECH
     |--------------------------------------------------------------------------
     */
 
@@ -623,53 +775,114 @@ function stopAnnouncementLoop() {
         'speechSynthesis' in window
     ) {
 
-        window.speechSynthesis.cancel();
-
+        window.speechSynthesis
+            .cancel();
     }
-
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| MULAI SUARA BERULANG
+| JALANKAN ANTREAN SUARA BERIKUTNYA
 |--------------------------------------------------------------------------
+|
+| Jika hanya satu antrean dipanggil:
+|
+| A001
+| 4 detik
+| A001
+| 4 detik
+| ...
+|
+|
+| Jika tiga pelayanan memanggil bersamaan:
+|
+| A001
+| 4 detik
+| B001
+| 4 detik
+| D001
+| 4 detik
+| A001
+| ...
+|
+| Jadi suara tidak saling bertabrakan.
+|
 */
 
-function startAnnouncementLoop(
-    queue
-) {
+function runNextAnnouncement() {
 
     /*
     |--------------------------------------------------------------------------
-    | SUDAH BERJALAN UNTUK NOMOR YANG SAMA
+    | TIDAK ADA YANG DIPANGGIL
     |--------------------------------------------------------------------------
     */
 
     if (
-        activeAnnouncementQueueId
-        === queue.id
+        calledQueues.length === 0
     ) {
 
-        return;
+        stopAnnouncementLoop();
 
+        return;
     }
 
 
     /*
     |--------------------------------------------------------------------------
-    | HENTIKAN YANG LAMA
+    | CARI POSISI ANTREAN YANG TERAKHIR DIBACA
     |--------------------------------------------------------------------------
     */
 
-    stopAnnouncementLoop();
+    let nextIndex = 0;
+
+
+    if (
+        activeAnnouncementQueueId !== null
+    ) {
+
+        const currentIndex =
+            calledQueues.findIndex(
+                (queue) =>
+                    queue.id ===
+                    activeAnnouncementQueueId
+            );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | LANJUT KE ANTREAN BERIKUTNYA
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            currentIndex !== -1
+        ) {
+
+            nextIndex =
+                (
+                    currentIndex + 1
+                )
+                %
+                calledQueues.length;
+        }
+    }
 
 
     /*
     |--------------------------------------------------------------------------
-    | SIMPAN ID
+    | ANTREAN YANG AKAN DIBACA
     |--------------------------------------------------------------------------
     */
+
+    const queue =
+        calledQueues[nextIndex];
+
+
+    if (!queue) {
+        return;
+    }
+
 
     activeAnnouncementQueueId =
         queue.id;
@@ -677,102 +890,267 @@ function startAnnouncementLoop(
 
     /*
     |--------------------------------------------------------------------------
-    | FUNCTION PENGULANGAN
+    | TOKEN SIKLUS SAAT INI
     |--------------------------------------------------------------------------
     */
 
-    function repeatAnnouncement() {
-
-        if (
-            activeAnnouncementQueueId
-            !== queue.id
-        ) {
-
-            return;
-
-        }
-
-
-        announceQueue(
-            queue,
-
-            () => {
-
-                /*
-                |--------------------------------------------------------------------------
-                | JIKA STATUS SUDAH BERUBAH JANGAN ULANG
-                |--------------------------------------------------------------------------
-                */
-
-                if (
-                    activeAnnouncementQueueId
-                    !== queue.id
-                ) {
-
-                    return;
-
-                }
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | JEDA 4 DETIK
-                |--------------------------------------------------------------------------
-                */
-
-                announcementTimer =
-                    setTimeout(
-                        repeatAnnouncement,
-                        4000
-                    );
-
-            }
-        );
-
-    }
+    const currentToken =
+        announcementCycleToken;
 
 
     /*
     |--------------------------------------------------------------------------
-    | SUARA PERTAMA LANGSUNG
+    | BACA
     |--------------------------------------------------------------------------
     */
 
-    repeatAnnouncement();
+    announceQueue(
+        queue,
+        () => {
 
+            /*
+            |--------------------------------------------------------------------------
+            | CALLBACK SUDAH KADALUWARSA
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                currentToken !==
+                announcementCycleToken
+            ) {
+
+                return;
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | JIKA SUDAH TIDAK CALLED JANGAN ULANGI
+            |--------------------------------------------------------------------------
+            */
+
+            const stillCalled =
+                calledQueues.some(
+                    (item) =>
+                        item.id ===
+                        queue.id
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | TUNGGU 4 DETIK
+            |--------------------------------------------------------------------------
+            */
+
+            announcementTimer =
+                setTimeout(
+                    () => {
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | TOKEN MASIH VALID
+                        |--------------------------------------------------------------------------
+                        */
+
+                        if (
+                            currentToken !==
+                            announcementCycleToken
+                        ) {
+
+                            return;
+                        }
+
+
+                        /*
+                        |--------------------------------------------------------------------------
+                        | Jika antrean sudah berubah serving,
+                        | tetap lanjutkan ke antrean called lain.
+                        |--------------------------------------------------------------------------
+                        */
+
+                        if (!stillCalled) {
+
+                            activeAnnouncementQueueId =
+                                null;
+                        }
+
+
+                        runNextAnnouncement();
+
+                    },
+                    4000
+                );
+        }
+    );
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| SIGNATURE DATA
+| SINKRONISASI SUARA
 |--------------------------------------------------------------------------
-|
-| Supaya card tidak dibuat ulang setiap polling 2 detik
-| kalau datanya tidak berubah.
-|
 */
 
-function createQueueSignature(
-    queues
+function syncAnnouncements(
+    newCalledQueues
+) {
+
+    /*
+    |--------------------------------------------------------------------------
+    | SIMPAN DATA TERBARU
+    |--------------------------------------------------------------------------
+    */
+
+    calledQueues =
+        newCalledQueues;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | TIDAK ADA CALLED
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        calledQueues.length === 0
+    ) {
+
+        stopAnnouncementLoop();
+
+        return;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | BELUM ADA SUARA BERJALAN
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        activeAnnouncementQueueId === null
+    ) {
+
+        announcementCycleToken++;
+
+        runNextAnnouncement();
+
+        return;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CEK ANTREAN YANG SEDANG DIBACA
+    |--------------------------------------------------------------------------
+    */
+
+    const activeStillCalled =
+        calledQueues.some(
+            (queue) =>
+                queue.id ===
+                activeAnnouncementQueueId
+        );
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | STATUS SUDAH BERUBAH
+    |
+    | Contoh:
+    |
+    | called -> serving
+    |
+    | Suara langsung dihentikan.
+    |--------------------------------------------------------------------------
+    */
+
+    if (!activeStillCalled) {
+
+        stopAnnouncementLoop();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | MASIH ADA CALLED LAIN
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            calledQueues.length > 0
+        ) {
+
+            announcementCycleToken++;
+
+            runNextAnnouncement();
+        }
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| BUAT SIGNATURE DATA
+|--------------------------------------------------------------------------
+*/
+
+function createServicesSignature(
+    services
 ) {
 
     return JSON.stringify(
 
-        queues.map(
-            (queue) => [
+        services.map(
+            (service) => {
 
-                queue.id,
-                queue.status,
-                queue.number,
-                queue.service,
-                queue.called_at ?? null,
+                return {
 
-            ]
+                    service_id:
+                        service.service_id,
+
+                    current_queue:
+                        service.current_queue
+                            ? {
+
+                                id:
+                                    service.current_queue.id,
+
+                                number:
+                                    service.current_queue.number,
+
+                                status:
+                                    service.current_queue.status,
+
+                                status_label:
+                                    service.current_queue.status_label,
+
+                            }
+                            : null,
+
+                    next_queues:
+                        Array.isArray(
+                            service.next_queues
+                        )
+                            ? service.next_queues.map(
+                                (queue) => {
+
+                                    return {
+
+                                        id:
+                                            queue.id,
+
+                                        number:
+                                            queue.number,
+
+                                    };
+                                }
+                            )
+                            : [],
+                };
+            }
         )
-
     );
-
 }
 
 
@@ -786,8 +1164,9 @@ async function fetchQueues() {
 
     const container =
         document.getElementById(
-            'queueContainer'
+            'serviceDisplayContainer'
         );
+
 
     if (!container) {
         return;
@@ -797,6 +1176,7 @@ async function fetchQueues() {
     const url =
         container.dataset.url;
 
+
     if (!url) {
         return;
     }
@@ -804,14 +1184,22 @@ async function fetchQueues() {
 
     try {
 
+        /*
+        |--------------------------------------------------------------------------
+        | REQUEST
+        |--------------------------------------------------------------------------
+        */
+
         const response =
             await fetch(
                 url,
                 {
 
                     headers: {
+
                         Accept:
                             'application/json',
+
                     },
 
                     cache:
@@ -821,14 +1209,25 @@ async function fetchQueues() {
             );
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | ERROR HTTP
+        |--------------------------------------------------------------------------
+        */
+
         if (!response.ok) {
 
             throw new Error(
                 'Gagal mengambil data antrean.'
             );
-
         }
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | JSON
+        |--------------------------------------------------------------------------
+        */
 
         const data =
             await response.json();
@@ -841,110 +1240,101 @@ async function fetchQueues() {
 
         /*
         |--------------------------------------------------------------------------
-        | PASTIKAN ARRAY
+        | DATA SERVICES
         |--------------------------------------------------------------------------
         */
 
-        const queues =
+        const services =
             Array.isArray(
-                data.queues
+                data.services
             )
-                ? data.queues
-                : [];
-
-
-        const nextQueues =
-            Array.isArray(
-                data.next_queues
-            )
-                ? data.next_queues
+                ? data.services
                 : [];
 
 
         /*
         |--------------------------------------------------------------------------
-        | UPDATE ANTREAN AKTIF
+        | UPDATE CARD HANYA JIKA DATA BERUBAH
         |--------------------------------------------------------------------------
         */
 
-        const currentSignature =
-            createQueueSignature(
-                queues
+        const signature =
+            createServicesSignature(
+                services
             );
 
 
         if (
-            currentSignature
-            !== lastQueuesSignature
+            signature !==
+            lastServicesSignature
         ) {
 
-            lastQueuesSignature =
-                currentSignature;
+            lastServicesSignature =
+                signature;
 
-            renderQueues(
-                queues
+
+            services.forEach(
+                (service) => {
+
+                    updateServiceCard(
+                        service
+                    );
+                }
             );
-
         }
 
 
         /*
         |--------------------------------------------------------------------------
-        | UPDATE ANTREAN BERIKUTNYA
+        | KUMPULKAN SEMUA STATUS CALLED
         |--------------------------------------------------------------------------
         */
 
-        const nextSignature =
-            createQueueSignature(
-                nextQueues
-            );
+        const newCalledQueues = [];
 
 
-        if (
-            nextSignature
-            !== lastNextQueuesSignature
-        ) {
+        services.forEach(
+            (service) => {
 
-            lastNextQueuesSignature =
-                nextSignature;
+                const currentQueue =
+                    service.current_queue;
 
-            renderNextQueues(
-                nextQueues
-            );
 
-        }
+                if (
+                    currentQueue &&
+                    currentQueue.status ===
+                        'called'
+                ) {
+
+                    newCalledQueues.push({
+
+                        id:
+                            currentQueue.id,
+
+                        number:
+                            currentQueue.number,
+
+                        serviceId:
+                            service.service_id,
+
+                        service:
+                            service.service_name,
+
+                    });
+                }
+            }
+        );
 
 
         /*
         |--------------------------------------------------------------------------
-        | SUARA HANYA UNTUK STATUS CALLED
+        | SINKRON SUARA
         |--------------------------------------------------------------------------
         */
 
-        const calledQueue =
-            queues.find(
-                (queue) =>
-                    queue.status === 'called'
-            );
-
-
-        if (calledQueue) {
-
-            startAnnouncementLoop(
-                calledQueue
-            );
-
-        } else {
-
-            /*
-            |--------------------------------------------------------------------------
-            | JIKA SEMUA SUDAH SERVING / SKIPPED
-            |--------------------------------------------------------------------------
-            */
-
-            stopAnnouncementLoop();
-
-        }
+        syncAnnouncements(
+            newCalledQueues
+        );
 
     } catch (error) {
 
@@ -952,9 +1342,7 @@ async function fetchQueues() {
             'Display antrean:',
             error
         );
-
     }
-
 }
 
 
@@ -966,6 +1354,7 @@ async function fetchQueues() {
 
 updateClock();
 
+
 setInterval(
     updateClock,
     1000
@@ -974,11 +1363,15 @@ setInterval(
 
 /*
 |--------------------------------------------------------------------------
-| AUTO UPDATE ANTREAN
+| AUTO UPDATE DISPLAY
 |--------------------------------------------------------------------------
+|
+| Cek database setiap 2 detik.
+|
 */
 
 fetchQueues();
+
 
 setInterval(
     fetchQueues,
@@ -988,7 +1381,7 @@ setInterval(
 
 /*
 |--------------------------------------------------------------------------
-| YOUTUBE
+| YOUTUBE API
 |--------------------------------------------------------------------------
 */
 
@@ -999,6 +1392,7 @@ function loadYouTubeAPI() {
             'bpsYoutubePlayer'
         );
 
+
     if (!playerElement) {
         return;
     }
@@ -1006,7 +1400,7 @@ function loadYouTubeAPI() {
 
     /*
     |--------------------------------------------------------------------------
-    | API SUDAH DIMUAT
+    | API SUDAH TERSEDIA
     |--------------------------------------------------------------------------
     */
 
@@ -1018,13 +1412,12 @@ function loadYouTubeAPI() {
         createYouTubePlayer();
 
         return;
-
     }
 
 
     /*
     |--------------------------------------------------------------------------
-    | CEK SCRIPT SUDAH ADA
+    | SCRIPT SUDAH DIMUAT
     |--------------------------------------------------------------------------
     */
 
@@ -1035,31 +1428,38 @@ function loadYouTubeAPI() {
     ) {
 
         return;
-
     }
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOAD SCRIPT YOUTUBE
+    |--------------------------------------------------------------------------
+    */
 
     const script =
         document.createElement(
             'script'
         );
 
+
     script.src =
         'https://www.youtube.com/iframe_api';
+
 
     script.async =
         true;
 
+
     document.head.appendChild(
         script
     );
-
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| YOUTUBE API READY
+| YOUTUBE READY
 |--------------------------------------------------------------------------
 */
 
@@ -1067,13 +1467,12 @@ window.onYouTubeIframeAPIReady =
     function () {
 
         createYouTubePlayer();
-
     };
 
 
 /*
 |--------------------------------------------------------------------------
-| BUAT YOUTUBE PLAYER
+| CREATE YOUTUBE PLAYER
 |--------------------------------------------------------------------------
 */
 
@@ -1084,13 +1483,13 @@ function createYouTubePlayer() {
             'bpsYoutubePlayer'
         );
 
+
     if (
         !playerElement ||
         youtubePlayer
     ) {
 
         return;
-
     }
 
 
@@ -1105,7 +1504,6 @@ function createYouTubePlayer() {
         );
 
         return;
-
     }
 
 
@@ -1114,46 +1512,72 @@ function createYouTubePlayer() {
             'bpsYoutubePlayer',
             {
 
-                videoId: videoId,
+                videoId:
+                    videoId,
+
 
                 playerVars: {
 
-                    autoplay: 1,
+                    autoplay:
+                        1,
 
-                    controls: 1,
+                    controls:
+                        1,
 
-                    loop: 1,
+                    loop:
+                        1,
 
                     playlist:
                         videoId,
 
-                    rel: 0,
+                    rel:
+                        0,
 
-                    playsinline: 1,
+                    playsinline:
+                        1,
 
                 },
 
+
                 events: {
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | READY
+                    |--------------------------------------------------------------------------
+                    */
 
                     onReady:
                         function (event) {
 
                             /*
                             |--------------------------------------------------------------------------
-                            | MUTE AGAR AUTOPLAY TIDAK DIBLOKIR
+                            | MUTE
                             |--------------------------------------------------------------------------
+                            |
+                            | Video dimute agar autoplay tidak diblokir browser
+                            | dan tidak mengganggu suara panggilan antrean.
+                            |
                             */
 
                             event.target.mute();
+
 
                             event.target.setVolume(
                                 10
                             );
 
-                            event.target.playVideo();
 
+                            event.target.playVideo();
                         },
 
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | VIDEO SELESAI
+                    |--------------------------------------------------------------------------
+                    */
 
                     onStateChange:
                         function (event) {
@@ -1167,17 +1591,15 @@ function createYouTubePlayer() {
                                     0
                                 );
 
+
                                 event.target.playVideo();
-
                             }
-
                         },
 
                 },
 
             }
         );
-
 }
 
 

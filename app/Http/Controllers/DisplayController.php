@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Queue;
+use App\Models\Service;
 use App\Services\QueueScheduleService;
 
 class DisplayController extends Controller
@@ -35,11 +36,135 @@ class DisplayController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | ANTREAN AKTIF
+        | PELAYANAN AKTIF
         |--------------------------------------------------------------------------
         |
-        | called  = sedang dipanggil
-        | serving = sedang dilayani
+        | Hanya 3 pelayanan aktif yang ditampilkan.
+        | Penjualan Produk Statistik tidak ikut karena is_active = false.
+        |
+        */
+
+        $services = Service::where(
+            'is_active',
+            true
+        )
+            ->orderBy('id')
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATA PER PELAYANAN
+        |--------------------------------------------------------------------------
+        */
+
+        $displayServices = $services->map(
+            function ($service) use (
+                $periodStart,
+                $periodEnd
+            ) {
+
+                /*
+                |--------------------------------------------------------------------------
+                | ANTREAN AKTIF PELAYANAN INI
+                |--------------------------------------------------------------------------
+                */
+
+                $currentQueue = Queue::with('service')
+
+                    ->whereBetween(
+                        'created_at',
+                        [
+                            $periodStart,
+                            $periodEnd
+                        ]
+                    )
+
+                    ->where(
+                        'service_id',
+                        $service->id
+                    )
+
+                    ->whereIn(
+                        'status',
+                        [
+                            'called',
+                            'serving',
+                        ]
+                    )
+
+                    ->orderByRaw(
+                        "CASE
+                            WHEN status = 'called' THEN 0
+                            WHEN status = 'serving' THEN 1
+                            ELSE 2
+                        END"
+                    )
+
+                    ->orderByDesc('called_at')
+
+                    ->first();
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | ANTREAN BERIKUTNYA PELAYANAN INI
+                |--------------------------------------------------------------------------
+                */
+
+                $nextQueues = Queue::with('service')
+
+                    ->whereBetween(
+                        'created_at',
+                        [
+                            $periodStart,
+                            $periodEnd
+                        ]
+                    )
+
+                    ->where(
+                        'service_id',
+                        $service->id
+                    )
+
+                    ->where(
+                        'status',
+                        'waiting'
+                    )
+
+                    ->orderBy(
+                        'created_at',
+                        'asc'
+                    )
+
+                    ->limit(3)
+
+                    ->get();
+
+
+                return [
+
+                    'service' =>
+                        $service,
+
+                    'current_queue' =>
+                        $currentQueue,
+
+                    'next_queues' =>
+                        $nextQueues,
+
+                ];
+            }
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATA LAMA
+        |--------------------------------------------------------------------------
+        |
+        | Untuk sementara masih dikirim supaya Blade lama
+        | tidak langsung error sebelum kita ubah.
         |
         */
 
@@ -61,7 +186,6 @@ class DisplayController extends Controller
                 ]
             )
 
-            // Yang sedang dipanggil ditampilkan terlebih dahulu
             ->orderByRaw(
                 "CASE
                     WHEN status = 'called' THEN 0
@@ -74,12 +198,6 @@ class DisplayController extends Controller
 
             ->get();
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | ANTREAN BERIKUTNYA
-        |--------------------------------------------------------------------------
-        */
 
         $nextQueues = Queue::with('service')
 
@@ -106,9 +224,16 @@ class DisplayController extends Controller
             ->get();
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | TAMPILKAN HALAMAN
+        |--------------------------------------------------------------------------
+        */
+
         return view(
             'display.index',
             compact(
+                'displayServices',
                 'currentQueues',
                 'nextQueues'
             )
@@ -135,137 +260,196 @@ class DisplayController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | ANTREAN AKTIF
+        | PELAYANAN AKTIF
         |--------------------------------------------------------------------------
         */
 
-        $queues = Queue::with('service')
-
-            ->whereBetween(
-                'created_at',
-                [
-                    $periodStart,
-                    $periodEnd
-                ]
-            )
-
-            ->whereIn(
-                'status',
-                [
-                    'called',
-                    'serving',
-                ]
-            )
-
-            ->orderByRaw(
-                "CASE
-                    WHEN status = 'called' THEN 0
-                    WHEN status = 'serving' THEN 1
-                    ELSE 2
-                END"
-            )
-
-            ->orderByDesc('called_at')
-
+        $services = Service::where(
+            'is_active',
+            true
+        )
+            ->orderBy('id')
             ->get();
 
 
         /*
         |--------------------------------------------------------------------------
-        | ANTREAN MENUNGGU
+        | DATA SETIAP PELAYANAN
         |--------------------------------------------------------------------------
         */
 
-        $nextQueues = Queue::with('service')
+        $serviceData = $services->map(
+            function ($service) use (
+                $periodStart,
+                $periodEnd
+            ) {
 
-            ->whereBetween(
-                'created_at',
-                [
-                    $periodStart,
-                    $periodEnd
-                ]
-            )
+                /*
+                |--------------------------------------------------------------------------
+                | ANTREAN AKTIF
+                |--------------------------------------------------------------------------
+                */
 
-            ->where(
-                'status',
-                'waiting'
-            )
+                $currentQueue = Queue::whereBetween(
+                    'created_at',
+                    [
+                        $periodStart,
+                        $periodEnd
+                    ]
+                )
 
-            ->orderBy(
-                'created_at',
-                'asc'
-            )
+                    ->where(
+                        'service_id',
+                        $service->id
+                    )
 
-            ->limit(4)
+                    ->whereIn(
+                        'status',
+                        [
+                            'called',
+                            'serving',
+                        ]
+                    )
 
-            ->get();
+                    ->orderByRaw(
+                        "CASE
+                            WHEN status = 'called' THEN 0
+                            WHEN status = 'serving' THEN 1
+                            ELSE 2
+                        END"
+                    )
 
+                    ->orderByDesc(
+                        'called_at'
+                    )
+
+                    ->first();
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | ANTREAN MENUNGGU
+                |--------------------------------------------------------------------------
+                */
+
+                $nextQueues = Queue::whereBetween(
+                    'created_at',
+                    [
+                        $periodStart,
+                        $periodEnd
+                    ]
+                )
+
+                    ->where(
+                        'service_id',
+                        $service->id
+                    )
+
+                    ->where(
+                        'status',
+                        'waiting'
+                    )
+
+                    ->orderBy(
+                        'created_at',
+                        'asc'
+                    )
+
+                    ->limit(3)
+
+                    ->get();
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | FORMAT JSON
+                |--------------------------------------------------------------------------
+                */
+
+                return [
+
+                    'service_id' =>
+                        $service->id,
+
+                    'service_code' =>
+                        $service->code,
+
+                    'service_name' =>
+                        $service->name,
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | ANTREAN AKTIF
+                    |--------------------------------------------------------------------------
+                    */
+
+                    'current_queue' =>
+                        $currentQueue
+                            ? [
+
+                                'id' =>
+                                    $currentQueue->id,
+
+                                'number' =>
+                                    $currentQueue->queue_number,
+
+                                'status' =>
+                                    $currentQueue->status,
+
+                                'status_label' =>
+                                    $currentQueue->status_label,
+
+                                'called_at' =>
+                                    $currentQueue->called_at,
+
+                            ]
+                            : null,
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | ANTREAN BERIKUTNYA
+                    |--------------------------------------------------------------------------
+                    */
+
+                    'next_queues' =>
+                        $nextQueues->map(
+                            function ($queue) {
+
+                                return [
+
+                                    'id' =>
+                                        $queue->id,
+
+                                    'number' =>
+                                        $queue->queue_number,
+
+                                    'status' =>
+                                        $queue->status,
+
+                                ];
+                            }
+                        ),
+
+                ];
+            }
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RESPONSE
+        |--------------------------------------------------------------------------
+        */
 
         return response()->json([
 
-            'success' => true,
+            'success' =>
+                true,
 
-
-            /*
-            |--------------------------------------------------------------------------
-            | DIPANGGIL + SEDANG DILAYANI
-            |--------------------------------------------------------------------------
-            */
-
-            'queues' => $queues->map(
-                function ($queue) {
-
-                    return [
-
-                        'id' =>
-                            $queue->id,
-
-                        'number' =>
-                            $queue->queue_number,
-
-                        'service' =>
-                            $queue->service->name,
-
-                        'status' =>
-                            $queue->status,
-
-                        'status_label' =>
-                            $queue->status_label,
-
-                        'called_at' =>
-                            $queue->called_at,
-
-                    ];
-                }
-            ),
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | ANTREAN BERIKUTNYA
-            |--------------------------------------------------------------------------
-            */
-
-            'next_queues' => $nextQueues->map(
-                function ($queue) {
-
-                    return [
-
-                        'id' =>
-                            $queue->id,
-
-                        'number' =>
-                            $queue->queue_number,
-
-                        'service' =>
-                            $queue->service->name,
-
-                        'status' =>
-                            $queue->status,
-
-                    ];
-                }
-            ),
+            'services' =>
+                $serviceData,
 
         ]);
     }
