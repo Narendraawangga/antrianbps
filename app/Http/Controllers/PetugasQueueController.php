@@ -69,7 +69,7 @@ class PetugasQueueController extends Controller
             )
             ->where(
                 'served_by',
-                auth()->id()
+                Auth::id()
             )
             ->whereIn(
                 'status',
@@ -94,7 +94,7 @@ class PetugasQueueController extends Controller
         )
             ->where(
                 'served_by',
-                auth()->id()
+                Auth::id()
             )
             ->where(
                 'status',
@@ -137,7 +137,7 @@ class PetugasQueueController extends Controller
         )
             ->where(
                 'served_by',
-                auth()->id()
+                Auth::id()
             )
             ->count();
 
@@ -190,7 +190,7 @@ class PetugasQueueController extends Controller
         )
             ->where(
                 'served_by',
-                auth()->id()
+                Auth::id()
             )
             ->whereIn(
                 'status',
@@ -246,7 +246,7 @@ class PetugasQueueController extends Controller
                     ->now()
                     ->utc(),
 
-                'served_by' => auth()->id(),
+                'served_by' => Auth::id(),
             ]);
         });
 
@@ -285,7 +285,7 @@ class PetugasQueueController extends Controller
         )
             ->where(
                 'served_by',
-                auth()->id()
+                Auth::id()
             )
             ->where(
                 'status',
@@ -357,7 +357,7 @@ class PetugasQueueController extends Controller
         )
             ->where(
                 'served_by',
-                auth()->id()
+                Auth::id()
             )
             ->where(
                 'status',
@@ -425,7 +425,7 @@ class PetugasQueueController extends Controller
         )
             ->where(
                 'served_by',
-                auth()->id()
+                Auth::id()
             )
             ->whereIn(
                 'status',
@@ -482,7 +482,7 @@ class PetugasQueueController extends Controller
                 ->now()
                 ->utc(),
 
-            'served_by' => auth()->id(),
+            'served_by' => Auth::id(),
         ]);
 
 
@@ -514,7 +514,7 @@ class PetugasQueueController extends Controller
         )
             ->where(
                 'served_by',
-                auth()->id()
+                Auth::id()
             )
             ->whereIn(
                 'status',

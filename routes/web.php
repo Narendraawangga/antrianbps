@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PetugasQueueController;
 use App\Http\Controllers\DisplayController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\ServiceController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -176,6 +177,36 @@ Route::middleware([
     )->name('admin.jadwal.destroy');
 });
 
+/*
+|--------------------------------------------------------------------------
+| MANAJEMEN LAYANAN
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/admin/layanan',
+    [ServiceController::class, 'index']
+)->name('admin.layanan');
+
+Route::post(
+    '/admin/layanan',
+    [ServiceController::class, 'store']
+)->name('admin.layanan.store');
+
+Route::get(
+    '/admin/layanan/{id}/edit',
+    [ServiceController::class, 'edit']
+)->name('admin.layanan.edit');
+
+Route::put(
+    '/admin/layanan/{id}',
+    [ServiceController::class, 'update']
+)->name('admin.layanan.update');
+
+Route::delete(
+    '/admin/layanan/{id}',
+    [ServiceController::class, 'destroy']
+)->name('admin.layanan.destroy');
 
 /*
 |--------------------------------------------------------------------------
