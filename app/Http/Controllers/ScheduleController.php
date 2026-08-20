@@ -5,21 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Schedule;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ScheduleController extends Controller
 {
     /**
-     * Halaman jadwal petugas
+     * Halaman jadwal petugas untuk admin
      */
     public function index()
     {
-        // Ambil hanya user yang ber-role petugas dan aktif
         $petugas = User::where('role', 'petugas')
             ->where('is_active', 1)
             ->orderBy('name')
             ->get();
 
-        // Ambil jadwal beserta data petugas
         $schedules = Schedule::with('user')
             ->orderBy('date', 'desc')
             ->orderBy('start_time')
@@ -89,7 +88,7 @@ class ScheduleController extends Controller
         ]);
 
 
-        // Pastikan user memang petugas dan aktif
+        // Pastikan user adalah petugas aktif
         $petugas = User::where('id', $validated['user_id'])
             ->where('role', 'petugas')
             ->where('is_active', 1)
@@ -106,7 +105,7 @@ class ScheduleController extends Controller
         }
 
 
-        // Cegah jadwal bentrok
+        // Cek jadwal bentrok
         $bentrok = Schedule::where(
             'user_id',
             $validated['user_id']
@@ -143,7 +142,6 @@ class ScheduleController extends Controller
         }
 
 
-        // Simpan jadwal
         Schedule::create([
 
             'user_id' =>
@@ -181,17 +179,13 @@ class ScheduleController extends Controller
      */
     public function edit($id)
     {
-        // Ambil jadwal
         $schedule = Schedule::with('user')
             ->findOrFail($id);
 
-
-        // Ambil petugas aktif
         $petugas = User::where('role', 'petugas')
             ->where('is_active', 1)
             ->orderBy('name')
             ->get();
-
 
         return view(
             'admin.jadwal-edit',
@@ -213,8 +207,6 @@ class ScheduleController extends Controller
 
         $schedule = Schedule::findOrFail($id);
 
-
-        // Validasi input
         $validated = $request->validate([
 
             'user_id' => [
@@ -267,12 +259,11 @@ class ScheduleController extends Controller
         ]);
 
 
-        // Pastikan user adalah petugas aktif
+        // Pastikan petugas aktif
         $petugas = User::where('id', $validated['user_id'])
             ->where('role', 'petugas')
             ->where('is_active', 1)
             ->first();
-
 
         if (!$petugas) {
 
@@ -285,15 +276,8 @@ class ScheduleController extends Controller
         }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | CEK JADWAL BENTROK
-        |--------------------------------------------------------------------------
-        |
-        | Jadwal yang sedang diedit dikecualikan
-        |
-        */
-
+        // Cek jadwal bentrok
+        // Jadwal yang sedang diedit dikecualikan
         $bentrok = Schedule::where(
             'user_id',
             $validated['user_id']
@@ -335,7 +319,6 @@ class ScheduleController extends Controller
         }
 
 
-        // Update data
         $schedule->update([
 
             'user_id' =>
@@ -366,15 +349,32 @@ class ScheduleController extends Controller
 
 
     /**
+     * Menampilkan jadwal milik petugas yang sedang login
+     */
+    /**
+     * Menampilkan jadwal milik petugas yang sedang login
+     */
+    public function petugasIndex()
+    {
+        $userId = Auth::id();
+
+        $jadwals = Schedule::where('user_id', $userId)
+            ->orderBy('date', 'asc')
+            ->orderBy('start_time', 'asc')
+            ->get();
+
+        return view('petugas.jadwal', compact('jadwals'));
+    }
+
+
+    /**
      * Hapus jadwal
      */
     public function destroy($id)
     {
         $schedule = Schedule::findOrFail($id);
 
-
         $schedule->delete();
-
 
         return redirect()
             ->route('admin.jadwal')

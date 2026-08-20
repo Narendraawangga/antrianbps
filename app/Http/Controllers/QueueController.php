@@ -409,6 +409,148 @@ class QueueController extends Controller
             ],
         ]);
     }
+
+    /*
+|--------------------------------------------------------------------------
+| LAPORAN ANTREAN ADMIN
+|--------------------------------------------------------------------------
+*/
+
+    public function laporan(Request $request)
+    {
+        // Ambil semua layanan
+        $services = Service::orderBy('name')->get();
+
+        // Filter tanggal
+        $startDate = $request->input(
+            'start_date',
+            now()->format('Y-m-d')
+        );
+
+        $endDate = $request->input(
+            'end_date',
+            now()->format('Y-m-d')
+        );
+
+        $serviceId = $request->input('service_id');
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | QUERY ANTREAN
+    |--------------------------------------------------------------------------
+    */
+
+        $query = Queue::with([
+            'service',
+            'servedBy'
+        ])
+            ->whereDate('created_at', '>=', $startDate)
+            ->whereDate('created_at', '<=', $endDate);
+
+
+        // Filter layanan
+        if ($serviceId) {
+            $query->where(
+                'service_id',
+                $serviceId
+            );
+        }
+
+
+        $antrians = $query
+            ->latest('created_at')
+            ->get();
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | STATISTIK
+    |--------------------------------------------------------------------------
+    */
+
+        $total = $antrians->count();
+
+        $waiting = $antrians
+            ->where('status', 'waiting')
+            ->count();
+
+        $called = $antrians
+            ->where('status', 'called')
+            ->count();
+
+        $serving = $antrians
+            ->where('status', 'serving')
+            ->count();
+
+        $completed = $antrians
+            ->where('status', 'completed')
+            ->count();
+
+        $skipped = $antrians
+            ->where('status', 'skipped')
+            ->count();
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | REKAP PER LAYANAN
+    |--------------------------------------------------------------------------
+    */
+
+        $rekapLayanan = $antrians
+            ->groupBy('service_id')
+            ->map(function ($queues) {
+
+                $service = $queues->first()->service;
+
+                return [
+                    'service' => $service,
+
+                    'total' => $queues->count(),
+
+                    'waiting' => $queues
+                        ->where('status', 'waiting')
+                        ->count(),
+
+                    'called' => $queues
+                        ->where('status', 'called')
+                        ->count(),
+
+                    'serving' => $queues
+                        ->where('status', 'serving')
+                        ->count(),
+
+                    'completed' => $queues
+                        ->where('status', 'completed')
+                        ->count(),
+
+                    'skipped' => $queues
+                        ->where('status', 'skipped')
+                        ->count(),
+                ];
+            })
+            ->values();
+
+
+        return view(
+            'admin.laporan',
+            compact(
+                'services',
+                'antrians',
+                'rekapLayanan',
+                'startDate',
+                'endDate',
+                'serviceId',
+                'total',
+                'waiting',
+                'called',
+                'serving',
+                'completed',
+                'skipped'
+            )
+        );
+    }
     /*
     |--------------------------------------------------------------------------
     | HAPUS ANTREAN ADMIN
@@ -422,5 +564,71 @@ class QueueController extends Controller
         $antrian->delete();
 
         return redirect()->route('admin.antrean');
+    }
+
+    public function cetakLaporan(Request $request)
+    {
+        $startDate = $request->input(
+            'start_date',
+            now()->format('Y-m-d')
+        );
+
+        $endDate = $request->input(
+            'end_date',
+            now()->format('Y-m-d')
+        );
+
+        $serviceId = $request->input('service_id');
+
+        $query = Queue::with([
+            'service',
+            'servedBy'
+        ])
+            ->whereDate('created_at', '>=', $startDate)
+            ->whereDate('created_at', '<=', $endDate);
+
+        if ($serviceId) {
+            $query->where(
+                'service_id',
+                $serviceId
+            );
+        }
+
+        $antrians = $query
+            ->orderBy('created_at')
+            ->get();
+
+        $total = $antrians->count();
+
+        $waiting = $antrians
+            ->where('status', 'waiting')
+            ->count();
+
+        $serving = $antrians
+            ->where('status', 'serving')
+            ->count();
+
+        $completed = $antrians
+            ->where('status', 'completed')
+            ->count();
+
+        $skipped = $antrians
+            ->where('status', 'skipped')
+            ->count();
+
+        return view(
+            'admin.laporan-cetak',
+            compact(
+                'antrians',
+                'startDate',
+                'endDate',
+                'serviceId',
+                'total',
+                'waiting',
+                'serving',
+                'completed',
+                'skipped'
+            )
+        );
     }
 }

@@ -210,6 +210,21 @@ Route::delete(
 
 /*
 |--------------------------------------------------------------------------
+| LAPORAN ADMIN
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/admin/laporan',
+    [QueueController::class, 'laporan']
+)->name('admin.laporan');
+
+Route::get(
+    '/admin/laporan/cetak',
+    [QueueController::class, 'cetakLaporan']
+)->name('admin.laporan.cetak');
+/*
+|--------------------------------------------------------------------------
 | PETUGAS
 |--------------------------------------------------------------------------
 */
@@ -265,4 +280,25 @@ Route::middleware([
         '/petugas/antrean/selesai',
         [PetugasQueueController::class, 'selesai']
     )->name('petugas.antrean.selesai');
+
+    /*
+    |--------------------------------------------------------------------------
+    | JADWAL PETUGAS
+    |--------------------------------------------------------------------------
+    */
+    Route::get(
+        '/petugas/jadwal',
+        [ScheduleController::class, 'petugasIndex']
+    )->name('petugas.jadwal');
+
+    /*
+|--------------------------------------------------------------------------
+| RIWAYAT LAYANAN PETUGAS
+|--------------------------------------------------------------------------
+*/
+
+    Route::get(
+        '/petugas/riwayat',
+        [PetugasQueueController::class, 'riwayat']
+    )->name('petugas.riwayat');
 });

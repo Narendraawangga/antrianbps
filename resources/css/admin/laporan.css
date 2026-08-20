@@ -1,0 +1,617 @@
+/* =========================================================
+   LAPORAN ADMIN - BPS KOLAKA UTARA
+   ========================================================= */
+
+.laporan-page {
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: 40px;
+}
+
+
+/* =====================================================
+   HEADER LAPORAN
+===================================================== */
+
+.header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 14px;
+
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+
+    border-bottom: 2px solid #222;
+
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.logo-bps {
+    display: block;
+
+    width: 65px !important;
+    height: 65px !important;
+
+    max-width: 65px !important;
+    max-height: 65px !important;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+}
+
+.header-text {
+    text-align: left;
+}
+
+.header-text h1 {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.2;
+}
+
+.header-text h2 {
+    margin: 3px 0;
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+.header-text p {
+    margin: 4px 0 0;
+    font-size: 11px;
+}
+
+/* =========================================================
+   FILTER CARD
+   ========================================================= */
+
+.laporan-page .filter-card {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.laporan-page .filter-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.35fr auto;
+    gap: 16px;
+    align-items: end;
+}
+
+.laporan-page .filter-group {
+    min-width: 0;
+}
+
+.laporan-page .filter-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #374151;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.laporan-page .filter-input {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #d9dee7;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #374151;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.laporan-page .filter-input:focus {
+    border-color: #3158b7;
+    box-shadow: 0 0 0 3px rgba(49, 88, 183, 0.10);
+}
+
+.laporan-page .filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.laporan-page .btn-filter,
+.laporan-page .btn-reset {
+    height: 42px;
+    padding: 0 17px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.laporan-page .btn-filter {
+    border: none;
+    background: #3158b7;
+    color: #ffffff;
+}
+
+.laporan-page .btn-filter:hover {
+    background: #244da8;
+}
+
+.laporan-page .btn-reset {
+    border: 1px solid #d9dee7;
+    background: #ffffff;
+    color: #4b5563;
+}
+
+.laporan-page .btn-reset:hover {
+    background: #f5f7fa;
+}
+
+
+/* =========================================================
+   STATISTIK
+   ========================================================= */
+
+.laporan-page .stats-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.laporan-page .stat-card {
+    min-height: 120px;
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+}
+
+.laporan-page .stat-title {
+    display: block;
+    margin-bottom: 6px;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.laporan-page .stat-card strong {
+    display: block;
+    color: #244da8;
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.laporan-page .stat-card small {
+    display: block;
+    margin-top: 6px;
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+.laporan-page .stat-icon {
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+    font-size: 20px;
+}
+
+.laporan-page .stat-icon.blue {
+    background: #eef4ff;
+}
+
+.laporan-page .stat-icon.orange {
+    background: #fff6e9;
+}
+
+.laporan-page .stat-icon.purple {
+    background: #f3efff;
+}
+
+.laporan-page .stat-icon.green {
+    background: #ecfdf3;
+}
+
+.laporan-page .stat-icon.red {
+    background: #fff0f0;
+}
+
+
+/* =========================================================
+   TABLE CARD
+   ========================================================= */
+
+.laporan-page .table-card {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.laporan-page .table-header {
+    min-height: 78px;
+    padding: 17px 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #e8ebf0;
+    box-sizing: border-box;
+}
+
+.laporan-page .table-header h2 {
+    margin: 0;
+    color: #244da8;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.laporan-page .table-header p {
+    margin: 5px 0 0;
+    color: #8a94a6;
+    font-size: 12px;
+}
+
+.laporan-page .total-badge {
+    padding: 8px 13px;
+    border-radius: 20px;
+    background: #eef4ff;
+    color: #3158b7;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.laporan-page .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.laporan-page table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.laporan-page table th {
+    height: 48px;
+    padding: 0 15px;
+
+    background: #fafbfc;
+    border-bottom: 1px solid #e5e7eb;
+
+    color: #667085;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: left;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+}
+
+.laporan-page table td {
+    height: 62px;
+    padding: 10px 15px;
+
+    border-bottom: 1px solid #edf0f4;
+
+    color: #334155;
+    font-size: 13px;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+.laporan-page table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.laporan-page table tbody tr:hover {
+    background: #f8faff;
+}
+
+
+/* =========================================================
+   KOLOM REKAP LAYANAN
+   ========================================================= */
+
+.laporan-page .table-card:first-of-type table th:nth-child(1) {
+    width: 9%;
+}
+
+.laporan-page .table-card:first-of-type table th:nth-child(2) {
+    width: 34%;
+}
+
+.laporan-page .table-card:first-of-type table th:nth-child(3),
+.laporan-page .table-card:first-of-type table th:nth-child(4),
+.laporan-page .table-card:first-of-type table th:nth-child(5),
+.laporan-page .table-card:first-of-type table th:nth-child(6),
+.laporan-page .table-card:first-of-type table th:nth-child(7) {
+    width: 11.5%;
+    text-align: center;
+}
+
+.laporan-page .table-card:first-of-type table td:nth-child(3),
+.laporan-page .table-card:first-of-type table td:nth-child(4),
+.laporan-page .table-card:first-of-type table td:nth-child(5),
+.laporan-page .table-card:first-of-type table td:nth-child(6),
+.laporan-page .table-card:first-of-type table td:nth-child(7) {
+    text-align: center;
+}
+
+
+/* =========================================================
+   KODE LAYANAN
+   ========================================================= */
+
+.laporan-page .code-badge {
+    min-width: 32px;
+    height: 28px;
+    padding: 0 9px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #d6e2ff;
+    border-radius: 7px;
+
+    background: #f1f5ff;
+    color: #2856b7;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   NOMOR ANTREAN
+   ========================================================= */
+
+.laporan-page .queue-number {
+    min-width: 54px;
+    height: 30px;
+    padding: 0 10px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #d6e2ff;
+    border-radius: 7px;
+
+    background: #f1f5ff;
+    color: #2856b7;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.laporan-page .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 7px 11px;
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.laporan-page .status-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+
+/* Menunggu */
+.laporan-page .status-waiting {
+    background: #fff7ed;
+    color: #ea6a0a;
+}
+
+/* Dipanggil */
+.laporan-page .status-called {
+    background: #eef4ff;
+    color: #3158b7;
+}
+
+/* Sedang Dilayani */
+.laporan-page .status-serving {
+    background: #f3efff;
+    color: #6841c6;
+}
+
+/* Selesai */
+.laporan-page .status-completed {
+    background: #ecfdf3;
+    color: #16834b;
+}
+
+/* Dilewati */
+.laporan-page .status-skipped {
+    background: #fff1f2;
+    color: #d92d20;
+}
+
+
+/* =========================================================
+   WAKTU
+   ========================================================= */
+
+.laporan-page table td small {
+    color: #8a94a6;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.laporan-page .empty-cell {
+    height: 110px !important;
+    color: #9ca3af !important;
+    text-align: center !important;
+    font-size: 13px !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE - LAPTOP
+   ========================================================= */
+
+@media (max-width: 1250px) {
+
+    .laporan-page .filter-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .laporan-page .filter-actions {
+        grid-column: 1 / -1;
+    }
+
+    .laporan-page .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .laporan-page .page-header h1 {
+        font-size: 26px;
+    }
+
+    .laporan-page .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .laporan-page table {
+        min-width: 850px;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .laporan-page .page-header {
+        margin-bottom: 16px;
+    }
+
+    .laporan-page .page-header h1 {
+        font-size: 23px;
+    }
+
+    .laporan-page .page-header p {
+        font-size: 13px;
+    }
+
+    .laporan-page .filter-card {
+        padding: 15px;
+    }
+
+    .laporan-page .filter-form {
+        grid-template-columns: 1fr;
+    }
+
+    .laporan-page .filter-actions {
+        grid-column: auto;
+        width: 100%;
+    }
+
+    .laporan-page .btn-filter,
+    .laporan-page .btn-reset {
+        flex: 1;
+    }
+
+    .laporan-page .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .laporan-page .table-header {
+        padding: 15px;
+    }
+
+    .laporan-page .table-header h2 {
+        font-size: 16px;
+    }
+
+    .laporan-page .btn-print {
+        height: 42px;
+        padding: 0 17px;
+        border-radius: 8px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #ffffff;
+        border: 1px solid #3158b7;
+        color: #3158b7;
+
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .laporan-page .btn-print:hover {
+        background: #eef4ff;
+    }
+
+}

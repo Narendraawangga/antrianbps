@@ -36,6 +36,7 @@ export default defineConfig({
                 'resources/js/admin/dashboard.js',
                 'resources/css/admin/jadwal.css',
                 'resources/css/admin/antrean.css',
+                'resources/css/admin/laporan.css',
 
 
                 // =========================================
