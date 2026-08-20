@@ -247,10 +247,16 @@ Route::middleware([
 
 
     /*
-    |--------------------------------------------------------------------------
-    | ANTREAN PETUGAS
-    |--------------------------------------------------------------------------
-    */
+|--------------------------------------------------------------------------
+| ANTREAN PETUGAS
+|--------------------------------------------------------------------------
+*/
+
+    Route::get(
+        '/petugas/antrean',
+        [PetugasQueueController::class, 'antrean']
+    )->name('petugas.antrean');
+
 
     Route::post(
         '/petugas/antrean/panggil',
@@ -281,6 +287,7 @@ Route::middleware([
         [PetugasQueueController::class, 'selesai']
     )->name('petugas.antrean.selesai');
 
+    /*
     /*
     |--------------------------------------------------------------------------
     | JADWAL PETUGAS

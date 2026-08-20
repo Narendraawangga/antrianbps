@@ -44,6 +44,7 @@ export default defineConfig({
                 // =========================================
                 'resources/css/petugas/dashboard.css',
                 'resources/js/petugas/dashboard.js',
+                'resources/js/petugas/antrean.css',
 
 
                 // =========================================
