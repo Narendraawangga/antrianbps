@@ -90,7 +90,7 @@
 
         <!-- TAMU PPID -->
         <a
-            href="{{ route('petugas.ppid') }}"
+            href="#"
             class="petugas-menu-item {{ request()->routeIs('petugas.ppid*') ? 'active' : '' }}">
 
             <span class="menu-icon">
