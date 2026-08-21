@@ -337,6 +337,54 @@ function updateServiceCard(
                 currentQueue.number;
         }
 
+        /*
+|--------------------------------------------------------------------------
+| NAMA PENGUNJUNG
+|--------------------------------------------------------------------------
+*/
+
+let nameElement =
+    card.querySelector(
+        '[data-current-name]'
+    );
+
+
+if (!nameElement) {
+
+    nameElement =
+        document.createElement(
+            'div'
+        );
+
+
+    nameElement.className =
+        'service-current-name';
+
+
+    nameElement.setAttribute(
+        'data-current-name',
+        ''
+    );
+
+
+    if (numberElement) {
+
+        numberElement.insertAdjacentElement(
+            'afterend',
+            nameElement
+        );
+
+    }
+
+}
+
+
+nameElement.textContent =
+    currentQueue.visitor_name
+        ? currentQueue.visitor_name
+            .toUpperCase()
+        : '-';
+
 
         /*
         |--------------------------------------------------------------------------
@@ -369,6 +417,19 @@ function updateServiceCard(
         | TIDAK ADA ANTREAN AKTIF
         |--------------------------------------------------------------------------
         */
+
+        const nameElement =
+            card.querySelector(
+                '[data-current-name]'
+            );
+
+
+        if (nameElement) {
+
+            nameElement.textContent =
+                '-';
+
+        }
 
         if (numberElement) {
 
@@ -636,8 +697,14 @@ function announceQueue(
     | Silakan menuju loket Pelayanan Perpustakaan.
     |
     */
+    const visitorName =
+        queue.visitor_name
+            ? queue.visitor_name
+            : 'pengunjung';
+
 
     const message =
+        `Atas nama ${visitorName}. ` +
         `Nomor antrean ${queueText}. ` +
         `Silakan menuju loket ${queue.service}.`;
 
@@ -1124,6 +1191,9 @@ function createServicesSignature(
 
                                 status_label:
                                     service.current_queue.status_label,
+                                
+                                visitor_name:
+                                    service.current_queue.visitor_name,
 
                             }
                             : null,
@@ -1313,6 +1383,9 @@ async function fetchQueues() {
 
                         number:
                             currentQueue.number,
+
+                        visitor_name:
+                            currentQueue.visitor_name,
 
                         serviceId:
                             service.service_id,

@@ -45,6 +45,7 @@ Route::get(
     [DisplayController::class, 'data']
 )->name('display.data');
 
+
 Route::get(
     '/layanan',
     [QueueController::class, 'layanan']
@@ -56,6 +57,24 @@ Route::post(
     [QueueController::class, 'ambilAntrian']
 )->name('ambil.antrian');
 
+
+/*
+|--------------------------------------------------------------------------
+| TIKET DIGITAL ANTREAN
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/tiket-antrian/{public_token}',
+    [QueueController::class, 'ticket']
+)->name('ticket.antrian');
+
+
+/*
+|--------------------------------------------------------------------------
+| STATUS ANTREAN
+|--------------------------------------------------------------------------
+*/
 
 Route::get(
     '/status-antrian/{public_token}',
@@ -130,10 +149,12 @@ Route::middleware([
         [QueueController::class, 'adminIndex']
     )->name('admin.antrean');
 
+
     Route::delete(
         '/admin/antrean/{id}',
         [QueueController::class, 'destroyAdmin']
     )->name('admin.antrean.destroy');
+
 
     /*
 |--------------------------------------------------------------------------
@@ -289,7 +310,6 @@ Route::middleware([
     )->name('admin.laporan.cetak');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | PETUGAS
@@ -314,10 +334,10 @@ Route::middleware([
 
 
     /*
-|--------------------------------------------------------------------------
-| ANTREAN PETUGAS
-|--------------------------------------------------------------------------
-*/
+    |--------------------------------------------------------------------------
+    | ANTREAN PETUGAS
+    |--------------------------------------------------------------------------
+    */
 
     Route::get(
         '/petugas/antrean',
@@ -353,22 +373,25 @@ Route::middleware([
         '/petugas/antrean/selesai',
         [PetugasQueueController::class, 'selesai']
     )->name('petugas.antrean.selesai');
-    /*
+
+
     /*
     |--------------------------------------------------------------------------
     | JADWAL PETUGAS
     |--------------------------------------------------------------------------
     */
+
     Route::get(
         '/petugas/jadwal',
         [ScheduleController::class, 'petugasIndex']
     )->name('petugas.jadwal');
 
+
     /*
-|--------------------------------------------------------------------------
-| RIWAYAT LAYANAN PETUGAS
-|--------------------------------------------------------------------------
-*/
+    |--------------------------------------------------------------------------
+    | RIWAYAT PETUGAS
+    |--------------------------------------------------------------------------
+    */
 
     Route::get(
         '/petugas/riwayat',
