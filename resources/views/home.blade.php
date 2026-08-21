@@ -733,12 +733,15 @@
             </div>
 
             <!-- Link PPID -->
-            <a href="#" class="ppid">
+            <a
+                href="{{ route('ppid.form') }}"
+                class="ppid">
+
                 <span>P</span>
                 <span>P</span>
                 <span>ID</span>
-            </a>
 
+            </a>
         </div>
 
 

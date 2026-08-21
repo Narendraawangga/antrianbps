@@ -43,8 +43,7 @@
         <!-- ANTREAN -->
         <a
             href="{{ route('petugas.antrean') }}"
-            class="petugas-menu-item
-    {{ request()->routeIs('petugas.antrean') ? 'active' : '' }}">
+            class="petugas-menu-item {{ request()->routeIs('petugas.antrean') ? 'active' : '' }}">
 
             <span class="menu-icon">
                 🎫
@@ -88,28 +87,18 @@
 
         </a>
 
-    </div>
 
-
-    <!-- SISTEM -->
-    <div class="sidebar-section">
-
-        <div class="section-title">
-            SISTEM
-        </div>
-
-
-        <!-- PENGATURAN -->
+        <!-- TAMU PPID -->
         <a
-            href="#"
-            class="petugas-menu-item">
+            href="{{ route('petugas.ppid') }}"
+            class="petugas-menu-item {{ request()->routeIs('petugas.ppid*') ? 'active' : '' }}">
 
             <span class="menu-icon">
-                ⚙️
+                📋
             </span>
 
             <span class="menu-text">
-                Pengaturan
+                Tamu PPID
             </span>
 
         </a>

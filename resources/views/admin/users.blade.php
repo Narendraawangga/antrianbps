@@ -7,8 +7,7 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        content="width=device-width, initial-scale=1.0">
 
     <title>
         Manajemen Pengguna - BPS Kolaka Utara
@@ -16,7 +15,6 @@
 
 
     <style>
-
         /* =========================================================
            RESET
         ========================================================= */
@@ -238,8 +236,7 @@
             overflow: hidden;
 
             box-shadow:
-                0 2px 6px
-                rgba(0, 0, 0, .03);
+                0 2px 6px rgba(0, 0, 0, .03);
         }
 
 
@@ -441,49 +438,77 @@
             font-size: 12px;
         }
 
+        /* =====================================
+   ACTION
+===================================== */
 
-        /* =========================================================
-           STATUS
-        ========================================================= */
+        .action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-        .status {
+        .action-buttons form {
+            margin: 0;
+        }
+
+        .action-btn {
+            width: 34px;
+            height: 34px;
+
             display: inline-flex;
 
             align-items: center;
+            justify-content: center;
 
-            gap: 6px;
+            border-radius: 7px;
 
-            font-size: 11px;
+            border: 1px solid transparent;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            transition: .2s ease;
         }
 
+        .action-btn svg {
+            width: 16px;
+            height: 16px;
 
-        .status.active {
-            color: #168044;
+            fill: none;
+
+            stroke: currentColor;
+
+            stroke-width: 1.8;
+
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
+        .action-btn.edit {
+            background: #eff6ff;
 
-        .status.inactive {
+            color: #2563eb;
+
+            border-color: #dbeafe;
+        }
+
+        .action-btn.edit:hover {
+            background: #dbeafe;
+        }
+
+        .action-btn.delete {
+            background: #fef2f2;
+
             color: #dc2626;
+
+            border-color: #fecaca;
         }
 
-
-        .status-dot {
-            width: 7px;
-            height: 7px;
-
-            border-radius: 50%;
+        .action-btn.delete:hover {
+            background: #fee2e2;
         }
-
-
-        .status.active .status-dot {
-            background: #22c55e;
-        }
-
-
-        .status.inactive .status-dot {
-            background: #ef4444;
-        }
-
 
         /* =========================================================
            EMPTY
@@ -559,8 +584,7 @@
             border-radius: 12px;
 
             box-shadow:
-                0 15px 50px
-                rgba(0, 0, 0, .2);
+                0 15px 50px rgba(0, 0, 0, .2);
 
             overflow-y: auto;
         }
@@ -838,7 +862,6 @@
             }
 
         }
-
     </style>
 
 </head>
@@ -894,8 +917,7 @@
                 <button
                     type="button"
                     class="add-user-btn"
-                    onclick="openUserModal()"
-                >
+                    onclick="openUserModal()">
 
                     <span>
                         ＋
@@ -917,11 +939,11 @@
 
             @if (session('success'))
 
-                <div class="alert alert-success">
+            <div class="alert alert-success">
 
-                    {{ session('success') }}
+                {{ session('success') }}
 
-                </div>
+            </div>
 
             @endif
 
@@ -933,12 +955,12 @@
 
             @if ($errors->any())
 
-                <div class="alert alert-error">
+            <div class="alert alert-error">
 
-                    Terdapat data yang belum benar.
-                    Silakan periksa kembali form tambah pengguna.
+                Terdapat data yang belum benar.
+                Silakan periksa kembali form tambah pengguna.
 
-                </div>
+            </div>
 
             @endif
 
@@ -1036,8 +1058,7 @@
                         type="search"
                         class="search-box"
                         id="userSearch"
-                        placeholder="Cari nama, username, pelayanan..."
-                    >
+                        placeholder="Cari nama, username, pelayanan...">
 
                 </div>
 
@@ -1067,7 +1088,7 @@
                                 </th>
 
                                 <th>
-                                    STATUS
+                                    AKSI
                                 </th>
 
                             </tr>
@@ -1080,26 +1101,25 @@
 
                             @forelse ($users as $user)
 
-                                <tr
-                                    class="user-row"
-                                    data-search="
+                            <tr
+                                class="user-row"
+                                data-search="
                                         {{ strtolower(
                                             $user->name . ' ' .
                                             $user->username . ' ' .
                                             ($user->service->name ?? '')
                                         ) }}
-                                    "
-                                >
+                                    ">
 
-                                    {{-- USER --}}
+                                {{-- USER --}}
 
-                                    <td>
+                                <td>
 
-                                        <div class="user-profile">
+                                    <div class="user-profile">
 
-                                            <div class="avatar">
+                                        <div class="avatar">
 
-                                                {{ strtoupper(
+                                            {{ strtoupper(
                                                     substr(
                                                         $user->name,
                                                         0,
@@ -1107,182 +1127,191 @@
                                                     )
                                                 ) }}
 
+                                        </div>
+
+
+                                        <div>
+
+                                            <div class="user-name">
+
+                                                {{ $user->name }}
+
                                             </div>
 
+                                            <div class="user-username">
 
-                                            <div>
-
-                                                <div class="user-name">
-
-                                                    {{ $user->name }}
-
-                                                </div>
-
-                                                <div class="user-username">
-
-                                                    ID #{{ $user->id }}
-
-                                                </div>
+                                                ID #{{ $user->id }}
 
                                             </div>
 
                                         </div>
 
-                                    </td>
+                                    </div>
+
+                                </td>
 
 
 
-                                    {{-- USERNAME --}}
+                                {{-- USERNAME --}}
 
-                                    <td>
+                                <td>
 
-                                        {{ $user->username }}
+                                    {{ $user->username }}
 
-                                    </td>
+                                </td>
 
 
 
-                                    {{-- ROLE --}}
+                                {{-- ROLE --}}
 
-                                    <td>
+                                <td>
 
-                                        @if (
-                                            $user->role ===
-                                            'admin_utama'
-                                        )
+                                    @if (
+                                    $user->role ===
+                                    'admin_utama'
+                                    )
 
-                                            <span
-                                                class="
+                                    <span
+                                        class="
                                                     role
                                                     admin-utama
-                                                "
-                                            >
+                                                ">
 
-                                                Admin Utama
+                                        Admin Utama
 
-                                            </span>
+                                    </span>
 
-                                        @else
+                                    @else
 
-                                            <span
-                                                class="
+                                    <span
+                                        class="
                                                     role
                                                     petugas
-                                                "
-                                            >
+                                                ">
 
-                                                Petugas
+                                        Petugas
 
-                                            </span>
+                                    </span>
 
-                                        @endif
+                                    @endif
 
-                                    </td>
-
-
-
-                                    {{-- PELAYANAN --}}
-
-                                    <td>
-
-                                        @if (
-                                            $user->role ===
-                                                'petugas'
-                                            &&
-                                            $user->service
-                                        )
-
-                                            <span
-                                                class="service-badge"
-                                            >
-
-                                                {{ $user->service->name }}
-
-                                            </span>
-
-                                        @else
-
-                                            <span
-                                                class="service-none"
-                                            >
-
-                                                —
-
-                                            </span>
-
-                                        @endif
-
-                                    </td>
+                                </td>
 
 
 
-                                    {{-- STATUS --}}
+                                {{-- PELAYANAN --}}
 
-                                    <td>
+                                <td>
 
-                                        @if ($user->is_active)
+                                    @if (
+                                    $user->role ===
+                                    'petugas'
+                                    &&
+                                    $user->service
+                                    )
 
-                                            <span
-                                                class="status active"
-                                            >
+                                    <span
+                                        class="service-badge">
 
-                                                <span
-                                                    class="status-dot"
-                                                ></span>
+                                        {{ $user->service->name }}
 
-                                                Aktif
+                                    </span>
 
-                                            </span>
+                                    @else
 
-                                        @else
+                                    <span
+                                        class="service-none">
 
-                                            <span
-                                                class="status inactive"
-                                            >
+                                        —
 
-                                                <span
-                                                    class="status-dot"
-                                                ></span>
+                                    </span>
 
-                                                Nonaktif
+                                    @endif
 
-                                            </span>
+                                </td>
 
-                                        @endif
 
-                                    </td>
 
-                                </tr>
+                                {{-- AKSI --}}
+
+                                <td>
+
+                                    <div class="action-buttons">
+
+                                        <a
+                                            href="{{ route('admin.users.edit', $user->id) }}"
+                                            class="action-btn edit"
+                                            title="Edit Pengguna">
+
+                                            <svg viewBox="0 0 24 24">
+                                                <path d="M12 20h9" />
+                                                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                                            </svg>
+
+                                        </a>
+
+
+                                        <form
+                                            action="{{ route('admin.users.destroy', $user->id) }}"
+                                            method="POST"
+                                            style="display: inline;"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna {{ $user->name }}?')">
+
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button
+                                                type="submit"
+                                                class="action-btn delete"
+                                                title="Hapus Pengguna">
+
+                                                <svg viewBox="0 0 24 24">
+                                                    <path d="M3 6h18" />
+                                                    <path d="M8 6V4h8v2" />
+                                                    <path d="M19 6l-1 14H6L5 6" />
+                                                    <path d="M10 11v5" />
+                                                    <path d="M14 11v5" />
+                                                </svg>
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
 
 
                             @empty
 
 
-                                <tr>
+                            <tr>
 
-                                    <td colspan="5">
+                                <td colspan="5">
 
-                                        <div class="empty-state">
+                                    <div class="empty-state">
 
-                                            <div class="empty-icon">
-                                                👥
-                                            </div>
-
-                                            <h3>
-                                                Belum ada pengguna
-                                            </h3>
-
-                                            <p>
-                                                Tambahkan akun Petugas
-                                                untuk mulai menggunakan
-                                                sistem.
-                                            </p>
-
+                                        <div class="empty-icon">
+                                            👥
                                         </div>
 
-                                    </td>
+                                        <h3>
+                                            Belum ada pengguna
+                                        </h3>
 
-                                </tr>
+                                        <p>
+                                            Tambahkan akun Petugas
+                                            untuk mulai menggunakan
+                                            sistem.
+                                        </p>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
 
 
                             @endforelse
@@ -1307,8 +1336,7 @@
 
     <div
         class="modal"
-        id="userModal"
-    >
+        id="userModal">
 
         <div class="modal-box">
 
@@ -1324,8 +1352,7 @@
                 <button
                     type="button"
                     class="close-modal"
-                    onclick="closeUserModal()"
-                >
+                    onclick="closeUserModal()">
                     ×
                 </button>
 
@@ -1338,8 +1365,7 @@
             <form
                 method="POST"
                 action="{{ route('admin.users.store') }}"
-                id="userForm"
-            >
+                id="userForm">
 
                 @csrf
 
@@ -1376,17 +1402,16 @@
                             "
                             value="{{ old('name') }}"
                             placeholder="Masukkan nama lengkap"
-                            required
-                        >
+                            required>
 
 
                         @error('name')
 
-                            <small class="field-error">
+                        <small class="field-error">
 
-                                {{ $message }}
+                            {{ $message }}
 
-                            </small>
+                        </small>
 
                         @enderror
 
@@ -1426,8 +1451,7 @@
                             minlength="4"
                             maxlength="30"
                             autocomplete="off"
-                            required
-                        >
+                            required>
 
 
                         <small class="field-help">
@@ -1437,11 +1461,11 @@
 
                         @error('username')
 
-                            <small class="field-error">
+                        <small class="field-error">
 
-                                {{ $message }}
+                            {{ $message }}
 
-                            </small>
+                        </small>
 
                         @enderror
 
@@ -1479,8 +1503,7 @@
                             placeholder="Minimal 8 karakter"
                             minlength="8"
                             autocomplete="new-password"
-                            required
-                        >
+                            required>
 
 
                         <small class="field-help">
@@ -1490,11 +1513,11 @@
 
                         @error('password')
 
-                            <small class="field-error">
+                        <small class="field-error">
 
-                                {{ $message }}
+                            {{ $message }}
 
-                            </small>
+                        </small>
 
                         @enderror
 
@@ -1527,8 +1550,7 @@
                             placeholder="Ulangi password"
                             minlength="8"
                             autocomplete="new-password"
-                            required
-                        >
+                            required>
 
                     </div>
 
@@ -1560,8 +1582,7 @@
                                     input-error
                                 @enderror
                             "
-                            required
-                        >
+                            required>
 
                             <option value="">
                                 Pilih Role
@@ -1571,11 +1592,8 @@
                             <option
                                 value="admin_utama"
                                 @selected(
-                                    old('role')
-                                    ===
-                                    'admin_utama'
-                                )
-                            >
+                                old('role')==='admin_utama'
+                                )>
 
                                 Admin Utama
 
@@ -1585,11 +1603,8 @@
                             <option
                                 value="petugas"
                                 @selected(
-                                    old('role')
-                                    ===
-                                    'petugas'
-                                )
-                            >
+                                old('role')==='petugas'
+                                )>
 
                                 Petugas
 
@@ -1600,11 +1615,11 @@
 
                         @error('role')
 
-                            <small class="field-error">
+                        <small class="field-error">
 
-                                {{ $message }}
+                            {{ $message }}
 
-                            </small>
+                        </small>
 
                         @enderror
 
@@ -1620,13 +1635,11 @@
                         class="form-group"
                         id="serviceGroup"
                         @if (
-                            old('role')
-                            !==
-                            'petugas'
+                        old('role')
+                        !=='petugas'
                         )
-                            hidden
-                        @endif
-                    >
+                        hidden
+                        @endif>
 
                         <label for="serviceId">
 
@@ -1656,8 +1669,7 @@
                                 @error('service_id')
                                     input-error
                                 @enderror
-                            "
-                        >
+                            ">
 
                             <option value="">
                                 Pilih Pelayanan
@@ -1666,18 +1678,16 @@
 
                             @foreach ($services as $service)
 
-                                <option
-                                    value="{{ $service->id }}"
-                                    @selected(
-                                        old('service_id')
-                                        ==
-                                        $service->id
-                                    )
+                            <option
+                                value="{{ $service->id }}"
+                                @selected(
+                                old('service_id')==$service->id
+                                )
                                 >
 
-                                    {{ $service->name }}
+                                {{ $service->name }}
 
-                                </option>
+                            </option>
 
                             @endforeach
 
@@ -1686,11 +1696,11 @@
 
                         @error('service_id')
 
-                            <small class="field-error">
+                        <small class="field-error">
 
-                                {{ $message }}
+                            {{ $message }}
 
-                            </small>
+                        </small>
 
                         @enderror
 
@@ -1710,8 +1720,7 @@
                     <button
                         type="button"
                         class="cancel-btn"
-                        onclick="closeUserModal()"
-                    >
+                        onclick="closeUserModal()">
 
                         Batal
 
@@ -1720,8 +1729,7 @@
 
                     <button
                         type="submit"
-                        class="save-btn"
-                    >
+                        class="save-btn">
 
                         Simpan Pengguna
 
@@ -1738,7 +1746,6 @@
 
 
     <script>
-
         /*
         |--------------------------------------------------------------------------
         | ELEMENT
@@ -1830,8 +1837,7 @@
         function updateServiceField() {
 
             const isPetugas =
-                roleSelect.value
-                ===
+                roleSelect.value ===
                 'petugas';
 
 
@@ -1878,11 +1884,10 @@
 
         userModal.addEventListener(
             'click',
-            function (event) {
+            function(event) {
 
                 if (
-                    event.target
-                    ===
+                    event.target ===
                     userModal
                 ) {
 
@@ -1903,11 +1908,10 @@
 
         document.addEventListener(
             'keydown',
-            function (event) {
+            function(event) {
 
                 if (
-                    event.key
-                    ===
+                    event.key ===
                     'Escape'
                 ) {
 
@@ -1930,12 +1934,12 @@
 
             userSearch.addEventListener(
                 'input',
-                function () {
+                function() {
 
                     const keyword =
                         this.value
-                            .toLowerCase()
-                            .trim();
+                        .toLowerCase()
+                        .trim();
 
 
                     const rows =
@@ -1945,19 +1949,19 @@
 
 
                     rows.forEach(
-                        function (row) {
+                        function(row) {
 
                             const text =
                                 row.dataset.search
-                                    .toLowerCase();
+                                .toLowerCase();
 
 
                             row.style.display =
                                 text.includes(
                                     keyword
-                                )
-                                    ? ''
-                                    : 'none';
+                                ) ?
+                                '' :
+                                'none';
 
                         }
                     );
@@ -1977,13 +1981,6 @@
         | Modal otomatis dibuka kembali.
         |
         */
-
-        @if ($errors->any())
-
-            openUserModal();
-
-        @endif
-
     </script>
 
 

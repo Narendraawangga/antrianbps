@@ -114,6 +114,22 @@
         </a>
 
 
+        <!-- TAMU PPID -->
+        <a
+            href="{{ route('admin.ppid') }}"
+            class="admin-menu-item {{ request()->routeIs('admin.ppid*') ? 'active' : '' }}">
+
+            <span class="menu-icon">
+                📋
+            </span>
+
+            <span class="menu-text">
+                Tamu PPID
+            </span>
+
+        </a>
+
+
         <!-- LAPORAN -->
         <a
             href="{{ route('admin.laporan') }}"
@@ -125,32 +141,6 @@
 
             <span class="menu-text">
                 Laporan
-            </span>
-
-        </a>
-
-    </div>
-
-
-    <!-- SISTEM -->
-    <div class="sidebar-section">
-
-        <div class="section-title">
-            SISTEM
-        </div>
-
-
-        <!-- PENGATURAN -->
-        <a
-            href="#"
-            class="admin-menu-item">
-
-            <span class="menu-icon">
-                ⚙️
-            </span>
-
-            <span class="menu-text">
-                Pengaturan
             </span>
 
         </a>

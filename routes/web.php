@@ -7,6 +7,8 @@ use App\Http\Controllers\PetugasQueueController;
 use App\Http\Controllers\DisplayController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\PpidController;
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +22,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
+
+Route::get(
+    '/ppid',
+    [PpidController::class, 'create']
+)->name('ppid.form');
+
+Route::post(
+    '/ppid',
+    [PpidController::class, 'store']
+)->name('ppid.store');
 
 
 Route::get(
@@ -124,10 +136,10 @@ Route::middleware([
     )->name('admin.antrean.destroy');
 
     /*
-    |--------------------------------------------------------------------------
-    | MANAJEMEN PENGGUNA
-    |--------------------------------------------------------------------------
-    */
+|--------------------------------------------------------------------------
+| MANAJEMEN PENGGUNA
+|--------------------------------------------------------------------------
+*/
 
     Route::get(
         '/admin/pengguna',
@@ -139,6 +151,24 @@ Route::middleware([
         '/admin/pengguna',
         [UserController::class, 'store']
     )->name('admin.users.store');
+
+
+    Route::get(
+        '/admin/pengguna/{id}/edit',
+        [UserController::class, 'edit']
+    )->name('admin.users.edit');
+
+
+    Route::put(
+        '/admin/pengguna/{id}',
+        [UserController::class, 'update']
+    )->name('admin.users.update');
+
+
+    Route::delete(
+        '/admin/pengguna/{id}',
+        [UserController::class, 'destroy']
+    )->name('admin.users.destroy');
 
 
     /*
@@ -175,54 +205,91 @@ Route::middleware([
         '/admin/jadwal/{id}',
         [ScheduleController::class, 'destroy']
     )->name('admin.jadwal.destroy');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | MANAJEMEN LAYANAN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/admin/layanan',
+        [ServiceController::class, 'index']
+    )->name('admin.layanan');
+
+
+    Route::post(
+        '/admin/layanan',
+        [ServiceController::class, 'store']
+    )->name('admin.layanan.store');
+
+
+    Route::get(
+        '/admin/layanan/{id}/edit',
+        [ServiceController::class, 'edit']
+    )->name('admin.layanan.edit');
+
+
+    Route::put(
+        '/admin/layanan/{id}',
+        [ServiceController::class, 'update']
+    )->name('admin.layanan.update');
+
+
+    Route::delete(
+        '/admin/layanan/{id}',
+        [ServiceController::class, 'destroy']
+    )->name('admin.layanan.destroy');
+
+
+    /*
+|--------------------------------------------------------------------------
+| TAMU PPID ADMIN
+|--------------------------------------------------------------------------
+*/
+
+    Route::get(
+        '/admin/ppid',
+        [PpidController::class, 'indexAdmin']
+    )->name('admin.ppid');
+
+
+    Route::post(
+        '/admin/ppid/{id}/panggil',
+        [PpidController::class, 'panggil']
+    )->name('admin.ppid.panggil');
+
+
+    Route::post(
+        '/admin/ppid/{id}/selesai',
+        [PpidController::class, 'selesai']
+    )->name('admin.ppid.selesai');
+
+
+    Route::delete(
+        '/admin/ppid/{id}',
+        [PpidController::class, 'destroyAdmin']
+    )->name('admin.ppid.destroy');
+    /*
+    |--------------------------------------------------------------------------
+    | LAPORAN ADMIN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/admin/laporan',
+        [QueueController::class, 'laporan']
+    )->name('admin.laporan');
+
+
+    Route::get(
+        '/admin/laporan/cetak',
+        [QueueController::class, 'cetakLaporan']
+    )->name('admin.laporan.cetak');
 });
 
-/*
-|--------------------------------------------------------------------------
-| MANAJEMEN LAYANAN
-|--------------------------------------------------------------------------
-*/
 
-Route::get(
-    '/admin/layanan',
-    [ServiceController::class, 'index']
-)->name('admin.layanan');
-
-Route::post(
-    '/admin/layanan',
-    [ServiceController::class, 'store']
-)->name('admin.layanan.store');
-
-Route::get(
-    '/admin/layanan/{id}/edit',
-    [ServiceController::class, 'edit']
-)->name('admin.layanan.edit');
-
-Route::put(
-    '/admin/layanan/{id}',
-    [ServiceController::class, 'update']
-)->name('admin.layanan.update');
-
-Route::delete(
-    '/admin/layanan/{id}',
-    [ServiceController::class, 'destroy']
-)->name('admin.layanan.destroy');
-
-/*
-|--------------------------------------------------------------------------
-| LAPORAN ADMIN
-|--------------------------------------------------------------------------
-*/
-
-Route::get(
-    '/admin/laporan',
-    [QueueController::class, 'laporan']
-)->name('admin.laporan');
-
-Route::get(
-    '/admin/laporan/cetak',
-    [QueueController::class, 'cetakLaporan']
-)->name('admin.laporan.cetak');
 /*
 |--------------------------------------------------------------------------
 | PETUGAS

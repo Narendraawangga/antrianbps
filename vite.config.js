@@ -37,6 +37,8 @@ export default defineConfig({
                 'resources/css/admin/jadwal.css',
                 'resources/css/admin/antrean.css',
                 'resources/css/admin/laporan.css',
+                'resources/css/admin/user.css',
+                'resources/css/admin/ppid.css',
 
 
                 // =========================================

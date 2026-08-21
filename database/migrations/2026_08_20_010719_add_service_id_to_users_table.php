@@ -8,29 +8,29 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        if (!Schema::hasColumn('users', 'service_id')) {
 
-            $table->foreignId('service_id')
-                ->nullable()
-                ->after('role')
-                ->constrained('services')
-                ->nullOnDelete();
+            Schema::table('users', function (Blueprint $table) {
 
-        });
+                $table->foreignId('service_id')
+                    ->nullable()
+                    ->after('role')
+                    ->constrained('services')
+                    ->nullOnDelete();
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        if (Schema::hasColumn('users', 'service_id')) {
 
-            $table->dropForeign([
-                'service_id'
-            ]);
+            Schema::table('users', function (Blueprint $table) {
 
-            $table->dropColumn(
-                'service_id'
-            );
+                $table->dropForeign(['service_id']);
 
-        });
+                $table->dropColumn('service_id');
+            });
+        }
     }
 };

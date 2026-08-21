@@ -1,0 +1,152 @@
+/* =========================================================
+   TOMBOL AKSI
+   ========================================================= */
+
+.action-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-buttons .action-btn {
+    width: 40px !important;
+    height: 40px !important;
+
+    min-width: 40px;
+    max-width: 40px;
+
+    min-height: 40px;
+    max-height: 40px;
+
+    padding: 0 !important;
+    margin: 0;
+
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+    text-decoration: none;
+
+    background: transparent;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+/* =========================================================
+   SVG IKON
+   ========================================================= */
+
+.action-buttons .action-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+
+    min-width: 20px;
+    max-width: 20px;
+
+    min-height: 20px;
+    max-height: 20px;
+
+    display: block;
+
+    overflow: visible;
+
+    fill: none !important;
+    stroke: currentColor !important;
+
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* =========================================================
+   EDIT
+   ========================================================= */
+
+.action-buttons .action-btn.edit {
+    color: #2563eb !important;
+
+    background: #eff6ff !important;
+
+    border: 1px solid #dbeafe !important;
+}
+
+.action-buttons .action-btn.edit:hover {
+    color: #2563eb !important;
+
+    background: #dbeafe !important;
+
+    border-color: #bfdbfe !important;
+}
+
+
+/* =========================================================
+   DELETE
+   ========================================================= */
+
+.action-buttons .action-btn.delete {
+    color: #ef4444 !important;
+
+    background: #fff5f5 !important;
+
+    border: 1px solid #fecaca !important;
+}
+
+.action-buttons .action-btn.delete:hover {
+    color: #ef4444 !important;
+
+    background: #fee2e2 !important;
+
+    border-color: #fca5a5 !important;
+}
+
+
+/* =========================================================
+   FORM HAPUS
+   ========================================================= */
+
+.action-buttons form {
+    display: inline-flex !important;
+    margin: 0;
+    padding: 0;
+}
+
+/* =========================================================
+   PERBAIKAN SVG HALAMAN PENGGUNA
+   Mencegah SVG membesar dan merusak layout
+   ========================================================= */
+
+.admin-main-content svg {
+    max-width: 24px;
+    max-height: 24px;
+}
+
+
+/* Ikon pada kartu statistik */
+
+.admin-main-content .stat-icon svg,
+.admin-main-content .card-icon svg,
+.admin-main-content .summary-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+
+/* Ikon tombol aksi tetap 20px */
+
+.admin-main-content .action-buttons .action-btn svg {
+    width: 20px !important;
+    height: 20px !important;
+
+    max-width: 20px !important;
+    max-height: 20px !important;
+}
