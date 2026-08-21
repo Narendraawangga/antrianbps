@@ -31,6 +31,7 @@
         'resources/js/display/index.js'
     ])
 
+
 </head>
 
 
