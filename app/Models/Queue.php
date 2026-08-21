@@ -11,6 +11,7 @@ class Queue extends Model
     protected $fillable = [
         'service_id',
         'queue_number',
+        'visitor_name',
         'public_token',
         'photo',
         'status',

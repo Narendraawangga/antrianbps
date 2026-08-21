@@ -6,9 +6,11 @@ use App\Models\Queue;
 use App\Models\Service;
 use App\Services\QueueScheduleService;
 
+
 class DisplayController extends Controller
 {
     private QueueScheduleService $schedule;
+
 
     public function __construct(
         QueueScheduleService $schedule
@@ -25,9 +27,16 @@ class DisplayController extends Controller
 
     public function index()
     {
+        /*
+        |--------------------------------------------------------------------------
+        | PERIODE ANTREAN HARI INI
+        |--------------------------------------------------------------------------
+        */
+
         $periodStart = $this->schedule
             ->periodStart()
             ->utc();
+
 
         $periodEnd = $this->schedule
             ->periodEnd()
@@ -38,10 +47,6 @@ class DisplayController extends Controller
         |--------------------------------------------------------------------------
         | PELAYANAN AKTIF
         |--------------------------------------------------------------------------
-        |
-        | Hanya 3 pelayanan aktif yang ditampilkan.
-        | Penjualan Produk Statistik tidak ikut karena is_active = false.
-        |
         */
 
         $services = Service::where(
@@ -54,7 +59,7 @@ class DisplayController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | DATA PER PELAYANAN
+        | DATA SETIAP PELAYANAN
         |--------------------------------------------------------------------------
         */
 
@@ -66,12 +71,13 @@ class DisplayController extends Controller
 
                 /*
                 |--------------------------------------------------------------------------
-                | ANTREAN AKTIF PELAYANAN INI
+                | ANTREAN AKTIF
                 |--------------------------------------------------------------------------
                 */
 
-                $currentQueue = Queue::with('service')
-
+                $currentQueue = Queue::with(
+                    'service'
+                )
                     ->whereBetween(
                         'created_at',
                         [
@@ -79,12 +85,10 @@ class DisplayController extends Controller
                             $periodEnd
                         ]
                     )
-
                     ->where(
                         'service_id',
                         $service->id
                     )
-
                     ->whereIn(
                         'status',
                         [
@@ -92,28 +96,30 @@ class DisplayController extends Controller
                             'serving',
                         ]
                     )
-
                     ->orderByRaw(
-                        "CASE
+                        "
+                        CASE
                             WHEN status = 'called' THEN 0
                             WHEN status = 'serving' THEN 1
                             ELSE 2
-                        END"
+                        END
+                        "
                     )
-
-                    ->orderByDesc('called_at')
-
+                    ->orderByDesc(
+                        'called_at'
+                    )
                     ->first();
 
 
                 /*
                 |--------------------------------------------------------------------------
-                | ANTREAN BERIKUTNYA PELAYANAN INI
+                | ANTREAN BERIKUTNYA
                 |--------------------------------------------------------------------------
                 */
 
-                $nextQueues = Queue::with('service')
-
+                $nextQueues = Queue::with(
+                    'service'
+                )
                     ->whereBetween(
                         'created_at',
                         [
@@ -121,24 +127,19 @@ class DisplayController extends Controller
                             $periodEnd
                         ]
                     )
-
                     ->where(
                         'service_id',
                         $service->id
                     )
-
                     ->where(
                         'status',
                         'waiting'
                     )
-
                     ->orderBy(
                         'created_at',
                         'asc'
                     )
-
                     ->limit(3)
-
                     ->get();
 
 
@@ -147,8 +148,10 @@ class DisplayController extends Controller
                     'service' =>
                         $service,
 
+
                     'current_queue' =>
                         $currentQueue,
+
 
                     'next_queues' =>
                         $nextQueues,
@@ -160,16 +163,16 @@ class DisplayController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | DATA LAMA
+        | DATA ANTREAN AKTIF
         |--------------------------------------------------------------------------
         |
-        | Untuk sementara masih dikirim supaya Blade lama
-        | tidak langsung error sebelum kita ubah.
+        | Masih dikirim agar tampilan lama tetap kompatibel.
         |
         */
 
-        $currentQueues = Queue::with('service')
-
+        $currentQueues = Queue::with(
+            'service'
+        )
             ->whereBetween(
                 'created_at',
                 [
@@ -177,7 +180,6 @@ class DisplayController extends Controller
                     $periodEnd
                 ]
             )
-
             ->whereIn(
                 'status',
                 [
@@ -185,22 +187,30 @@ class DisplayController extends Controller
                     'serving',
                 ]
             )
-
             ->orderByRaw(
-                "CASE
+                "
+                CASE
                     WHEN status = 'called' THEN 0
                     WHEN status = 'serving' THEN 1
                     ELSE 2
-                END"
+                END
+                "
             )
-
-            ->orderByDesc('called_at')
-
+            ->orderByDesc(
+                'called_at'
+            )
             ->get();
 
 
-        $nextQueues = Queue::with('service')
+        /*
+        |--------------------------------------------------------------------------
+        | ANTREAN BERIKUTNYA
+        |--------------------------------------------------------------------------
+        */
 
+        $nextQueues = Queue::with(
+            'service'
+        )
             ->whereBetween(
                 'created_at',
                 [
@@ -208,25 +218,21 @@ class DisplayController extends Controller
                     $periodEnd
                 ]
             )
-
             ->where(
                 'status',
                 'waiting'
             )
-
             ->orderBy(
                 'created_at',
                 'asc'
             )
-
             ->limit(4)
-
             ->get();
 
 
         /*
         |--------------------------------------------------------------------------
-        | TAMPILKAN HALAMAN
+        | TAMPILKAN DISPLAY
         |--------------------------------------------------------------------------
         */
 
@@ -249,9 +255,16 @@ class DisplayController extends Controller
 
     public function data()
     {
+        /*
+        |--------------------------------------------------------------------------
+        | PERIODE ANTREAN
+        |--------------------------------------------------------------------------
+        */
+
         $periodStart = $this->schedule
             ->periodStart()
             ->utc();
+
 
         $periodEnd = $this->schedule
             ->periodEnd()
@@ -297,12 +310,10 @@ class DisplayController extends Controller
                         $periodEnd
                     ]
                 )
-
                     ->where(
                         'service_id',
                         $service->id
                     )
-
                     ->whereIn(
                         'status',
                         [
@@ -310,19 +321,18 @@ class DisplayController extends Controller
                             'serving',
                         ]
                     )
-
                     ->orderByRaw(
-                        "CASE
+                        "
+                        CASE
                             WHEN status = 'called' THEN 0
                             WHEN status = 'serving' THEN 1
                             ELSE 2
-                        END"
+                        END
+                        "
                     )
-
                     ->orderByDesc(
                         'called_at'
                     )
-
                     ->first();
 
 
@@ -339,24 +349,19 @@ class DisplayController extends Controller
                         $periodEnd
                     ]
                 )
-
                     ->where(
                         'service_id',
                         $service->id
                     )
-
                     ->where(
                         'status',
                         'waiting'
                     )
-
                     ->orderBy(
                         'created_at',
                         'asc'
                     )
-
                     ->limit(3)
-
                     ->get();
 
 
@@ -368,11 +373,19 @@ class DisplayController extends Controller
 
                 return [
 
+                    /*
+                    |--------------------------------------------------------------------------
+                    | PELAYANAN
+                    |--------------------------------------------------------------------------
+                    */
+
                     'service_id' =>
                         $service->id,
 
+
                     'service_code' =>
                         $service->code,
+
 
                     'service_name' =>
                         $service->name,
@@ -391,14 +404,28 @@ class DisplayController extends Controller
                                 'id' =>
                                     $currentQueue->id,
 
+
                                 'number' =>
                                     $currentQueue->queue_number,
+
+
+                                /*
+                                |--------------------------------------------------------------------------
+                                | NAMA PENGUNJUNG
+                                |--------------------------------------------------------------------------
+                                */
+
+                                'visitor_name' =>
+                                    $currentQueue->visitor_name,
+
 
                                 'status' =>
                                     $currentQueue->status,
 
+
                                 'status_label' =>
                                     $currentQueue->status_label,
+
 
                                 'called_at' =>
                                     $currentQueue->called_at,
@@ -422,8 +449,20 @@ class DisplayController extends Controller
                                     'id' =>
                                         $queue->id,
 
+
                                     'number' =>
                                         $queue->queue_number,
+
+
+                                    /*
+                                    |--------------------------------------------------------------------------
+                                    | NAMA PENGUNJUNG
+                                    |--------------------------------------------------------------------------
+                                    */
+
+                                    'visitor_name' =>
+                                        $queue->visitor_name,
+
 
                                     'status' =>
                                         $queue->status,
@@ -447,6 +486,7 @@ class DisplayController extends Controller
 
             'success' =>
                 true,
+
 
             'services' =>
                 $serviceData,

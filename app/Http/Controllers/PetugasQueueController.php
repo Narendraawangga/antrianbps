@@ -1026,69 +1026,189 @@ class PetugasQueueController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function riwayat()
-    {
-        $user = auth()->user();
+   public function riwayat()
+{
+    $user = auth()->user();
+
+    /*
+    |--------------------------------------------------------------------------
+    | AMBIL FILTER DARI URL
+    |--------------------------------------------------------------------------
+    */
+
+    $periode = request()->query(
+        'periode',
+        'semua'
+    );
+
+    $search = request()->query(
+        'search',
+        ''
+    );
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | RIWAYAT HANYA MILIK PETUGAS YANG LOGIN
-        |--------------------------------------------------------------------------
-        */
+    /*
+    |--------------------------------------------------------------------------
+    | QUERY DASAR
+    |--------------------------------------------------------------------------
+    |
+    | Hanya riwayat milik petugas yang sedang login.
+    |
+    */
 
-        $riwayat = Queue::with('service')
+    $query = Queue::with('service')
 
-            ->where(
-                'served_by',
-                $user->id
-            )
+        ->where(
+            'served_by',
+            $user->id
+        )
 
-            ->whereIn(
-                'status',
-                [
-                    'completed',
-                    'skipped',
-                ]
-            )
-
-            ->orderByDesc(
-                'completed_at'
-            )
-
-            ->get();
+        ->whereIn(
+            'status',
+            [
+                'completed',
+                'skipped',
+            ]
+        );
 
 
-        $totalRiwayat =
-            $riwayat->count();
+    /*
+    |--------------------------------------------------------------------------
+    | FILTER HARI INI
+    |--------------------------------------------------------------------------
+    */
+
+    if ($periode === 'hari_ini') {
+
+        $start = $this->schedule
+            ->now()
+            ->copy()
+            ->startOfDay()
+            ->utc();
+
+        $end = $this->schedule
+            ->now()
+            ->copy()
+            ->endOfDay()
+            ->utc();
 
 
-        $totalSelesai =
-            $riwayat
-                ->where(
-                    'status',
-                    'completed'
-                )
-                ->count();
-
-
-        $totalDilewati =
-            $riwayat
-                ->where(
-                    'status',
-                    'skipped'
-                )
-                ->count();
-
-
-        return view(
-            'petugas.riwayat',
-            compact(
-                'riwayat',
-                'totalRiwayat',
-                'totalSelesai',
-                'totalDilewati'
-            )
+        $query->whereBetween(
+            'created_at',
+            [
+                $start,
+                $end
+            ]
         );
     }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FILTER KEMARIN
+    |--------------------------------------------------------------------------
+    */
+
+    elseif ($periode === 'kemarin') {
+
+        $start = $this->schedule
+            ->now()
+            ->copy()
+            ->subDay()
+            ->startOfDay()
+            ->utc();
+
+        $end = $this->schedule
+            ->now()
+            ->copy()
+            ->subDay()
+            ->endOfDay()
+            ->utc();
+
+
+        $query->whereBetween(
+            'created_at',
+            [
+                $start,
+                $end
+            ]
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FILTER PENCARIAN
+    |--------------------------------------------------------------------------
+    */
+
+    if (!empty($search)) {
+
+        $query->where(
+            'queue_number',
+            'like',
+            '%' . $search . '%'
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | AMBIL DATA
+    |--------------------------------------------------------------------------
+    */
+
+    $riwayat = $query
+        ->orderByDesc(
+            'created_at'
+        )
+        ->get();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | STATISTIK SESUAI FILTER
+    |--------------------------------------------------------------------------
+    */
+
+    $totalRiwayat =
+        $riwayat->count();
+
+
+    $totalSelesai =
+        $riwayat
+            ->where(
+                'status',
+                'completed'
+            )
+            ->count();
+
+
+    $totalDilewati =
+        $riwayat
+            ->where(
+                'status',
+                'skipped'
+            )
+            ->count();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | TAMPILKAN VIEW
+    |--------------------------------------------------------------------------
+    */
+
+    return view(
+        'petugas.riwayat',
+        compact(
+            'riwayat',
+            'totalRiwayat',
+            'totalSelesai',
+            'totalDilewati',
+            'periode',
+            'search'
+        )
+    );
+}
 }

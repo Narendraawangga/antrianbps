@@ -33,6 +33,7 @@ Route::get(
     [DisplayController::class, 'data']
 )->name('display.data');
 
+
 Route::get(
     '/layanan',
     [QueueController::class, 'layanan']
@@ -44,6 +45,24 @@ Route::post(
     [QueueController::class, 'ambilAntrian']
 )->name('ambil.antrian');
 
+
+/*
+|--------------------------------------------------------------------------
+| TIKET DIGITAL ANTREAN
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/tiket-antrian/{public_token}',
+    [QueueController::class, 'ticket']
+)->name('ticket.antrian');
+
+
+/*
+|--------------------------------------------------------------------------
+| STATUS ANTREAN
+|--------------------------------------------------------------------------
+*/
 
 Route::get(
     '/status-antrian/{public_token}',
@@ -118,10 +137,12 @@ Route::middleware([
         [QueueController::class, 'adminIndex']
     )->name('admin.antrean');
 
+
     Route::delete(
         '/admin/antrean/{id}',
         [QueueController::class, 'destroyAdmin']
     )->name('admin.antrean.destroy');
+
 
     /*
     |--------------------------------------------------------------------------
@@ -177,6 +198,7 @@ Route::middleware([
     )->name('admin.jadwal.destroy');
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | MANAJEMEN LAYANAN
@@ -188,25 +210,30 @@ Route::get(
     [ServiceController::class, 'index']
 )->name('admin.layanan');
 
+
 Route::post(
     '/admin/layanan',
     [ServiceController::class, 'store']
 )->name('admin.layanan.store');
+
 
 Route::get(
     '/admin/layanan/{id}/edit',
     [ServiceController::class, 'edit']
 )->name('admin.layanan.edit');
 
+
 Route::put(
     '/admin/layanan/{id}',
     [ServiceController::class, 'update']
 )->name('admin.layanan.update');
 
+
 Route::delete(
     '/admin/layanan/{id}',
     [ServiceController::class, 'destroy']
 )->name('admin.layanan.destroy');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -219,10 +246,13 @@ Route::get(
     [QueueController::class, 'laporan']
 )->name('admin.laporan');
 
+
 Route::get(
     '/admin/laporan/cetak',
     [QueueController::class, 'cetakLaporan']
 )->name('admin.laporan.cetak');
+
+
 /*
 |--------------------------------------------------------------------------
 | PETUGAS
@@ -247,10 +277,10 @@ Route::middleware([
 
 
     /*
-|--------------------------------------------------------------------------
-| ANTREAN PETUGAS
-|--------------------------------------------------------------------------
-*/
+    |--------------------------------------------------------------------------
+    | ANTREAN PETUGAS
+    |--------------------------------------------------------------------------
+    */
 
     Route::get(
         '/petugas/antrean',
@@ -286,22 +316,25 @@ Route::middleware([
         '/petugas/antrean/selesai',
         [PetugasQueueController::class, 'selesai']
     )->name('petugas.antrean.selesai');
-    /*
+
+
     /*
     |--------------------------------------------------------------------------
     | JADWAL PETUGAS
     |--------------------------------------------------------------------------
     */
+
     Route::get(
         '/petugas/jadwal',
         [ScheduleController::class, 'petugasIndex']
     )->name('petugas.jadwal');
 
+
     /*
-|--------------------------------------------------------------------------
-| RIWAYAT LAYANAN PETUGAS
-|--------------------------------------------------------------------------
-*/
+    |--------------------------------------------------------------------------
+    | RIWAYAT PETUGAS
+    |--------------------------------------------------------------------------
+    */
 
     Route::get(
         '/petugas/riwayat',
