@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Queue;
+use App\Models\Service;
 use App\Services\QueueScheduleService;
 use Illuminate\Support\Facades\DB;
 
@@ -431,9 +432,7 @@ class PetugasQueueController extends Controller
     {
         $user = auth()->user();
 
-
         if (!$user->service_id) {
-
             return redirect()
                 ->route('petugas.dashboard')
                 ->with(
@@ -442,83 +441,82 @@ class PetugasQueueController extends Controller
                 );
         }
 
-
         $serviceId = $user->service_id;
-
 
         $periodStart = $this->schedule
             ->periodStart()
             ->utc();
 
-
         $periodEnd = $this->schedule
             ->periodEnd()
             ->utc();
 
-
         /*
         |--------------------------------------------------------------------------
-        | CEK ANTREAN AKTIF PETUGAS
+        | TRANSAKSI PANGGIL ANTREAN
         |--------------------------------------------------------------------------
+        |
+        | Service dikunci terlebih dahulu agar dua petugas dengan pelayanan
+        | yang sama tidak dapat memanggil dua antrean secara bersamaan.
+        |
         */
 
-        $activeQueue = Queue::whereBetween(
-            'created_at',
-            [
-                $periodStart,
-                $periodEnd
-            ]
-        )
-
-            ->where(
-                'service_id',
-                $serviceId
-            )
-
-            ->where(
-                'served_by',
-                $user->id
-            )
-
-            ->whereIn(
-                'status',
-                [
-                    'called',
-                    'serving',
-                ]
-            )
-
-            ->exists();
-
-
-        if ($activeQueue) {
-
-            return redirect()
-                ->route('petugas.antrean')
-                ->with(
-                    'error',
-                    'Selesaikan antrean aktif terlebih dahulu.'
-                );
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | AMBIL ANTREAN PALING AWAL
-        |--------------------------------------------------------------------------
-        */
-
-        $queueFound = false;
-
-
-        DB::transaction(
+        $result = DB::transaction(
             function () use (
+                $serviceId,
                 $periodStart,
                 $periodEnd,
-                $serviceId,
-                $user,
-                &$queueFound
+                $user
             ) {
+                /*
+                |------------------------------------------------------------------
+                | KUNCI PELAYANAN
+                |------------------------------------------------------------------
+                */
+
+                Service::whereKey($serviceId)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                /*
+                |------------------------------------------------------------------
+                | CEK ANTREAN AKTIF PADA PELAYANAN
+                |------------------------------------------------------------------
+                |
+                | Tidak menggunakan served_by, sehingga satu pelayanan hanya
+                | boleh memiliki satu antrean berstatus called/serving.
+                |
+                */
+
+                $activeQueue = Queue::whereBetween(
+                    'created_at',
+                    [
+                        $periodStart,
+                        $periodEnd
+                    ]
+                )
+                    ->where(
+                        'service_id',
+                        $serviceId
+                    )
+                    ->whereIn(
+                        'status',
+                        [
+                            'called',
+                            'serving'
+                        ]
+                    )
+                    ->exists();
+
+                if ($activeQueue) {
+                    return 'active';
+                }
+
+                /*
+                |------------------------------------------------------------------
+                | AMBIL ANTREAN PALING AWAL SESUAI PELAYANAN
+                |------------------------------------------------------------------
+                */
 
                 $queue = Queue::whereBetween(
                     'created_at',
@@ -527,61 +525,47 @@ class PetugasQueueController extends Controller
                         $periodEnd
                     ]
                 )
-
                     ->where(
                         'service_id',
                         $serviceId
                     )
-
                     ->where(
                         'status',
                         'waiting'
                     )
-
                     ->orderBy(
                         'created_at',
                         'asc'
                     )
-
                     ->lockForUpdate()
-
                     ->first();
 
-
                 if (!$queue) {
-                    return;
+                    return 'empty';
                 }
 
-
-                $queueFound = true;
-
-
                 $queue->update([
-
-                    'status' =>
-                        'called',
-
-                    'called_at' =>
-                        $this->schedule
-                            ->now()
-                            ->utc(),
-
-                    'served_by' =>
-                        $user->id,
-
+                    'status' => 'called',
+                    'called_at' => $this->schedule
+                        ->now()
+                        ->utc(),
+                    'served_by' => $user->id,
                 ]);
+
+                return 'called';
             }
         );
 
+        if ($result === 'active') {
+            return redirect()
+                ->route('petugas.antrean')
+                ->with(
+                    'error',
+                    'Pelayanan ini masih memiliki antrean aktif. Selesaikan terlebih dahulu.'
+                );
+        }
 
-        /*
-        |--------------------------------------------------------------------------
-        | TIDAK ADA ANTREAN
-        |--------------------------------------------------------------------------
-        */
-
-        if (!$queueFound) {
-
+        if ($result === 'empty') {
             return redirect()
                 ->route('petugas.antrean')
                 ->with(
@@ -590,15 +574,12 @@ class PetugasQueueController extends Controller
                 );
         }
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | KEMBALI KE MENU ANTREAN
-        |--------------------------------------------------------------------------
-        */
-
         return redirect()
-            ->route('petugas.antrean');
+            ->route('petugas.antrean')
+            ->with(
+                'success',
+                'Antrean berhasil dipanggil.'
+            );
     }
 
 
@@ -806,129 +787,137 @@ class PetugasQueueController extends Controller
     ) {
         $user = auth()->user();
 
-
         if (!$user->service_id) {
-
             return redirect()
                 ->route('petugas.dashboard');
         }
 
+        $serviceId = $user->service_id;
 
         $periodStart = $this->schedule
             ->periodStart()
             ->utc();
 
-
         $periodEnd = $this->schedule
             ->periodEnd()
             ->utc();
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | CEK ANTREAN AKTIF
-        |--------------------------------------------------------------------------
-        */
-
-        $activeQueue = Queue::whereBetween(
-            'created_at',
-            [
+        $result = DB::transaction(
+            function () use (
+                $id,
+                $user,
+                $serviceId,
                 $periodStart,
                 $periodEnd
-            ]
-        )
+            ) {
+                /*
+                |------------------------------------------------------------------
+                | KUNCI PELAYANAN
+                |------------------------------------------------------------------
+                */
 
-            ->where(
-                'service_id',
-                $user->service_id
-            )
+                Service::whereKey($serviceId)
+                    ->lockForUpdate()
+                    ->firstOrFail();
 
-            ->where(
-                'served_by',
-                $user->id
-            )
+                /*
+                |------------------------------------------------------------------
+                | CEK ANTREAN AKTIF PADA PELAYANAN
+                |------------------------------------------------------------------
+                */
 
-            ->whereIn(
-                'status',
-                [
-                    'called',
-                    'serving',
-                ]
-            )
+                $activeQueue = Queue::whereBetween(
+                    'created_at',
+                    [
+                        $periodStart,
+                        $periodEnd
+                    ]
+                )
+                    ->where(
+                        'service_id',
+                        $serviceId
+                    )
+                    ->whereIn(
+                        'status',
+                        [
+                            'called',
+                            'serving'
+                        ]
+                    )
+                    ->exists();
 
-            ->exists();
+                if ($activeQueue) {
+                    return 'active';
+                }
 
+                /*
+                |------------------------------------------------------------------
+                | CARI ANTREAN DILEWATI SESUAI PELAYANAN PETUGAS
+                |------------------------------------------------------------------
+                */
 
-        if ($activeQueue) {
+                $queue = Queue::where(
+                    'id',
+                    $id
+                )
+                    ->whereBetween(
+                        'created_at',
+                        [
+                            $periodStart,
+                            $periodEnd
+                        ]
+                    )
+                    ->where(
+                        'service_id',
+                        $serviceId
+                    )
+                    ->where(
+                        'status',
+                        'skipped'
+                    )
+                    ->lockForUpdate()
+                    ->first();
 
+                if (!$queue) {
+                    return 'not_found';
+                }
+
+                $queue->update([
+                    'status' => 'called',
+                    'called_at' => $this->schedule
+                        ->now()
+                        ->utc(),
+                    'served_by' => $user->id,
+                ]);
+
+                return 'called';
+            }
+        );
+
+        if ($result === 'active') {
             return redirect()
                 ->route('petugas.antrean')
                 ->with(
                     'error',
-                    'Selesaikan antrean aktif terlebih dahulu.'
+                    'Pelayanan ini masih memiliki antrean aktif. Selesaikan terlebih dahulu.'
                 );
         }
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | CARI ANTREAN DILEWATI
-        |--------------------------------------------------------------------------
-        |
-        | service_id harus sama dengan pelayanan petugas.
-        |
-        */
-
-        $queue = Queue::where(
-            'id',
-            $id
-        )
-
-            ->whereBetween(
-                'created_at',
-                [
-                    $periodStart,
-                    $periodEnd
-                ]
-            )
-
-            ->where(
-                'service_id',
-                $user->service_id
-            )
-
-            ->where(
-                'status',
-                'skipped'
-            )
-
-            ->firstOrFail();
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | PANGGIL KEMBALI
-        |--------------------------------------------------------------------------
-        */
-
-        $queue->update([
-
-            'status' =>
-                'called',
-
-            'called_at' =>
-                $this->schedule
-                    ->now()
-                    ->utc(),
-
-            'served_by' =>
-                $user->id,
-
-        ]);
-
+        if ($result === 'not_found') {
+            return redirect()
+                ->route('petugas.antrean')
+                ->with(
+                    'error',
+                    'Antrean yang ingin dipanggil ulang tidak ditemukan.'
+                );
+        }
 
         return redirect()
-            ->route('petugas.antrean');
+            ->route('petugas.antrean')
+            ->with(
+                'success',
+                'Antrean berhasil dipanggil ulang.'
+            );
     }
 
 
