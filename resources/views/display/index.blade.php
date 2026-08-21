@@ -28,7 +28,7 @@
 
     @vite([
         'resources/css/display/index.css',
-        'resources/js/display/index.js',
+        'resources/js/display/index.js'
     ])
 
 </head>
