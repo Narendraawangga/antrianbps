@@ -297,6 +297,8 @@
 
                     @csrf
 
+                    <input type="hidden" name="source" value="dashboard">
+
 
                     <button
                         type="submit"
@@ -372,6 +374,8 @@
                     >
                         @csrf
 
+                    <input type="hidden" name="source" value="dashboard">
+
                         <button
                             type="submit"
                             class="btn-start"
@@ -388,6 +392,8 @@
                         method="POST"
                     >
                         @csrf
+
+                    <input type="hidden" name="source" value="dashboard">
 
                         <button
                             type="submit"
@@ -411,6 +417,8 @@
                 >
 
                     @csrf
+
+                    <input type="hidden" name="source" value="dashboard">
 
 
                     <button
@@ -456,7 +464,7 @@
 
 
                 <a
-                    href="#"
+                    href="{{ route('petugas.antrean') }}"
                     class="view-all"
                 >
                     Lihat Semua
@@ -610,6 +618,8 @@
                     >
 
                         @csrf
+
+                    <input type="hidden" name="source" value="dashboard">
 
                         <button
                             type="submit"
